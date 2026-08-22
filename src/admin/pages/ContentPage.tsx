@@ -23,15 +23,10 @@ export default function ContentPage() {
   const resetAll = useSiteStore((state) => state.resetAll);
 
   const email = useAuthStore((state) => state.email);
-  const changePassword = useAuthStore((state) => state.changePassword);
-  const changeEmail = useAuthStore((state) => state.changeEmail);
 
   const [heroDraft, setHeroDraft] = useState(hero);
   const [workshopDraft, setWorkshopDraft] = useState(workshop);
   const [contactDraft, setContactDraft] = useState(contact);
-  const [accountEmail, setAccountEmail] = useState(email);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [nextPassword, setNextPassword] = useState('');
 
   return (
     <div className="space-y-10">
@@ -340,59 +335,16 @@ export default function ContentPage() {
 
       <section className="panel p-5">
         <h2 className="text-sm font-semibold text-fg">Compte administrateur</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Field label="Email de connexion">
-            <TextInput
-              value={accountEmail}
-              onChange={(event) => setAccountEmail(event.target.value)}
-            />
-          </Field>
-          <div className="flex items-end">
-            <AdminButton
-              variant="ghost"
-              onClick={() => {
-                changeEmail(accountEmail);
-                toast('Email de connexion mis à jour.');
-              }}
-            >
-              Mettre à jour l’email
-            </AdminButton>
-          </div>
-
-          <Field label="Mot de passe actuel">
-            <TextInput
-              type="password"
-              value={currentPassword}
-              autoComplete="current-password"
-              onChange={(event) => setCurrentPassword(event.target.value)}
-            />
-          </Field>
-          <Field label="Nouveau mot de passe" hint="10 caractères minimum">
-            <TextInput
-              type="password"
-              value={nextPassword}
-              autoComplete="new-password"
-              onChange={(event) => setNextPassword(event.target.value)}
-            />
-          </Field>
-
-          <div className="sm:col-span-2">
-            <AdminButton
-              onClick={async () => {
-                const result = await changePassword(currentPassword, nextPassword);
-                if (!result.ok) {
-                  toast(result.error ?? 'Changement refusé.', 'danger');
-                  return;
-                }
-                setCurrentPassword('');
-                setNextPassword('');
-                toast('Mot de passe modifié.');
-              }}
-            >
-              Changer le mot de passe
-            </AdminButton>
-          </div>
-        </div>
+        <p className="mt-2 text-xs leading-relaxed text-faint">
+          Connecté en tant que <span className="text-muted">{email}</span>.
+        </p>
+        <p className="mt-3 text-xs leading-relaxed text-faint">
+          L’email et le mot de passe se changent sur le serveur, pas ici : c’est ce qui garantit
+          qu’aucun identifiant ne circule dans le navigateur. Sur le VPS, générez un nouveau
+          condensé puis redémarrez le service —
+          <span className="num text-muted"> node server/creer-mot-de-passe.js "nouveau mot de passe"</span>.
+          La procédure complète est dans <span className="text-muted">DEPLOIEMENT.md</span>.
+        </p>
       </section>
 
       <section className="panel p-5">

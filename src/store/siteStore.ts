@@ -1,10 +1,16 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { api } from '../lib/api.js';
 import { SERVICE_PACKS, SERVICE_OPTIONS as PACK_OPTIONS } from '../data/services.js';
-import { RETROFIT_CATALOGUE } from '../data/retrofit.js';
+import {
+  RETROFIT_CATALOGUE,
+  RETROFIT_FACTS,
+  RETROFIT_KEEPS,
+  RETROFIT_PROCESS,
+} from '../data/retrofit.js';
 import { VEHICLES } from '../data/vehicles.js';
 import {
   BEFORE_AFTER,
+  GALLERY_FILTERS,
   GALLERY_ITEMS,
   HERO,
   REVIEW_SUMMARY,
@@ -14,7 +20,7 @@ import {
   WORKSHOP,
 } from '../data/content.js';
 import { LEADS } from '../data/leads.js';
-import { CONTACT } from '../data/site.js';
+import { BRAND, COMPANY, CONTACT, NAV_LINKS, POLES } from '../data/site.js';
 import type {
   BeforeAfterCase,
   ContactInfo,
@@ -40,6 +46,14 @@ interface SiteState {
   workshop: WorkshopContent;
   beforeAfter: BeforeAfterCase[];
   gallery: typeof GALLERY_ITEMS;
+  galleryFilters: typeof GALLERY_FILTERS;
+  poles: typeof POLES;
+  navLinks: typeof NAV_LINKS;
+  brand: typeof BRAND;
+  company: typeof COMPANY;
+  retrofitProcess: typeof RETROFIT_PROCESS;
+  retrofitFacts: typeof RETROFIT_FACTS;
+  retrofitKeeps: typeof RETROFIT_KEEPS;
   testimonials: Testimonial[];
   reviewSummary: ReviewSummary;
   pipeline: typeof SOURCING_PIPELINE;
@@ -70,12 +84,44 @@ interface SiteState {
   removeTestimonial: (id: string) => void;
   updateReviewSummary: (patch: Partial<ReviewSummary>) => void;
 
-  addLead: (lead: Omit<Lead, 'id' | 'createdAt' | 'status'>) => Lead;
-  setLeadStatus: (id: string, status: LeadStatus) => void;
-  removeLead: (id: string) => void;
+  /** Dépose une demande sur le serveur. Lève si l'envoi échoue. */
+  addLead: (lead: Omit<Lead, 'id' | 'createdAt' | 'status'>) => Promise<Lead>;
+  setLeadStatus: (id: string, status: LeadStatus) => Promise<void>;
+  removeLead: (id: string) => Promise<void>;
+  /** Recharge les demandes depuis le serveur (panel d'administration). */
+  chargerDemandes: () => Promise<void>;
 
   resetAll: () => void;
+
+  /** Remplace une section entière de contenus et enregistre sur le serveur. */
+  setSection: <K extends keyof SiteContent>(cle: K, valeur: SiteContent[K]) => void;
+  /** Fusionne un correctif dans une section objet et enregistre. */
+  patchSection: <K extends keyof SiteContent>(cle: K, patch: Partial<SiteContent[K]>) => void;
+
+  /** Charge les contenus depuis le serveur au démarrage du site. */
+  hydrater: () => Promise<void>;
+
+  /** État de la synchronisation, affiché dans le panel. */
+  chargement: boolean;
+  enregistrement: boolean;
+  erreurSync: string | null;
+  horsLigne: boolean;
 }
+
+/** Les clés de contenus modifiables depuis le panel d'administration. */
+type SiteContent = Omit<
+  SiteState,
+  | 'leads'
+  | 'chargement'
+  | 'enregistrement'
+  | 'erreurSync'
+  | 'horsLigne'
+  | keyof ActionsSeules
+>;
+
+type ActionsSeules = {
+  [K in keyof SiteState as SiteState[K] extends (...args: never[]) => unknown ? K : never]: true;
+};
 
 const seed = () => ({
   vehicles: VEHICLES as Vehicle[],
@@ -86,6 +132,14 @@ const seed = () => ({
   workshop: WORKSHOP as WorkshopContent,
   beforeAfter: BEFORE_AFTER as BeforeAfterCase[],
   gallery: GALLERY_ITEMS,
+  galleryFilters: GALLERY_FILTERS,
+  poles: POLES,
+  navLinks: NAV_LINKS,
+  brand: BRAND,
+  company: COMPANY,
+  retrofitProcess: RETROFIT_PROCESS,
+  retrofitFacts: RETROFIT_FACTS,
+  retrofitKeeps: RETROFIT_KEEPS,
   testimonials: TESTIMONIALS as Testimonial[],
   reviewSummary: REVIEW_SUMMARY as ReviewSummary,
   pipeline: SOURCING_PIPELINE,
@@ -94,46 +148,122 @@ const seed = () => ({
   leads: LEADS as Lead[],
 });
 
-const nextLeadId = (leads: Lead[]) => {
-  const numbers = leads
-    .map((lead) => Number.parseInt(lead.id.replace(/\D/g, ''), 10))
-    .filter((value) => Number.isFinite(value));
-  const max = numbers.length > 0 ? Math.max(...numbers) : 2600;
-  return `LD-${max + 1}`;
-};
 
-export const useSiteStore = create<SiteState>()(
-  persist(
-    (set, get) => ({
+/**
+ * Clés de contenus enregistrées sur le serveur. Les demandes en sont exclues :
+ * elles ont leurs propres routes, et une sauvegarde de contenus ne doit jamais
+ * pouvoir les écraser.
+ */
+const CLES_CONTENU = [
+  'vehicles', 'packs', 'options', 'catalogue', 'hero', 'workshop', 'beforeAfter',
+  'gallery', 'galleryFilters', 'poles', 'navLinks', 'brand', 'company',
+  'retrofitProcess', 'retrofitFacts', 'retrofitKeeps', 'testimonials',
+  'reviewSummary', 'pipeline', 'sourcingFacts', 'contact',
+] as const;
+
+export const useSiteStore = create<SiteState>()((set, get) => {
+  /**
+   * Enregistrement différé : les champs texte du panel déclenchent une frappe
+   * par caractère. On regroupe les modifications sur un court délai plutôt que
+   * d'envoyer une requête à chaque touche.
+   */
+  let minuteur: ReturnType<typeof setTimeout> | undefined;
+  const enregistrerBientot = () => {
+    clearTimeout(minuteur);
+    set({ enregistrement: true });
+    minuteur = setTimeout(async () => {
+      const etat = get();
+      const contenus = Object.fromEntries(
+        CLES_CONTENU.map((cle) => [cle, etat[cle as keyof SiteState]])
+      );
+      try {
+        await api.enregistrerContenus(contenus);
+        set({ enregistrement: false, erreurSync: null });
+      } catch (erreur) {
+        set({
+          enregistrement: false,
+          erreurSync:
+            (erreur as Error).message || "Enregistrement impossible. Vos modifications ne sont pas publiées.",
+        });
+      }
+    }, 600);
+  };
+
+  /** Applique une modification locale puis programme l'enregistrement. */
+  const modifier: typeof set = (partiel) => {
+    set(partiel as never);
+    enregistrerBientot();
+  };
+
+  return {
       ...seed(),
 
-      addVehicle: (vehicle) => set((state) => ({ vehicles: [vehicle, ...state.vehicles] })),
+      chargement: true,
+      enregistrement: false,
+      erreurSync: null,
+      horsLigne: false,
+
+      hydrater: async () => {
+        try {
+          const contenus = (await api.lireContenus()) as Record<string, unknown>;
+          const defauts = seed() as Record<string, unknown>;
+
+          // Le serveur fait foi, mais on fusionne section par section avec les
+          // données du build : un champ ajouté par une nouvelle version du site
+          // et absent du fichier serveur garde ainsi sa valeur par défaut, au
+          // lieu de laisser le panel travailler sur une section incomplète.
+          const fusionne: Record<string, unknown> = { ...defauts };
+          for (const [cle, valeur] of Object.entries(contenus)) {
+            const defaut = defauts[cle];
+            const objetSimple = (v: unknown) =>
+              typeof v === 'object' && v !== null && !Array.isArray(v);
+            fusionne[cle] =
+              objetSimple(valeur) && objetSimple(defaut)
+                ? { ...(defaut as object), ...(valeur as object) }
+                : valeur;
+          }
+
+          set({ ...fusionne, chargement: false, horsLigne: false } as never);
+        } catch {
+          // L'API est injoignable : le site reste debout avec les contenus du
+          // build plutôt que de s'afficher vide.
+          set({ chargement: false, horsLigne: true });
+        }
+      },
+
+      setSection: (cle, valeur) => modifier({ [cle]: valeur } as never),
+
+      patchSection: (cle, patch) =>
+        modifier({ [cle]: { ...(get()[cle] as object), ...patch } } as never),
+
+
+      addVehicle: (vehicle) => modifier((state) => ({ vehicles: [vehicle, ...state.vehicles] })),
 
       updateVehicle: (id, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           vehicles: state.vehicles.map((item) => (item.id === id ? { ...item, ...patch } : item)),
         })),
 
       removeVehicle: (id) =>
-        set((state) => ({ vehicles: state.vehicles.filter((item) => item.id !== id) })),
+        modifier((state) => ({ vehicles: state.vehicles.filter((item) => item.id !== id) })),
 
       setVehicleStatus: (id, status) =>
-        set((state) => ({
+        modifier((state) => ({
           vehicles: state.vehicles.map((item) => (item.id === id ? { ...item, status } : item)),
         })),
 
       updatePack: (id, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           packs: state.packs.map((item) => (item.id === id ? { ...item, ...patch } : item)),
         })),
 
       updateOption: (id, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           options: state.options.map((item) => (item.id === id ? { ...item, ...patch } : item)),
         })),
 
       updateSystem: (brandId, modelId, systemId, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           catalogue: state.catalogue.map((brand) =>
             brand.id !== brandId
               ? brand
@@ -153,26 +283,26 @@ export const useSiteStore = create<SiteState>()(
           ),
         })),
 
-      updateHero: (patch) => set((state) => ({ hero: { ...state.hero, ...patch } })),
-      updateWorkshop: (patch) => set((state) => ({ workshop: { ...state.workshop, ...patch } })),
-      updateContact: (patch) => set((state) => ({ contact: { ...state.contact, ...patch } })),
+      updateHero: (patch) => modifier((state) => ({ hero: { ...state.hero, ...patch } })),
+      updateWorkshop: (patch) => modifier((state) => ({ workshop: { ...state.workshop, ...patch } })),
+      updateContact: (patch) => modifier((state) => ({ contact: { ...state.contact, ...patch } })),
 
       updateBeforeAfter: (id, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           beforeAfter: state.beforeAfter.map((item) =>
             item.id === id ? { ...item, ...patch } : item
           ),
         })),
 
       updateTestimonial: (id, patch) =>
-        set((state) => ({
+        modifier((state) => ({
           testimonials: state.testimonials.map((item) =>
             item.id === id ? { ...item, ...patch } : item
           ),
         })),
 
       addTestimonial: () =>
-        set((state) => ({
+        modifier((state) => ({
           testimonials: [
             ...state.testimonials,
             {
@@ -188,41 +318,36 @@ export const useSiteStore = create<SiteState>()(
         })),
 
       removeTestimonial: (id) =>
-        set((state) => ({ testimonials: state.testimonials.filter((item) => item.id !== id) })),
+        modifier((state) => ({ testimonials: state.testimonials.filter((item) => item.id !== id) })),
 
       updateReviewSummary: (patch) =>
-        set((state) => ({ reviewSummary: { ...state.reviewSummary, ...patch } })),
+        modifier((state) => ({ reviewSummary: { ...state.reviewSummary, ...patch } })),
 
-      addLead: (lead) => {
-        const created: Lead = {
-          ...lead,
-          id: nextLeadId(get().leads),
-          status: 'nouveau',
-          createdAt: new Date().toISOString(),
-        };
+      addLead: async (lead) => {
+        // Le serveur attribue la référence et l'horodatage : deux visiteurs
+        // simultanés ne peuvent pas se voir attribuer le même numéro.
+        const created = (await api.creerDemande(lead)) as Lead;
         set((state) => ({ leads: [created, ...state.leads] }));
         return created;
       },
 
-      setLeadStatus: (id, status) =>
+      setLeadStatus: async (id, status) => {
+        await api.changerStatutDemande(id, status);
         set((state) => ({
           leads: state.leads.map((item) => (item.id === id ? { ...item, status } : item)),
-        })),
+        }));
+      },
 
-      removeLead: (id) => set((state) => ({ leads: state.leads.filter((item) => item.id !== id) })),
+      removeLead: async (id) => {
+        await api.supprimerDemande(id);
+        set((state) => ({ leads: state.leads.filter((item) => item.id !== id) }));
+      },
 
-      resetAll: () => set({ ...seed() }),
-    }),
-    {
-      name: 'teinterior-site',
-      /**
-       * v2 : coordonnées de l'atelier (Brumath, deux lignes téléphoniques).
-       * Les états persistés antérieurs contiennent l'ancienne adresse ; on repart
-       * du jeu de données courant plutôt que de fusionner à l'aveugle.
-       */
-      version: 2,
-      migrate: () => seed(),
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+      chargerDemandes: async () => {
+        const leads = (await api.lireDemandes()) as Lead[];
+        set({ leads });
+      },
+
+      resetAll: () => modifier({ ...seed() }),
+  };
+});

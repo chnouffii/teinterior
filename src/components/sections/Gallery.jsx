@@ -2,10 +2,11 @@ import { useState } from 'react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import CarVisual from '../ui/CarVisual.jsx';
-import { GALLERY_FILTERS } from '../../data/content.js';
+
 import { useSiteStore } from '../../store/siteStore';
 
 export default function Gallery({ hideHeading = false, limit = null }) {
+  const galleryFilters = useSiteStore((state) => state.galleryFilters);
   const items = useSiteStore((state) => state.gallery);
   const [filter, setFilter] = useState('tous');
 
@@ -26,7 +27,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
           )}
 
           <Reveal delay={60} className="flex flex-wrap gap-2">
-            {GALLERY_FILTERS.map((item) => (
+            {galleryFilters.map((item) => (
               <button
                 key={item.id}
                 type="button"

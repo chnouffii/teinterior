@@ -1,0 +1,1339 @@
+{
+  "brand": {
+    "name": "Teintérior",
+    "baseline": "Atelier automobile — Brumath",
+    "since": 2025
+  },
+  "navLinks": [
+    {
+      "id": "prestations",
+      "path": "/prestations",
+      "label": "Prestations"
+    },
+    {
+      "id": "retrofit",
+      "path": "/retrofit-carplay",
+      "label": "Rétrofit CarPlay"
+    },
+    {
+      "id": "vendre",
+      "path": "/vendre-sa-voiture",
+      "label": "Vendre sa voiture"
+    },
+    {
+      "id": "vehicules",
+      "path": "/vehicules",
+      "label": "Véhicules à vendre"
+    },
+    {
+      "id": "realisations",
+      "path": "/realisations",
+      "label": "Réalisations"
+    },
+    {
+      "id": "contact",
+      "path": "/contact",
+      "label": "Contact"
+    }
+  ],
+  "poles": [
+    {
+      "id": "esthetique",
+      "index": "01",
+      "icon": "Gem",
+      "accent": "brass",
+      "title": "Esthétique",
+      "lead": "Remise en état intérieur, correction de peinture, céramique et teintage.",
+      "points": [
+        "Vernis mesuré à la jauge avant chaque passe",
+        "Rupes LHR 15 Mark III, Menzerna, CarPro",
+        "Devis détaillé ligne par ligne, dès 149 €"
+      ],
+      "to": "/prestations",
+      "cta": "Voir le détail des packs"
+    },
+    {
+      "id": "retrofit",
+      "index": "02",
+      "icon": "MonitorSmartphone",
+      "accent": "ice",
+      "title": "Rétrofit multimédia",
+      "lead": "CarPlay et Android Auto intégrés à l’écran d’usine, faisceau d’origine intact.",
+      "points": [
+        "18 systèmes embarqués référencés",
+        "Aucun câble coupé, retour d’origine en 30 min",
+        "Garantie 2 ans pièces et pose"
+      ],
+      "to": "/retrofit-carplay",
+      "cta": "Chercher ma compatibilité"
+    },
+    {
+      "id": "sourcing",
+      "index": "03",
+      "icon": "Handshake",
+      "accent": "brass",
+      "title": "Vente et sourcing",
+      "lead": "Dépôt-vente préparé et photographié, ou recherche du véhicule que vous cherchez.",
+      "points": [
+        "23 jours de délai moyen de vente",
+        "Commission unique de 4,9 %, rien si pas de vente",
+        "Fonds vérifiés avant remise des clés"
+      ],
+      "to": "/vendre-sa-voiture",
+      "cta": "Faire estimer un véhicule"
+    }
+  ],
+  "contact": {
+    "phones": [
+      {
+        "id": "ligne-1",
+        "label": "Atelier",
+        "number": "07 50 09 36 39",
+        "href": "tel:+33750093639"
+      },
+      {
+        "id": "ligne-2",
+        "label": "Second contact",
+        "number": "06 19 51 89 63",
+        "href": "tel:+33619518963"
+      }
+    ],
+    "email": "contact@teinterior.fr",
+    "emailHref": "mailto:contact@teinterior.fr",
+    "whatsapp": "https://wa.me/33750093639",
+    "address": {
+      "street": "4 rue des Carrières",
+      "zone": "",
+      "city": "67170 Brumath",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=4+rue+des+Carrieres+67170+Brumath"
+    },
+    "hours": [
+      {
+        "day": "Lundi — Vendredi",
+        "value": "08h30 — 19h00"
+      },
+      {
+        "day": "Samedi",
+        "value": "09h00 — 17h00"
+      },
+      {
+        "day": "Dimanche",
+        "value": "Sur rendez-vous"
+      }
+    ],
+    "socials": [
+      {
+        "id": "instagram",
+        "label": "Instagram",
+        "url": "https://www.instagram.com/teinterior_/"
+      }
+    ]
+  },
+  "company": {
+    "legalName": "Teintérior",
+    "capital": "",
+    "siret": "",
+    "rcs": "",
+    "vat": "",
+    "director": "Direction de la publication : le représentant légal de Teintérior",
+    "host": "Hébergeur : OVHcloud, 2 rue Kellermann, 59100 Roubaix, France",
+    "insurance": ""
+  },
+  "serviceOptions": [
+    {
+      "value": "interieur",
+      "label": "Remise en état intérieur"
+    },
+    {
+      "value": "correction-1",
+      "label": "Correction peinture — 1 passe"
+    },
+    {
+      "value": "integrale",
+      "label": "Rénovation intégrale + céramique"
+    },
+    {
+      "value": "teintage",
+      "label": "Teintage de vitres"
+    },
+    {
+      "value": "retrofit",
+      "label": "Rétrofit CarPlay / Android Auto"
+    },
+    {
+      "value": "depot-vente",
+      "label": "Dépôt-vente / estimation"
+    },
+    {
+      "value": "sourcing",
+      "label": "Recherche de véhicule"
+    },
+    {
+      "value": "autre",
+      "label": "Autre demande"
+    }
+  ],
+  "hero": {
+    "kicker": "Atelier indépendant — Brumath",
+    "title": "Detailing, rétrofit CarPlay et vente de véhicules.",
+    "subtitle": "Un véhicule à la fois dans l’atelier. Vernis mesuré avant chaque passe de polish, faisceaux jamais coupés sur les intégrations multimédia, et des devis détaillés ligne par ligne.",
+    "primaryCta": "Voir les prestations",
+    "secondaryCta": "Faire estimer ma voiture",
+    "facts": [
+      {
+        "label": "Véhicules traités depuis 2025",
+        "value": "1 400"
+      },
+      {
+        "label": "Rétrofits CarPlay posés",
+        "value": "380"
+      },
+      {
+        "label": "Délai de réponse sur devis",
+        "value": "24 h"
+      },
+      {
+        "label": "Note moyenne sur 214 avis",
+        "value": "4,9"
+      }
+    ]
+  },
+  "workshop": {
+    "title": "L’atelier",
+    "intro": "Un local de 180 m² à Brumath, chauffé et éclairé en 5 000 K pour travailler la peinture sans mauvaise surprise à la sortie.",
+    "points": [
+      {
+        "label": "Cabine de polissage",
+        "detail": "Éclairage Scangrip multi-température, sol résiné, aspiration à la source."
+      },
+      {
+        "label": "Outillage",
+        "detail": "Rupes LHR 15 Mark III et Mille, Kärcher Puzzi 10/1, jauge à vernis, générateur d’ozone."
+      },
+      {
+        "label": "Consommables",
+        "detail": "Koch-Chemie, Menzerna, CarPro, Colourlock, films 3M et Solar Gard."
+      },
+      {
+        "label": "Suivi",
+        "detail": "Photos avant / après à chaque étape, fiche d’intervention remise avec les clés."
+      }
+    ]
+  },
+  "beforeAfter": [
+    {
+      "id": "lustrage",
+      "label": "Correction peinture",
+      "vehicle": "Audi A5 Sportback — noir mythos",
+      "scene": "polish",
+      "beforeCaption": "Avant — micro-rayures de lavage",
+      "afterCaption": "Après — 2 passes",
+      "summary": "Peinture marquée par cinq ans de lavage automatique. Deux passes Menzerna 300 puis 3800, épaisseur de vernis relevée à 118 µm avant travail.",
+      "specs": [
+        {
+          "label": "Défauts corrigés",
+          "value": "92 %"
+        },
+        {
+          "label": "Temps atelier",
+          "value": "11 h"
+        },
+        {
+          "label": "Vernis retiré",
+          "value": "4 µm"
+        }
+      ]
+    },
+    {
+      "id": "teintage",
+      "label": "Teintage vitres",
+      "vehicle": "BMW Série 3 G20 — film 3M 20 %",
+      "scene": "tint",
+      "beforeCaption": "Avant — vitrage d’origine",
+      "afterCaption": "Après — film 3M 20 %",
+      "summary": "Pose à chaud sans découpe sur véhicule, quatre vitres latérales. Vitres avant laissées d’origine pour rester conforme au contrôle technique.",
+      "specs": [
+        {
+          "label": "UV bloqués",
+          "value": "99 %"
+        },
+        {
+          "label": "Chaleur rejetée",
+          "value": "58 %"
+        },
+        {
+          "label": "Pose",
+          "value": "3 h"
+        }
+      ]
+    },
+    {
+      "id": "interieur",
+      "label": "Habitacle",
+      "vehicle": "Volkswagen Golf VII — sellerie tissu",
+      "scene": "interior",
+      "beforeCaption": "Avant — 120 000 km d’usage",
+      "afterCaption": "Après — injection-extraction",
+      "summary": "Sièges et moquettes extraits au Puzzi 10/1 après détachage manuel, plastiques repris à la vapeur, séchage soufflerie 4 h.",
+      "specs": [
+        {
+          "label": "Taches traitées",
+          "value": "100 %"
+        },
+        {
+          "label": "Séchage",
+          "value": "4 h"
+        },
+        {
+          "label": "Passages",
+          "value": "3"
+        }
+      ]
+    }
+  ],
+  "pipeline": [
+    {
+      "step": "01",
+      "label": "Estimation",
+      "detail": "Relevé des ventes réelles sur les 90 derniers jours, état constaté et historique. Fourchette argumentée sous 24 h, sans engagement.",
+      "duration": "24 h"
+    },
+    {
+      "step": "02",
+      "label": "Préparation et shooting",
+      "detail": "Detailing complet offert, puis 30 photos au 35 mm sur fond neutre et une vidéo verticale de 45 s pour les annonces.",
+      "duration": "1 à 2 jours"
+    },
+    {
+      "step": "03",
+      "label": "Diffusion et visites",
+      "detail": "Annonce publiée sur 6 plateformes, filtrage des appels, essais accompagnés à l’atelier, négociation menée par nos soins.",
+      "duration": "23 jours en moyenne"
+    },
+    {
+      "step": "04",
+      "label": "Sécurisation des fonds",
+      "detail": "Vérification du virement avant remise des clés, certificat de cession, déclaration en ligne et procès-verbal de livraison.",
+      "duration": "Le jour de la vente"
+    }
+  ],
+  "sourcingFacts": [
+    {
+      "value": "+12 %",
+      "label": "de prix de vente moyen constaté après préparation"
+    },
+    {
+      "value": "23 j",
+      "label": "de délai moyen de vente sur les 12 derniers mois"
+    },
+    {
+      "value": "4,9 %",
+      "label": "de commission unique — rien à payer si le véhicule ne part pas"
+    }
+  ],
+  "galleryFilters": [
+    {
+      "id": "tous",
+      "label": "Tout"
+    },
+    {
+      "id": "detailing",
+      "label": "Detailing"
+    },
+    {
+      "id": "carplay",
+      "label": "CarPlay"
+    },
+    {
+      "id": "vente",
+      "label": "Vente"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "r1",
+      "category": "detailing",
+      "title": "Audi RS4 — correction 3 passes",
+      "meta": "14 h atelier · Menzerna 300/3800 · céramique 5 ans",
+      "scene": "polish",
+      "palette": [
+        "#2E1C22",
+        "#6B3541"
+      ],
+      "body": "berline"
+    },
+    {
+      "id": "r2",
+      "category": "carplay",
+      "title": "BMW Série 3 F30 — interface NBT",
+      "meta": "2 h de pose · molette iDrive conservée · caméra ajoutée",
+      "scene": "screen",
+      "palette": [
+        "#182029",
+        "#2F4A5E"
+      ]
+    },
+    {
+      "id": "r3",
+      "category": "vente",
+      "title": "Porsche Macan S — dépôt-vente",
+      "meta": "Vendue en 11 jours au prix demandé · 6 plateformes",
+      "scene": "sale",
+      "palette": [
+        "#1B2333",
+        "#38496B"
+      ],
+      "body": "suv"
+    },
+    {
+      "id": "r4",
+      "category": "detailing",
+      "title": "Golf VIII — teintage 3M 20 %",
+      "meta": "3 h · 4 vitres latérales · garantie à vie du film",
+      "scene": "tint",
+      "palette": [
+        "#1A2226",
+        "#33484F"
+      ],
+      "body": "citadine"
+    },
+    {
+      "id": "r5",
+      "category": "detailing",
+      "title": "Volvo XC60 — habitacle repris",
+      "meta": "6 h · cuir Colourlock · ozone 60 min",
+      "scene": "interior",
+      "palette": [
+        "#26211B",
+        "#4E4335"
+      ]
+    },
+    {
+      "id": "r6",
+      "category": "carplay",
+      "title": "Porsche Cayenne — PCM 4.1",
+      "meta": "2 h 30 · Android Auto ajouté · Burmester conservé",
+      "scene": "screen",
+      "palette": [
+        "#1A1F2B",
+        "#333C57"
+      ]
+    },
+    {
+      "id": "r7",
+      "category": "vente",
+      "title": "Mercedes Classe C break — sourcing",
+      "meta": "Trouvée en Allemagne · expertise sur place · import géré",
+      "scene": "sale",
+      "palette": [
+        "#24282E",
+        "#474F59"
+      ],
+      "body": "break"
+    },
+    {
+      "id": "r8",
+      "category": "detailing",
+      "title": "Tesla Model 3 — céramique 9H",
+      "meta": "2 jours · vernis mou, passe unique douce · garantie 3 ans",
+      "scene": "polish",
+      "palette": [
+        "#2A2E32",
+        "#5C646C"
+      ],
+      "body": "berline"
+    },
+    {
+      "id": "r9",
+      "category": "carplay",
+      "title": "Audi A5 B8 — MMI 3G",
+      "meta": "2 h 30 · micro externe · commandes au volant actives",
+      "scene": "screen",
+      "palette": [
+        "#1D2622",
+        "#33514A"
+      ]
+    }
+  ],
+  "reviewSummary": {
+    "rating": "4,9",
+    "scale": "5",
+    "count": "214"
+  },
+  "testimonials": [
+    {
+      "id": "t1",
+      "name": "Julien M.",
+      "city": "Vendenheim",
+      "service": "Rénovation intégrale",
+      "rating": 5,
+      "date": "Juin 2026",
+      "text": "Ils ont mesuré le vernis devant moi avant de sortir la polisseuse, et refusé une passe supplémentaire sur le capot parce que l'épaisseur était limite. C'est la première fois qu'un pro me dit non pour de bonnes raisons."
+    },
+    {
+      "id": "t2",
+      "name": "Sabrina L.",
+      "city": "Haguenau",
+      "service": "Rétrofit CarPlay",
+      "rating": 5,
+      "date": "Mai 2026",
+      "text": "CarPlay sans fil sur mon Q5 en deux heures, faisceau d'origine intact. Le tarif du configurateur était exactement le tarif facturé, sans supplément de dernière minute."
+    },
+    {
+      "id": "t3",
+      "name": "Marc D.",
+      "city": "Schiltigheim",
+      "service": "Dépôt-vente",
+      "rating": 5,
+      "date": "Avril 2026",
+      "text": "Macan vendue en 11 jours au prix demandé. Ils ont géré les onze appels, les trois visites et le virement. Je n'ai signé que le certificat de cession."
+    },
+    {
+      "id": "t4",
+      "name": "Élodie P.",
+      "city": "Hoerdt",
+      "service": "Remise en état intérieur",
+      "rating": 5,
+      "date": "Mars 2026",
+      "text": "Deux enfants et un chien pendant dix ans. Je pensais devoir changer la sellerie, l'injection-extraction a suffi. Aucune odeur au bout de trois mois."
+    },
+    {
+      "id": "t5",
+      "name": "Karim B.",
+      "city": "Bischwiller",
+      "service": "Teintage",
+      "rating": 5,
+      "date": "Février 2026",
+      "text": "Pose nette, aucune bulle sur les bords. Ils ont refusé de teinter les vitres avant en m'expliquant la règle des 70 % de transmission. Sérieux."
+    },
+    {
+      "id": "t6",
+      "name": "Nathalie R.",
+      "city": "Strasbourg",
+      "service": "Sourcing",
+      "rating": 5,
+      "date": "Janvier 2026",
+      "text": "Je cherchais un break récent avec un vrai historique. Ils l'ont trouvé, expertisé sur place et livré préparé. Deux mauvaises affaires évitées au passage."
+    }
+  ],
+  "packs": [
+    {
+      "id": "interieur",
+      "ref": "INT-01",
+      "name": "Remise en état intérieur",
+      "subtitle": "Sièges, moquettes, plastiques, cuir",
+      "price": 149,
+      "priceNote": "citadine · +30 € berline · +60 € SUV / 7 places",
+      "duration": "3 h 30 à 4 h",
+      "immobilisation": "Véhicule rendu le jour même",
+      "summary": "Extraction en profondeur des textiles et vapeur sur les plastiques. Utile sur un véhicule familial, un retour de LOA ou une voiture qui part à la vente.",
+      "steps": [
+        {
+          "label": "Aspiration et soufflage",
+          "detail": "Coffre, rails de sièges, sous-tapis et joints de portes à la soufflette.",
+          "duration": "45 min"
+        },
+        {
+          "label": "Injection-extraction textiles",
+          "detail": "Kärcher Puzzi 10/1, détachage préalable des auréoles au pinceau.",
+          "duration": "1 h 15"
+        },
+        {
+          "label": "Vapeur sèche 165 °C",
+          "detail": "Plastiques, aérateurs, contours de boutons, ceintures et seuils.",
+          "duration": "45 min"
+        },
+        {
+          "label": "Traitement du cuir",
+          "detail": "Nettoyant pH 5,5 Colourlock puis lait nourrissant mat, sans effet brillant.",
+          "duration": "40 min"
+        },
+        {
+          "label": "Vitres et contrôle final",
+          "detail": "Vitres intérieures sans traces, reprise des détails sous lampe LED.",
+          "duration": "20 min"
+        }
+      ],
+      "products": [
+        "Kärcher Puzzi 10/1",
+        "Koch-Chemie",
+        "Colourlock",
+        "Vapeur 165 °C"
+      ],
+      "note": "Le traitement anti-odeurs à l’ozone (+39 €) est conseillé après un transport d’animaux ou un dégât des eaux."
+    },
+    {
+      "id": "correction-1",
+      "ref": "EXT-02",
+      "name": "Correction peinture — 1 passe",
+      "subtitle": "Décontamination, cut, protection 4 mois",
+      "price": 229,
+      "priceNote": "citadine · +40 € berline · +80 € SUV / 7 places",
+      "duration": "6 h",
+      "immobilisation": "Dépose le matin, restitution en fin de journée",
+      "summary": "Une passe de correction qui retire 60 à 70 % des micro-rayures de lavage. Le vernis est mesuré avant intervention, aucune passe n’est faite à l’aveugle.",
+      "steps": [
+        {
+          "label": "Prélavage et lavage deux seaux",
+          "detail": "Mousse active Koch-Chemie Green Star, gant microfibre, séchage air pulsé.",
+          "duration": "1 h"
+        },
+        {
+          "label": "Décontamination ferreuse et mécanique",
+          "detail": "Iron-X sur carrosserie et jantes, puis barre d’argile fine sur lubrifiant.",
+          "duration": "1 h 15"
+        },
+        {
+          "label": "Mesure d’épaisseur du vernis",
+          "detail": "Relevé jauge à 12 points, refus de passe sous 90 µm ou sur repeinte suspecte.",
+          "duration": "15 min"
+        },
+        {
+          "label": "Passe de cut",
+          "detail": "Rupes LHR 15 Mark III, Menzerna 2500 sur mousse jaune, contrôle Scangrip Sunmatch.",
+          "duration": "2 h 30"
+        },
+        {
+          "label": "Protection et finitions",
+          "detail": "Dégraissage IPA, scellant SiO2 Sonax PNS 4 mois, jantes et dressing pneus mat.",
+          "duration": "1 h"
+        }
+      ],
+      "products": [
+        "Rupes LHR 15 Mark III",
+        "Menzerna 2500",
+        "Koch-Chemie Iron-X",
+        "Sonax PNS"
+      ],
+      "note": "Sur peinture noire ou vernis mou (Mazda, Tesla), une seconde passe de finition est souvent nécessaire : +120 €."
+    },
+    {
+      "id": "integrale",
+      "ref": "FULL-03",
+      "name": "Rénovation intégrale + céramique",
+      "subtitle": "Correction 2 à 3 passes, céramique 3 ans",
+      "price": 890,
+      "priceNote": "à partir de — devis ferme après examen sous lampe",
+      "duration": "2 à 3 jours",
+      "immobilisation": "Véhicule gardé en cabine le temps de la réticulation",
+      "summary": "Le protocole complet : intérieur repris, peinture corrigée en profondeur puis scellée sous céramique. C’est la prestation demandée avant une vente ou après une livraison de concession décevante.",
+      "steps": [
+        {
+          "label": "Intégralité des lignes INT-01",
+          "detail": "Habitacle repris avant tout travail de carrosserie pour éviter les reprises.",
+          "duration": "4 h"
+        },
+        {
+          "label": "Décontamination complète",
+          "detail": "Chimique, mécanique, goudrons et résidus de colle sur bas de caisse.",
+          "duration": "2 h"
+        },
+        {
+          "label": "Correction 2 à 3 passes",
+          "detail": "Menzerna 300 sur mousse verte, finition 3800 sur mousse noire, 85 à 95 % des défauts.",
+          "duration": "8 à 12 h"
+        },
+        {
+          "label": "Préparation et pose céramique",
+          "detail": "Dégraissage IPA, 2 couches CarPro CQuartz UK 3.0, réticulation 12 h à 21 °C.",
+          "duration": "4 h + 12 h"
+        },
+        {
+          "label": "Finitions et carnet de suivi",
+          "detail": "Optiques, inox, jantes céramisées, remise du protocole d’entretien signé.",
+          "duration": "2 h"
+        }
+      ],
+      "products": [
+        "CarPro CQuartz UK 3.0",
+        "Menzerna 300 / 3800",
+        "Rupes Mille",
+        "Scangrip"
+      ],
+      "note": "Garantie 3 ans sur la céramique, conditionnée à un lavage pH neutre et à un contrôle annuel à l’atelier.",
+      "featured": true
+    }
+  ],
+  "options": [
+    {
+      "id": "teintage",
+      "label": "Teintage 4 vitres latérales",
+      "detail": "Film 3M Colour Stable ou Solar Gard, pose à chaud sans découpe sur véhicule",
+      "price": "dès 189 €",
+      "duration": "3 h"
+    },
+    {
+      "id": "ceramique-seule",
+      "label": "Céramique seule (sans correction)",
+      "detail": "CQuartz UK 3.0 sur peinture déjà saine, 2 couches",
+      "price": "490 €",
+      "duration": "1 jour"
+    },
+    {
+      "id": "optiques",
+      "label": "Rénovation d’optiques",
+      "detail": "Ponçage 800 à 3000, polissage, vernis UV 2K",
+      "price": "79 € la paire",
+      "duration": "1 h 30"
+    },
+    {
+      "id": "pare-brise",
+      "label": "Traitement hydrophobe pare-brise",
+      "detail": "Nettoyage cérium puis Gtechniq G1, tenue 12 mois",
+      "price": "49 €",
+      "duration": "45 min"
+    },
+    {
+      "id": "ozone",
+      "label": "Désinfection ozone",
+      "detail": "Générateur 10 g/h, 60 min de cycle + ventilation",
+      "price": "39 €",
+      "duration": "1 h 30"
+    },
+    {
+      "id": "moteur",
+      "label": "Nettoyage compartiment moteur",
+      "detail": "Protection des connectiques, dégraissage et dressing plastiques",
+      "price": "69 €",
+      "duration": "1 h"
+    }
+  ],
+  "retrofitProcess": [
+    {
+      "step": "01",
+      "label": "Dépose de la façade",
+      "detail": "Outils plastique uniquement, agrafes contrôlées une à une. Les pièces déposées sont posées sur tapis feutré, jamais sur la sellerie.",
+      "duration": "25 min"
+    },
+    {
+      "step": "02",
+      "label": "Repérage du faisceau",
+      "detail": "Identification du connecteur LVDS et du quadlock d’origine, relevé de la référence de l’unité multimédia.",
+      "duration": "15 min"
+    },
+    {
+      "step": "03",
+      "label": "Intégration de l’interface",
+      "detail": "Branchement en série sur le faisceau d’origine, boîtier fixé par velcro industriel dans un espace ventilé. Rien n’est coupé ni dénudé.",
+      "duration": "40 min"
+    },
+    {
+      "step": "04",
+      "label": "Codage et paramétrage",
+      "detail": "Activation de l’entrée vidéo, réglage de la résolution, appairage sans fil et test du micro d’origine.",
+      "duration": "30 min"
+    },
+    {
+      "step": "05",
+      "label": "Essai routier",
+      "detail": "Contrôle du basculement radio / CarPlay, commandes au volant, caméra de recul et coupure au démarrage.",
+      "duration": "20 min"
+    },
+    {
+      "step": "06",
+      "label": "Remontage et garantie",
+      "detail": "Remontage au couple, contrôle des jeux de façade, remise de la fiche d’intervention et de la garantie 2 ans.",
+      "duration": "20 min"
+    }
+  ],
+  "retrofitFacts": [
+    {
+      "label": "Immobilisation moyenne",
+      "value": "2 h 30"
+    },
+    {
+      "label": "Garantie pièces et pose",
+      "value": "2 ans"
+    },
+    {
+      "label": "Retour à l’état d’origine",
+      "value": "30 min"
+    },
+    {
+      "label": "Installations réalisées",
+      "value": "380"
+    }
+  ],
+  "retrofitKeeps": [
+    "Molette iDrive, MMI, COMAND ou tactile d’origine",
+    "Commandes au volant et micro de série",
+    "Caméra de recul et radars de stationnement",
+    "Amplificateur et égalisation d’usine"
+  ],
+  "catalogue": [
+    {
+      "id": "bmw",
+      "brand": "BMW",
+      "models": [
+        {
+          "id": "f20",
+          "model": "Série 1 / Série 2",
+          "years": "2011 — 2019",
+          "systems": [
+            {
+              "id": "cic",
+              "name": "CIC 6,5\" / 8,8\"",
+              "ref": "TI-BMW-CIC",
+              "fitment": "module",
+              "price": 449,
+              "duration": "2 h 30",
+              "harness": "Nappe LVDS 4 voies + alimentation quadlock",
+              "note": "Split-screen d’origine conservé, la molette pilote CarPlay après codage."
+            },
+            {
+              "id": "nbt-evo",
+              "name": "NBT EVO ID5 / ID6",
+              "ref": "TI-BMW-EVO",
+              "fitment": "plug",
+              "price": 529,
+              "duration": "2 h",
+              "harness": "Connecteur d’origine, aucun adaptateur",
+              "note": "Si le véhicule est déjà équipé CarPlay d’usine, seule l’activation FSC est facturée : 149 €."
+            }
+          ]
+        },
+        {
+          "id": "f30",
+          "model": "Série 3 / Série 4",
+          "years": "2012 — 2024",
+          "systems": [
+            {
+              "id": "nbt",
+              "name": "NBT 6,5\" / 8,8\" (ID4)",
+              "ref": "TI-BMW-NBT",
+              "fitment": "plug",
+              "price": 499,
+              "duration": "2 h",
+              "harness": "Nappe LVDS d’origine, branchement en série",
+              "note": "La configuration la plus courante à l’atelier, aucune limitation constatée."
+            },
+            {
+              "id": "idrive7",
+              "name": "iDrive 7 / Live Cockpit",
+              "ref": "TI-BMW-ID7",
+              "fitment": "module",
+              "price": 589,
+              "duration": "2 h 30",
+              "harness": "Module vidéo + codage E-Sys",
+              "note": "Ajout d’Android Auto sur les véhicules livrés CarPlay seul."
+            }
+          ]
+        },
+        {
+          "id": "x3x5",
+          "model": "X1 / X3 / X5",
+          "years": "2011 — 2023",
+          "systems": [
+            {
+              "id": "cic-nbt",
+              "name": "CIC ou NBT",
+              "ref": "TI-BMW-SUV",
+              "fitment": "plug",
+              "price": 519,
+              "duration": "2 h 15",
+              "harness": "Nappe LVDS d’origine",
+              "note": "Entrée caméra additionnelle disponible sur la même interface."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audi",
+      "brand": "Audi",
+      "models": [
+        {
+          "id": "a3",
+          "model": "A3 / S3",
+          "years": "2013 — 2024",
+          "systems": [
+            {
+              "id": "mib2",
+              "name": "MMI MIB2 / Concert",
+              "ref": "TI-AUD-MIB2",
+              "fitment": "plug",
+              "price": 479,
+              "duration": "2 h",
+              "harness": "Quadlock + LVDS d’origine",
+              "note": "Sur MIB2 High, l’activation logicielle suffit parfois : 189 €."
+            },
+            {
+              "id": "mib3",
+              "name": "MIB3 tactile",
+              "ref": "TI-AUD-MIB3",
+              "fitment": "reserve",
+              "price": 629,
+              "duration": "3 h",
+              "harness": "Module HDMI dédié",
+              "note": "Le mirroring vidéo est bridé par le constructeur : contournement par module, commandes vocales natives conservées."
+            }
+          ]
+        },
+        {
+          "id": "a4a5",
+          "model": "A4 / A5",
+          "years": "2009 — 2023",
+          "systems": [
+            {
+              "id": "mmi3g",
+              "name": "MMI 3G / 3G+",
+              "ref": "TI-AUD-3G",
+              "fitment": "module",
+              "price": 499,
+              "duration": "2 h 30",
+              "harness": "Remplacement du lecteur DVD, faisceau intact",
+              "note": "Micro externe fourni, entrée caméra AV incluse."
+            },
+            {
+              "id": "mib2-vc",
+              "name": "MIB2 + Virtual Cockpit",
+              "ref": "TI-AUD-VC",
+              "fitment": "plug",
+              "price": 559,
+              "duration": "2 h",
+              "harness": "Connecteur d’origine",
+              "note": "Le report de la carte sur le combiné numérique reste actif."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mercedes",
+      "brand": "Mercedes-Benz",
+      "models": [
+        {
+          "id": "w205",
+          "model": "Classe C / GLC",
+          "years": "2014 — 2021",
+          "systems": [
+            {
+              "id": "ntg5",
+              "name": "COMAND NTG 5.0 / 5.1",
+              "ref": "TI-MB-NTG5",
+              "fitment": "plug",
+              "price": 549,
+              "duration": "2 h 15",
+              "harness": "Connecteur COMAND d’origine",
+              "note": "Retour à l’interface d’usine par appui long sur la touche Media."
+            },
+            {
+              "id": "ntg55",
+              "name": "COMAND NTG 5.5",
+              "ref": "TI-MB-NTG55",
+              "fitment": "module",
+              "price": 599,
+              "duration": "2 h 30",
+              "harness": "Module vidéo + touchpad conservé",
+              "note": "Caméra de recul rappelée automatiquement au passage de la marche arrière."
+            }
+          ]
+        },
+        {
+          "id": "w177",
+          "model": "Classe A / CLA",
+          "years": "2019 — 2024",
+          "systems": [
+            {
+              "id": "mbux",
+              "name": "MBUX",
+              "ref": "TI-MB-MBUX",
+              "fitment": "reserve",
+              "price": 649,
+              "duration": "3 h",
+              "harness": "Module vidéo certifié, système fermé",
+              "note": "Assistant vocal et écran tactile d’origine conservés, mirroring via module."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "porsche",
+      "brand": "Porsche",
+      "models": [
+        {
+          "id": "pcm4",
+          "model": "Macan / Cayenne / 911",
+          "years": "2014 — 2018",
+          "systems": [
+            {
+              "id": "pcm41",
+              "name": "PCM 4.0 / 4.1",
+              "ref": "TI-POR-PCM4",
+              "fitment": "plug",
+              "price": 719,
+              "duration": "2 h 30",
+              "harness": "Faisceau PCM d’origine, aucune dépose de planche de bord",
+              "note": "Alternative au kit officiel Porsche Classic, audio Burmester conservé."
+            }
+          ]
+        },
+        {
+          "id": "pcm6",
+          "model": "911 (992) / Cayenne (E3)",
+          "years": "2019 — 2023",
+          "systems": [
+            {
+              "id": "pcm60",
+              "name": "PCM 6.0 tactile",
+              "ref": "TI-POR-PCM6",
+              "fitment": "module",
+              "price": 769,
+              "duration": "3 h",
+              "harness": "Module + codage constructeur",
+              "note": "Ajout d’Android Auto, absent d’origine sur une grande partie du parc."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "volkswagen",
+      "brand": "Volkswagen",
+      "models": [
+        {
+          "id": "golf7",
+          "model": "Golf VII / Tiguan / Passat",
+          "years": "2013 — 2019",
+          "systems": [
+            {
+              "id": "discover",
+              "name": "Composition / Discover Media",
+              "ref": "TI-VW-MIB2",
+              "fitment": "plug",
+              "price": 399,
+              "duration": "1 h 45",
+              "harness": "Activation App-Connect ou interface MIB2",
+              "note": "Souvent réalisable par activation logicielle seule : 149 €, certificat remis."
+            }
+          ]
+        },
+        {
+          "id": "golf8",
+          "model": "Golf VIII",
+          "years": "2020 — 2024",
+          "systems": [
+            {
+              "id": "discoverpro",
+              "name": "MIB3 Discover Pro",
+              "ref": "TI-VW-MIB3",
+              "fitment": "module",
+              "price": 489,
+              "duration": "2 h",
+              "harness": "Module sans fil, widgets d’origine conservés",
+              "note": "Compatible finitions GTI, GTD et R."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stellantis",
+      "brand": "Renault / Peugeot",
+      "models": [
+        {
+          "id": "nac",
+          "model": "3008 / 508 / 208",
+          "years": "2017 — 2023",
+          "systems": [
+            {
+              "id": "nac-connect",
+              "name": "NAC Peugeot Connect",
+              "ref": "TI-PSA-NAC",
+              "fitment": "plug",
+              "price": 419,
+              "duration": "2 h",
+              "harness": "Mise à jour firmware NAC + module sans fil",
+              "note": "i-Cockpit et commandes au volant inchangés."
+            }
+          ]
+        },
+        {
+          "id": "rlink",
+          "model": "Mégane / Clio / Captur",
+          "years": "2016 — 2022",
+          "systems": [
+            {
+              "id": "rlink2",
+              "name": "R-Link 2",
+              "ref": "TI-REN-RL2",
+              "fitment": "reserve",
+              "price": 449,
+              "duration": "2 h 30",
+              "harness": "Interface filaire, mise à jour préalable parfois requise",
+              "note": "Certaines versions demandent un passage en concession avant intervention."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "a4-avant-190",
+      "ref": "TV-0142",
+      "brand": "Audi",
+      "model": "A4 Avant",
+      "trim": "2.0 TDI 190 S line quattro",
+      "year": 2019,
+      "km": 78400,
+      "gearbox": "BVA",
+      "fuel": "Diesel",
+      "power": 190,
+      "price": 24900,
+      "netSeller": 21800,
+      "status": "disponible",
+      "color": "Gris Daytona nacré",
+      "palette": [
+        "#2A313B",
+        "#5A6878"
+      ],
+      "body": "break",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-07-12",
+      "highlights": [
+        "Deuxième main, 2 clés, carnet Audi complet",
+        "Distribution faite à 74 000 km, facture à l’appui",
+        "Pneus Michelin Primacy 4 montés en mai 2026"
+      ],
+      "history": "Véhicule de cadre commercial, entretien exclusivement en réseau Audi. Aucun sinistre déclaré, rapport Histovec disponible.",
+      "workshopWork": [
+        "Correction 1 passe + scellant SiO2 (juillet 2026)",
+        "Habitacle repris en injection-extraction",
+        "Rétrofit CarPlay sans fil posé sur MIB2"
+      ]
+    },
+    {
+      "id": "serie3-touring-320d",
+      "ref": "TV-0147",
+      "brand": "BMW",
+      "model": "Série 3 Touring",
+      "trim": "320d xDrive M Sport",
+      "year": 2020,
+      "km": 62150,
+      "gearbox": "BVA",
+      "fuel": "Diesel",
+      "power": 190,
+      "price": 29500,
+      "netSeller": 26400,
+      "status": "disponible",
+      "color": "Noir Saphir métallisé",
+      "palette": [
+        "#101318",
+        "#2E3644"
+      ],
+      "body": "break",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-08-02",
+      "highlights": [
+        "Céramique CQuartz posée en mars 2026, garantie transférée",
+        "Sellerie cuir Vernasca reprise et nourrie",
+        "Révision et filtres faits à 60 000 km"
+      ],
+      "history": "Première main, véhicule de société suivi en concession. Quatre pneus Continental à 5 mm.",
+      "workshopWork": [
+        "Correction 2 passes + céramique 3 ans",
+        "Rénovation des optiques",
+        "Traitement hydrophobe pare-brise"
+      ]
+    },
+    {
+      "id": "golf-gtd-184",
+      "ref": "TV-0139",
+      "brand": "Volkswagen",
+      "model": "Golf VII",
+      "trim": "GTD 184 5 portes",
+      "year": 2017,
+      "km": 104300,
+      "gearbox": "BVM",
+      "fuel": "Diesel",
+      "power": 184,
+      "price": 17450,
+      "netSeller": 15200,
+      "status": "reserve",
+      "color": "Blanc Pur",
+      "palette": [
+        "#8A9099",
+        "#D5DAE0"
+      ],
+      "body": "citadine",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-06-28",
+      "highlights": [
+        "Teintage 3M 20 % posé à l’atelier",
+        "Deux jeux de roues fournis, hiver montés sur jantes acier",
+        "Embrayage remplacé à 98 000 km"
+      ],
+      "history": "Trois propriétaires, historique complet, dernière contre-visite néant. Véhicule non modifié, cartographie d’origine.",
+      "workshopWork": [
+        "Correction 1 passe",
+        "Teintage 4 vitres latérales",
+        "Nettoyage moteur"
+      ]
+    },
+    {
+      "id": "macan-s-354",
+      "ref": "TV-0151",
+      "brand": "Porsche",
+      "model": "Macan",
+      "trim": "S 3.0 V6 354 PDK",
+      "year": 2018,
+      "km": 88900,
+      "gearbox": "BVA",
+      "fuel": "Essence",
+      "power": 354,
+      "price": 48900,
+      "netSeller": 44500,
+      "status": "disponible",
+      "color": "Bleu Nuit métallisé",
+      "palette": [
+        "#152135",
+        "#2F4C7E"
+      ],
+      "body": "suv",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-08-14",
+      "highlights": [
+        "Suspension pneumatique et PASM, aucun défaut mémoire",
+        "Expertise indépendante 120 points remise à l’acheteur",
+        "Android Auto ajouté au PCM 4.1"
+      ],
+      "history": "Véhicule suivi chez Porsche Strasbourg jusqu’à 80 000 km, puis chez un spécialiste indépendant. Disques et plaquettes avant neufs.",
+      "workshopWork": [
+        "Rénovation intégrale + céramique",
+        "Rétrofit Android Auto PCM 4.1",
+        "Céramique jantes"
+      ]
+    },
+    {
+      "id": "classe-c-220d",
+      "ref": "TV-0148",
+      "brand": "Mercedes-Benz",
+      "model": "Classe C",
+      "trim": "220 d AMG Line 9G-Tronic",
+      "year": 2019,
+      "km": 71200,
+      "gearbox": "BVA",
+      "fuel": "Diesel",
+      "power": 194,
+      "price": 26800,
+      "netSeller": 23900,
+      "status": "disponible",
+      "color": "Gris Sélénite",
+      "palette": [
+        "#464C55",
+        "#8F97A2"
+      ],
+      "body": "berline",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-08-05",
+      "highlights": [
+        "Garantie 12 mois incluse dans le prix affiché",
+        "Quatre pneus toutes saisons neufs",
+        "Sellerie Artico nettoyée vapeur"
+      ],
+      "history": "Deux propriétaires, entretien Mercedes complet, dernière révision à 68 500 km.",
+      "workshopWork": [
+        "Correction 1 passe",
+        "Rénovation optiques",
+        "Traitement pare-brise"
+      ]
+    },
+    {
+      "id": "zoe-r135",
+      "ref": "TV-0133",
+      "brand": "Renault",
+      "model": "Zoé",
+      "trim": "R135 Intens — batterie en pleine propriété",
+      "year": 2021,
+      "km": 34600,
+      "gearbox": "BVA",
+      "fuel": "Électrique",
+      "power": 135,
+      "price": 14900,
+      "netSeller": 12900,
+      "status": "vendu",
+      "color": "Gris Titanium",
+      "palette": [
+        "#3A4347",
+        "#6E7D84"
+      ],
+      "body": "citadine",
+      "photos": [],
+      "coverIndex": 0,
+      "location": "Brumath (67)",
+      "listedAt": "2026-05-19",
+      "highlights": [
+        "Santé batterie certifiée à 94 % (rapport joint)",
+        "Câble Type 2 et prise renforcée fournis",
+        "Habitacle traité à l’ozone"
+      ],
+      "history": "Première main, batterie achetée avec le véhicule, aucune charge rapide répétée.",
+      "workshopWork": [
+        "Remise en état intérieur",
+        "Correction 1 passe"
+      ]
+    }
+  ],
+  "leads": [
+    {
+      "id": "LD-2609",
+      "type": "estimation",
+      "status": "nouveau",
+      "createdAt": "2026-08-20T09:12:00",
+      "name": "Camille Duarte",
+      "phone": "06 24 55 18 03",
+      "email": "camille.duarte@email.fr",
+      "vehicle": "BMW Série 1 118d — 2019 · 82 000 km · BVA",
+      "expectedPrice": 18500,
+      "message": "Véhicule entretenu en concession, deux clés, pneus neufs. Je vise une vente avant octobre."
+    },
+    {
+      "id": "LD-2608",
+      "type": "devis",
+      "status": "contacte",
+      "createdAt": "2026-08-19T17:40:00",
+      "name": "Thomas Riviere",
+      "phone": "07 81 46 22 90",
+      "email": "t.riviere@email.fr",
+      "service": "Correction peinture — 1 passe",
+      "plate": "FD-482-QT",
+      "message": "Golf R noire, beaucoup de micro-rayures après un lavage automatique. Dispo un samedi."
+    },
+    {
+      "id": "LD-2607",
+      "type": "devis",
+      "status": "rdv",
+      "createdAt": "2026-08-18T11:05:00",
+      "name": "Sophie Nguyen",
+      "phone": "06 11 74 39 55",
+      "email": "sophie.nguyen@email.fr",
+      "service": "Rétrofit CarPlay / Android Auto",
+      "plate": "GH-119-AB",
+      "message": "Classe C 2017 avec COMAND NTG 5.0. RDV posé le 26/08 à 9 h."
+    },
+    {
+      "id": "LD-2604",
+      "type": "estimation",
+      "status": "cloture",
+      "createdAt": "2026-08-14T15:22:00",
+      "name": "Pierre Lasserre",
+      "phone": "06 63 90 12 47",
+      "email": "p.lasserre@email.fr",
+      "vehicle": "Renault Zoé R135 — 2021 · 34 600 km · BVA",
+      "expectedPrice": 15000,
+      "message": "Mandat signé, véhicule vendu le 12/08. Dossier clos."
+    }
+  ]
+}

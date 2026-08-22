@@ -1,15 +1,33 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 
-/** Barrière d'accès : renvoie vers la page de connexion si la session est absente ou expirée. */
+/**
+ * Barrière d'accès au panel.
+ *
+ * L'état de session vient du serveur : au premier rendu on ne sait pas encore
+ * si le cookie est valide, on attend donc la réponse avant de rediriger. Sans
+ * cette attente, un rafraîchissement de page renverrait systématiquement vers
+ * l'écran de connexion alors que la session est ouverte.
+ */
 export default function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
-  // On s'abonne à la session pour re-rendre après connexion / déconnexion.
-  const session = useAuthStore((state) => state.session);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const connecte = useAuthStore((state) => state.connecte);
+  const verifierSession = useAuthStore((state) => state.verifierSession);
 
-  if (!session || !isAuthenticated()) {
+  useEffect(() => {
+    if (connecte === null) verifierSession();
+  }, [connecte, verifierSession]);
+
+  if (connecte === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-sm text-faint">
+        Vérification de la session…
+      </div>
+    );
+  }
+
+  if (!connecte) {
     return <Navigate to="/admin/connexion" replace state={{ from: location.pathname }} />;
   }
 

@@ -156,6 +156,24 @@ function EstimationForm() {
 
     setEnvoiErreur(null);
     setEnvoiEnCours(true);
+
+    let lead;
+    try {
+      lead = await addLead({
+        type: 'estimation',
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        vehicle: vehicule,
+        expectedPrice: price,
+        message: form.message || 'Aucun commentaire.',
+      });
+    } catch (error) {
+      setEnvoiErreur(error.message || "L'enregistrement de votre demande a échoué.");
+      setEnvoiEnCours(false);
+      return;
+    }
+
     try {
       await sendLead({
         sujet: `Estimation — ${form.brand} ${form.model} — ${form.name}`,
@@ -170,22 +188,9 @@ function EstimationForm() {
         },
       });
     } catch (error) {
-      setEnvoiErreur(error.message);
-      setEnvoiEnCours(false);
-      return;
+      console.warn('Notification email non envoyée :', error.message);
     }
     setEnvoiEnCours(false);
-
-    // Copie locale : alimente le panel d'administration en développement.
-    const lead = addLead({
-      type: 'estimation',
-      name: form.name,
-      phone: form.phone,
-      email: form.email,
-      vehicle: vehicule,
-      expectedPrice: price,
-      message: form.message || 'Aucun commentaire.',
-    });
 
     setSent({
       reference: lead.id,

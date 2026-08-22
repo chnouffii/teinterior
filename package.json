@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generer:contenus": "node scripts/generer-contenus-par-defaut.mjs",
+    "server": "node server/index.js"
   },
   "dependencies": {
     "lucide-react": "^0.454.0",

@@ -1,7 +1,12 @@
 # Mise en ligne sur un VPS
 
-Le site est **statique** : on construit des fichiers HTML/CSS/JS, et nginx les sert.
-Il n'y a aucun processus Node à faire tourner en permanence.
+Deux morceaux à installer :
+
+- **Le site** — des fichiers HTML/CSS/JS construits une fois et servis par nginx.
+- **L'API de contenus** — un petit service Node qui stocke les contenus et les
+  demandes dans un fichier JSON. C'est lui qui rend le panel d'administration
+  réellement utile : sans lui, vos modifications ne sortiraient pas de votre
+  navigateur.
 
 ---
 
@@ -18,9 +23,10 @@ le visiteur à téléphoner. Ils n'affichent **jamais** de fausse confirmation.
 
 ### Les mentions légales
 
-`src/data/site.js`, objet `COMPANY` : `siret`, `vat`, `rcs`, `capital` et
-`insurance` sont **vides**. Ces mentions sont obligatoires (art. 6 III LCEN).
-Les remplir avant d'ouvrir le site au public.
+SIRET, TVA, RCS, capital et assurance sont **vides**. Ces mentions sont
+obligatoires (art. 6 III LCEN). Une fois le site en ligne, remplissez-les dans
+**Admin → Informations légales** : l'écran signale lui-même ce qui manque. Tant
+qu'un champ est vide, il est masqué plutôt que rempli d'une approximation.
 
 ---
 
@@ -67,29 +73,35 @@ C'est **la commande à retenir**. En SSH sur le VPS :
 cd /opt/teinterior
 git pull origin claude/site-current-overview-ivnv0r
 npm ci
-VITE_WEB3FORMS_KEY=votre_cle npm run build
+VITE_WEB3FORMS_KEY=votre_cle VITE_ENABLE_ADMIN=true npm run build
 sudo rsync -a --delete dist/ /var/www/teinterior/
+sudo systemctl restart teinterior-api
 ```
 
 Pas besoin de recharger nginx : il sert les fichiers du dossier, qui vient
 d'être remplacé.
 
-> `VITE_ENABLE_ADMIN` doit rester **non défini** : le panel d'administration
-> est alors absent du build public. Voir la section 5.
+> `VITE_ENABLE_ADMIN=true` inclut le panel d'administration dans le build.
+> C'est désormais sans danger : l'authentification est côté serveur. Voir la
+> section 5.
 
 ### Pour éviter de retaper la clé
 
 Créer `/opt/teinterior/.env` (ignoré par git) :
 
 ```bash
-echo 'VITE_WEB3FORMS_KEY=votre_cle' > /opt/teinterior/.env
+sudo tee /opt/teinterior/.env >/dev/null <<'ENV'
+VITE_WEB3FORMS_KEY=votre_cle
+VITE_ENABLE_ADMIN=true
+ENV
 ```
 
 Le déploiement se réduit alors à :
 
 ```bash
 cd /opt/teinterior && git pull && npm ci && npm run build \
-  && sudo rsync -a --delete dist/ /var/www/teinterior/
+  && sudo rsync -a --delete dist/ /var/www/teinterior/ \
+  && sudo systemctl restart teinterior-api
 ```
 
 ### Script tout-en-un
@@ -103,6 +115,7 @@ git pull origin claude/site-current-overview-ivnv0r
 npm ci
 npm run build
 rsync -a --delete dist/ /var/www/teinterior/
+systemctl restart teinterior-api
 echo "Déployé : $(date '+%d/%m/%Y %H:%M')"
 SH
 sudo chmod +x /usr/local/bin/deploy-teinterior
@@ -127,38 +140,128 @@ rsync -avz --delete dist/ utilisateur@IP_DU_VPS:/var/www/teinterior/
 Remplacer `utilisateur` et `IP_DU_VPS`. Le `/` final après `dist` est
 important : il copie le *contenu* du dossier, pas le dossier lui-même.
 
+⚠ L'API de contenus doit malgré tout tourner sur le VPS (section 5) : c'est elle
+qui sert les contenus au site et reçoit les demandes. Seule la construction du
+site se fait alors sur le Mac.
+
 ---
 
-## 5. Le panel d'administration
+## 5. L'API de contenus et le panel d'administration
 
-Il n'est **pas** inclus dans le build public, et c'est volontaire :
-l'authentification est côté client, donc ses identifiants seraient lisibles
-dans le JavaScript servi à tous les visiteurs. En production, `/admin` renvoie
-simplement la page 404 du site.
+Le panel écrit dans un fichier JSON sur le serveur, et le site lit ce fichier :
+une modification faite dans `/admin` est visible par tous les visiteurs dès le
+rafraîchissement suivant. C'est un petit service Node, sans base de données et
+sans dépendance à installer.
 
-Pour l'utiliser en local :
+### Installation (une seule fois)
 
 ```bash
-VITE_ENABLE_ADMIN=true npm run dev
+# Dossier de données, écrit par le service
+sudo mkdir -p /var/lib/teinterior
+sudo chown www-data:www-data /var/lib/teinterior
+
+# Mot de passe administrateur : générer le condensé
+cd /opt/teinterior
+node server/creer-mot-de-passe.js "un mot de passe long et unique"
+# → scrypt$....  (copier la ligne entière)
+
+# Secrets du service
+sudo tee /etc/teinterior.env >/dev/null <<'ENV'
+TEINTERIOR_ADMIN_EMAIL=contact@teinterior.fr
+TEINTERIOR_ADMIN_HASH=collez_ici_le_condense_scrypt
+TEINTERIOR_SESSION_SECRET=collez_ici_une_longue_chaine_aleatoire
+TEINTERIOR_DATA=/var/lib/teinterior/contenus.json
+PORT=8787
+ENV
+sudo chmod 600 /etc/teinterior.env
+
+# Service systemd
+sudo cp deploy/teinterior-api.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now teinterior-api
+sudo systemctl status teinterior-api --no-pager
 ```
 
-Attention : les modifications faites dans le panel sont enregistrées dans le
-`localStorage` **du navigateur utilisé**. Elles ne sont pas partagées avec les
-visiteurs du site. Pour changer un contenu durablement, modifier les fichiers
-de `src/data/`, committer, et redéployer.
+Pour le secret de session : `openssl rand -hex 32`.
 
----
+L'API n'écoute que sur `127.0.0.1` : elle n'est pas joignable depuis
+l'extérieur, seul nginx lui parle, via le bloc `location /api/` de la config.
+
+### Changer le mot de passe
+
+```bash
+cd /opt/teinterior
+node server/creer-mot-de-passe.js "nouveau mot de passe"
+sudo nano /etc/teinterior.env      # remplacer TEINTERIOR_ADMIN_HASH
+sudo systemctl restart teinterior-api
+```
+
+Le mot de passe lui-même n'est stocké nulle part, seulement son condensé scrypt.
+
+### Sauvegarder les contenus
+
+Tout tient dans un fichier :
+
+```bash
+sudo cp /var/lib/teinterior/contenus.json ~/sauvegarde-$(date +%F).json
+```
+
+Une sauvegarde quotidienne automatique :
+
+```bash
+sudo tee /etc/cron.daily/teinterior-backup >/dev/null <<'SH'
+#!/bin/sh
+mkdir -p /var/backups/teinterior
+cp /var/lib/teinterior/contenus.json \
+   /var/backups/teinterior/contenus-$(date +%F).json
+find /var/backups/teinterior -name 'contenus-*.json' -mtime +30 -delete
+SH
+sudo chmod +x /etc/cron.daily/teinterior-backup
+```
+
+### Ce que le panel permet de modifier
+
+| Écran | Contenus |
+| --- | --- |
+| Page d'accueil | Accroche, les quatre chiffres, les trois métiers et leurs arguments |
+| Prestations | Formules, opérations, produits, options à la carte, forfaits rétrofit |
+| Avant / après | Cas du comparateur, légendes, chiffres, adresses de vraies photos |
+| Rétrofit CarPlay | Chiffres, déroulé de l'intervention, fonctions d'origine conservées |
+| Vendre sa voiture | Étapes du dépôt-vente, chiffres du sourcing |
+| Showroom | Véhicules : caractéristiques, prix, marge, statut, carrosserie |
+| Réalisations et avis | Galerie, filtres, témoignages, note affichée |
+| Atelier et coordonnées | Présentation, adresse, deux téléphones, horaires, réseaux |
+| Informations légales | SIRET, TVA, RCS, assurance, marque, menu de navigation |
+
+Les modifications sont enregistrées automatiquement : un témoin en haut à droite
+indique « Enregistrement… » puis « Publié ».
+
+### Journal et diagnostic
+
+```bash
+sudo journalctl -u teinterior-api -f      # journal en direct
+curl -s localhost:8787/api/content | head # l'API répond-elle ?
+```
+
+Si le panel affiche « Serveur injoignable », le service est arrêté ou le bloc
+`location /api/` manque dans la config nginx.
 
 ## 6. Vérifier après déploiement
 
 ```bash
-curl -I https://teinterior.fr/                # 200
-curl -I https://teinterior.fr/prestations     # 200 — et non 404
-curl -I https://teinterior.fr/admin           # doit servir la 404 du site
+curl -I https://teinterior.fr/                    # 200
+curl -I https://teinterior.fr/prestations         # 200 — et non 404
+curl -s  https://teinterior.fr/api/content | head # les contenus doivent sortir
+curl -I  https://teinterior.fr/admin/connexion    # 200
 ```
 
 Si `/prestations` renvoie 404, c'est que le `try_files` de la config nginx
 n'est pas actif : vérifier que le bon fichier est bien dans `sites-enabled`.
 
-Puis, dans un navigateur : envoyer une demande depuis `/contact` et vérifier
-que l'email arrive bien sur `contact@teinterior.fr`.
+Puis, dans un navigateur :
+
+1. Envoyer une demande depuis `/contact`, vérifier qu'elle apparaît dans
+   **Admin → Demandes** et que l'email arrive sur `contact@teinterior.fr`.
+2. Se connecter à `/admin`, modifier un chiffre de la page d'accueil, et
+   recharger le site dans une fenêtre de navigation privée : la modification
+   doit y être visible. C'est le test qui prouve que la publication fonctionne.

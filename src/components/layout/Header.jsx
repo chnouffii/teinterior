@@ -3,7 +3,7 @@ import { Menu, Phone, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
 import Button from '../ui/Button.jsx';
-import { NAV_LINKS, ROUTES, primaryPhone } from '../../data/site.js';
+import { ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import useScrollPosition from '../../hooks/useScrollPosition.js';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll.js';
@@ -13,6 +13,7 @@ export default function Header() {
   const scrolled = useScrollPosition(24);
   const { pathname } = useLocation();
   const contact = useSiteStore((state) => state.contact);
+  const navLinks = useSiteStore((state) => state.navLinks);
   const phone = primaryPhone(contact);
 
   useLockBodyScroll(menuOpen);
@@ -33,7 +34,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Navigation principale">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.id}
               to={link.path}
@@ -81,7 +82,7 @@ export default function Header() {
         }`}
       >
         <nav className="container-x flex flex-col gap-1 py-4" aria-label="Navigation mobile">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.id}
               to={link.path}

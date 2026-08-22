@@ -3,7 +3,7 @@ import { ArrowRight, Check, ChevronRight, RotateCcw } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
-import { FITMENT, RETROFIT_FACTS, RETROFIT_KEEPS, RETROFIT_PROCESS } from '../../data/retrofit.js';
+import { FITMENT } from '../../data/retrofit.js';
 import { useSiteStore } from '../../store/siteStore';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
@@ -208,6 +208,9 @@ function Finder() {
 }
 
 export default function Retrofit({ hideHeading = false }) {
+  const retrofitFacts = useSiteStore((state) => state.retrofitFacts);
+  const retrofitProcess = useSiteStore((state) => state.retrofitProcess);
+  const retrofitKeeps = useSiteStore((state) => state.retrofitKeeps);
   return (
     <section className={`relative overflow-hidden pb-20 lg:pb-28 ${hideHeading ? 'pt-6' : 'pt-20 lg:pt-28'}`}>
       <div className="pointer-events-none absolute -right-32 top-20 h-[420px] w-[420px] rounded-full bg-ice/5 blur-3xl" />
@@ -223,7 +226,7 @@ export default function Retrofit({ hideHeading = false }) {
         )}
 
         <Reveal className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
-          {RETROFIT_FACTS.map((fact) => (
+          {retrofitFacts.map((fact) => (
             <div key={fact.label} className="bg-ink-950/90 px-6 py-6 text-center">
               <p className="num font-display text-2xl font-bold text-fg">{fact.value}</p>
               <p className="mt-2 text-[11px] leading-snug text-faint">{fact.label}</p>
@@ -235,7 +238,7 @@ export default function Retrofit({ hideHeading = false }) {
           <div className="lg:col-span-8">
             <h3 className="text-lg font-bold">Déroulé de l’intervention</h3>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              {RETROFIT_PROCESS.map((item, index) => (
+              {retrofitProcess.map((item, index) => (
                 <Reveal
                   key={item.step}
                   delay={index * 60}
@@ -258,7 +261,7 @@ export default function Retrofit({ hideHeading = false }) {
             <div className="rounded-lg border border-ice/20 bg-ice/[0.04] p-6">
               <h3 className="text-base font-bold text-fg">Ce qui reste d’origine</h3>
               <ul className="mt-4 space-y-3">
-                {RETROFIT_KEEPS.map((item) => (
+                {retrofitKeeps.map((item) => (
                   <li key={item} className="flex gap-2.5 text-sm text-muted">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-ice" strokeWidth={2.6} aria-hidden="true" />
                     {item}

@@ -1,9 +1,9 @@
 import PageHeader from '../components/layout/PageHeader.jsx';
 import Reveal from '../components/ui/Reveal.jsx';
 import usePageMeta from '../hooks/usePageMeta.js';
-import { BRAND, COMPANY, CONTACT } from '../data/site.js';
+import { useSiteStore } from '../store/siteStore';
 
-const CORE_SECTIONS = [
+const construireSections = (BRAND, COMPANY, CONTACT) => [
   {
     id: 'mentions',
     title: 'Mentions légales',
@@ -84,10 +84,8 @@ const CORE_SECTIONS = [
       },
     ],
   },
-];
 
-const SECTIONS = [
-  ...CORE_SECTIONS,
+  // Rubriques suivantes : indépendantes des coordonnées.
   {
     id: 'confidentialite',
     title: 'Politique de confidentialité',
@@ -137,6 +135,11 @@ const SECTIONS = [
 ];
 
 export default function LegalPage() {
+  const brand = useSiteStore((state) => state.brand);
+  const company = useSiteStore((state) => state.company);
+  const contact = useSiteStore((state) => state.contact);
+  const SECTIONS = construireSections(brand, company, contact);
+
   usePageMeta({
     title: 'Mentions légales, CGV et confidentialité | Teintérior',
     description:

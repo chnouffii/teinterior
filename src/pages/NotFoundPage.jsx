@@ -1,10 +1,12 @@
 import { ArrowLeft, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button.jsx';
-import { NAV_LINKS, ROUTES } from '../data/site.js';
+import { ROUTES } from '../data/site.js';
 import usePageMeta from '../hooks/usePageMeta.js';
+import { useSiteStore } from '../store/siteStore';
 
 export default function NotFoundPage({ message }) {
+  const navLinks = useSiteStore((state) => state.navLinks);
   usePageMeta({
     title: 'Page introuvable | Teintérior',
     description: 'La page demandée n’existe pas ou a été déplacée.',
@@ -25,7 +27,7 @@ export default function NotFoundPage({ message }) {
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-2">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.id}
               to={link.path}

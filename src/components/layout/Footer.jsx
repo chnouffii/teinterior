@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
-import { BRAND, COMPANY, LEGAL_LINKS, NAV_LINKS } from '../../data/site.js';
+import { LEGAL_LINKS } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 
 export default function Footer() {
   const contact = useSiteStore((state) => state.contact);
+  const navLinks = useSiteStore((state) => state.navLinks);
+  const brand = useSiteStore((state) => state.brand);
+  const company = useSiteStore((state) => state.company);
   const year = new Date().getFullYear();
 
   return (
@@ -17,7 +20,7 @@ export default function Footer() {
             véhicules. Un seul véhicule à la fois, compte rendu photo à chaque étape.
           </p>
           <p className="mt-4 text-xs text-faint">
-            {BRAND.baseline} · depuis {BRAND.since}
+            {brand.baseline} · depuis {brand.since}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -38,7 +41,7 @@ export default function Footer() {
         <div className="lg:col-span-3">
           <h2 className="label-xs">Navigation</h2>
           <ul className="mt-4 space-y-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <li key={link.id}>
                 <Link
                   to={link.path}
@@ -103,7 +106,7 @@ export default function Footer() {
 
       <div className="container-x flex flex-col gap-3 py-6 text-xs text-faint md:flex-row md:items-center md:justify-between">
         <p className="num">
-          {[`© ${year} ${COMPANY.legalName}`, COMPANY.siret && `SIRET ${COMPANY.siret}`, COMPANY.vat && `TVA ${COMPANY.vat}`]
+          {[`© ${year} ${company.legalName}`, company.siret && `SIRET ${company.siret}`, company.vat && `TVA ${company.vat}`]
             .filter(Boolean)
             .join(' — ')}
         </p>

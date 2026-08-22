@@ -1,0 +1,38 @@
+# Service de l'API de contenus Teintérior.
+#
+# Installation :
+#   sudo cp deploy/teinterior-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now teinterior-api
+#
+# Les secrets sont lus dans /etc/teinterior.env (voir DEPLOIEMENT.md) : ils ne
+# doivent jamais être écrits dans ce fichier, qui est versionné.
+
+[Unit]
+Description=API de contenus Teintérior
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/teinterior
+ExecStart=/usr/bin/node server/index.js
+EnvironmentFile=/etc/teinterior.env
+Environment=NODE_ENV=production
+Restart=always
+RestartSec=5
+
+# L'API n'écrit que dans son dossier de données.
+ReadWritePaths=/var/lib/teinterior
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=teinterior-api
+
+[Install]
+WantedBy=multi-user.target

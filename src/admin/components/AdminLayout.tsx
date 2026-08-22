@@ -3,11 +3,17 @@ import {
   ChevronLeft,
   ExternalLink,
   FileText,
+  Handshake,
+  Home,
+  Images,
   Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
+  MonitorSmartphone,
+  Scale,
   Search,
+  SlidersHorizontal,
   Wrench,
   X,
 } from 'lucide-react';
@@ -15,23 +21,36 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { ADMIN_NAV, useAdminUi } from '../adminUi';
 import { useAuthStore } from '../../store/authStore';
 import { useSiteStore } from '../../store/siteStore';
+import EtatSync from './EtatSync';
 import Toaster from './Toaster';
 import { toast } from './toast';
 
-const ICONS = { LayoutDashboard, Car, Wrench, FileText, Inbox } as const;
+const ICONS = {
+  LayoutDashboard,
+  Car,
+  Wrench,
+  FileText,
+  Inbox,
+  Home,
+  MonitorSmartphone,
+  Handshake,
+  Images,
+  Scale,
+  SlidersHorizontal,
+} as const;
 
 export default function AdminLayout() {
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
-  const email = useAuthStore((state) => state.session?.email ?? state.email);
+  const email = useAuthStore((state) => state.email);
   const { query, setQuery, sidebarCollapsed, toggleSidebar, mobileNavOpen, setMobileNav } =
     useAdminUi();
   const newLeads = useSiteStore(
     (state) => state.leads.filter((lead) => lead.status === 'nouveau').length
   );
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     toast('Session fermée.', 'info');
     navigate('/admin/connexion', { replace: true });
   };
@@ -62,10 +81,17 @@ export default function AdminLayout() {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 p-3" aria-label="Navigation administration">
-          {ADMIN_NAV.map((item) => {
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Navigation administration">
+          {ADMIN_NAV.map((item, index) => {
             const Icon = ICONS[item.icon as keyof typeof ICONS];
+            const nouveauGroupe = index === 0 || ADMIN_NAV[index - 1].groupe !== item.groupe;
             return (
+              <div key={`groupe-${item.to}`}>
+                {nouveauGroupe && !sidebarCollapsed ? (
+                  <p className="px-3 pb-1 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-faint first:pt-1">
+                    {item.groupe}
+                  </p>
+                ) : null}
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -88,6 +114,7 @@ export default function AdminLayout() {
                   </span>
                 ) : null}
               </NavLink>
+              </div>
             );
           })}
         </nav>
@@ -157,7 +184,10 @@ export default function AdminLayout() {
             />
           </div>
 
-          <span className="ml-auto hidden text-xs text-faint sm:block">{email}</span>
+          <div className="ml-auto flex items-center gap-3">
+            <EtatSync />
+            <span className="hidden text-xs text-faint sm:block">{email}</span>
+          </div>
         </header>
 
         <main className="px-4 py-6 sm:px-6 lg:px-8">

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Icon from '../ui/Icon.jsx';
-import { POLES } from '../../data/site.js';
+import { useSiteStore } from '../../store/siteStore';
+
 
 /** Les trois métiers de l'atelier, chacun renvoyant vers sa page dédiée. */
 export default function PoleOverview() {
+  const poles = useSiteStore((state) => state.poles);
   return (
     <section id="poles" className="scroll-mt-24 py-12 lg:py-14">
       <div className="container-x">
@@ -18,7 +20,7 @@ export default function PoleOverview() {
         />
 
         <div className="mt-9 grid gap-5 lg:grid-cols-3">
-          {POLES.map((pole, index) => (
+          {poles.map((pole, index) => (
             <Reveal
               key={pole.id}
               delay={index * 90}

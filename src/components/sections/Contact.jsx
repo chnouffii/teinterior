@@ -164,11 +164,34 @@ function QuoteForm() {
 
     setEnvoiErreur(null);
     setEnvoiEnCours(true);
+
+    // L'enregistrement sur le serveur fait foi : c'est lui qui garantit que la
+    // demande apparaîtra dans le panel. S'il échoue, on ne confirme rien.
+    let lead;
+    try {
+      lead = await addLead({
+        type: 'devis',
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        service: serviceLabel,
+        plate: form.plate.toUpperCase(),
+        message,
+      });
+    } catch (error) {
+      setEnvoiErreur(error.message || "L'enregistrement de votre demande a échoué.");
+      setEnvoiEnCours(false);
+      return;
+    }
+
+    // Notification par email, au mieux : la demande est déjà sauvegardée, un
+    // échec d'envoi ne doit pas inquiéter le visiteur ni perdre sa demande.
     try {
       await sendLead({
         sujet: `Devis — ${serviceLabel} — ${form.name}`,
         replyTo: form.email,
         champs: {
+          Référence: lead.id,
           Prestation: serviceLabel,
           Nom: form.name,
           Téléphone: form.phone,
@@ -178,23 +201,10 @@ function QuoteForm() {
         },
       });
     } catch (error) {
-      setEnvoiErreur(error.message);
-      setEnvoiEnCours(false);
-      return;
+      console.warn('Notification email non envoyée :', error.message);
     }
+
     setEnvoiEnCours(false);
-
-    // Copie locale : alimente le panel d'administration en développement.
-    const lead = addLead({
-      type: 'devis',
-      name: form.name,
-      phone: form.phone,
-      email: form.email,
-      service: serviceLabel,
-      plate: form.plate.toUpperCase(),
-      message,
-    });
-
     setSent({ reference: lead.id, name: form.name, phone: form.phone, service: serviceLabel });
   };
 
