@@ -72,7 +72,7 @@ export default function BeforeAfterSlider({
     );
 
   return (
-    <figure className={`overflow-hidden rounded-3xl border border-white/10 bg-ink-900 ${className}`}>
+    <figure className={`overflow-hidden rounded-lg border border-white/10 bg-ink-900 ${className}`}>
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
         <span className="label-xs">Banc de comparaison</span>
         {reference ? <span className="num text-[11px] text-faint">{reference}</span> : null}
@@ -100,10 +100,10 @@ export default function BeforeAfterSlider({
           {renderLayer(afterImage, 'after', afterCaption)}
         </div>
 
-        <span className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/15 bg-ink-950/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted backdrop-blur">
+        <span className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/15 bg-ink-950/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
           {beforeCaption}
         </span>
-        <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-accent/40 bg-accent/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-soft backdrop-blur">
+        <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-accent/40 bg-accent/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-soft">
           {afterCaption}
         </span>
 
@@ -124,7 +124,7 @@ export default function BeforeAfterSlider({
           onPointerDown={(event) => event.stopPropagation()}
           className="absolute top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
             items-center justify-center rounded-full border border-white/30 bg-ink-950/90 text-fg
-            shadow-glow backdrop-blur transition-transform duration-200 hover:scale-110"
+            shadow-card transition-transform duration-200 hover:scale-110"
           style={{ left: `${position}%` }}
         >
           <MoveHorizontal className="h-4 w-4" aria-hidden="true" />

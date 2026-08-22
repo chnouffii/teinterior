@@ -31,7 +31,7 @@ const formatSize = (bytes) => {
 
 function WorkshopMap({ contact }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
+    <div className="overflow-hidden rounded-lg border border-white/10 bg-ink-900">
       <svg viewBox="0 0 600 280" className="h-48 w-full sm:h-56" role="img" aria-label="Plan d’accès">
         <rect width="600" height="280" fill="#11141A" />
         <g stroke="#1E232B" strokeWidth="14">
@@ -62,7 +62,7 @@ function WorkshopMap({ contact }) {
         <div className="text-sm">
           <p className="font-medium text-fg">{contact.address.street}</p>
           <p className="text-xs text-muted">
-            {contact.address.zone} — {contact.address.city}
+            {[contact.address.zone, contact.address.city].filter(Boolean).join(' — ')}
           </p>
         </div>
         <Button
@@ -170,7 +170,7 @@ function QuoteForm() {
 
   if (sent) {
     return (
-      <div className="rounded-3xl border border-white/10 bg-ink-900 p-6">
+      <div className="rounded-lg border border-white/10 bg-ink-900 p-6">
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-signal-ok/40 bg-signal-ok/10">
           <Check className="h-4 w-4 text-signal-ok" aria-hidden="true" />
         </span>
@@ -197,7 +197,7 @@ function QuoteForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={submit} noValidate className="rounded-3xl border border-white/10 bg-ink-900 p-6">
+    <form ref={formRef} onSubmit={submit} noValidate className="rounded-lg border border-white/10 bg-ink-900 p-6">
       <h3 className="text-base font-bold">Demander un devis</h3>
       <p className="mt-1 text-xs text-faint">
         Plus la description est précise, plus le devis l’est. Réponse sous 24 h ouvrées.
@@ -282,7 +282,7 @@ function QuoteForm() {
           <span className="field-label">Pièces jointes</span>
           <label
             htmlFor="contact-files"
-            className="flex cursor-pointer flex-col items-center gap-1.5 rounded-2xl border border-dashed border-white/10 bg-ink-950 px-5 py-6 text-center transition-colors hover:border-accent/50"
+            className="flex cursor-pointer flex-col items-center gap-1.5 rounded-md border border-dashed border-white/10 bg-ink-950 px-5 py-6 text-center transition-colors hover:border-accent/50"
           >
             <Paperclip className="h-4 w-4 text-accent" aria-hidden="true" />
             <span className="text-sm text-fg">Ajouter des photos ou un document</span>
@@ -303,7 +303,7 @@ function QuoteForm() {
               {files.map((file) => (
                 <li
                   key={file.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2"
+                  className="flex items-center justify-between gap-3 rounded-md border border-white/10 bg-ink-850 px-3 py-2"
                 >
                   <span className="truncate text-xs text-muted">{file.name}</span>
                   <span className="flex shrink-0 items-center gap-3">
@@ -355,7 +355,7 @@ export default function Contact({ hideHeading = false }) {
   const contact = useSiteStore((state) => state.contact);
 
   return (
-    <section className={`pb-16 lg:pb-20 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
+    <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
       <div className="container-x">
         {hideHeading ? null : (
           <SectionHeading
@@ -372,7 +372,7 @@ export default function Contact({ hideHeading = false }) {
           </Reveal>
 
           <div className="space-y-4 lg:col-span-5">
-            <Reveal delay={60} className="rounded-3xl border border-white/10 bg-ink-900 p-5">
+            <Reveal delay={60} className="rounded-lg border border-white/10 bg-ink-900 p-5">
               <h3 className="text-sm font-semibold text-fg">L’atelier</h3>
 
               <ul className="mt-4 space-y-4 text-sm">
@@ -381,19 +381,29 @@ export default function Contact({ hideHeading = false }) {
                   <span className="text-muted">
                     {contact.address.street}
                     <br />
-                    {contact.address.zone}
-                    <br />
+                    {contact.address.zone ? (
+                      <>
+                        {contact.address.zone}
+                        <br />
+                      </>
+                    ) : null}
                     {contact.address.city}
                   </span>
                 </li>
                 <li className="flex gap-3">
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  <a
-                    href={contact.phoneHref}
-                    className="num inline-flex min-h-[36px] items-center text-muted transition-colors hover:text-accent"
-                  >
-                    {contact.phone}
-                  </a>
+                  <span className="flex flex-col gap-1">
+                    {contact.phones.map((line) => (
+                      <a
+                        key={line.id}
+                        href={line.href}
+                        className="num inline-flex min-h-[36px] items-center gap-2 text-muted transition-colors hover:text-accent"
+                      >
+                        {line.number}
+                        <span className="text-xs not-italic text-faint">{line.label}</span>
+                      </a>
+                    ))}
+                  </span>
                 </li>
                 <li className="flex gap-3">
                   <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />

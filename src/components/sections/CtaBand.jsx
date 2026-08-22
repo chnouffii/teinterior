@@ -2,7 +2,7 @@ import { ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../ui/Button.jsx';
 import Reveal from '../ui/Reveal.jsx';
-import { ROUTES } from '../../data/site.js';
+import { ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 
 /** Bande de conversion placée en fin de page. */
@@ -17,7 +17,7 @@ export default function CtaBand({
   return (
     <section className="border-t border-white/5 py-14">
       <div className="container-x">
-        <Reveal className="flex flex-col items-start gap-6 rounded-3xl border border-white/10 bg-ink-900 p-6 lg:flex-row lg:items-center lg:justify-between lg:p-8">
+        <Reveal className="flex flex-col items-start gap-6 rounded-lg border border-white/10 bg-ink-900 p-6 lg:flex-row lg:items-center lg:justify-between lg:p-8">
           <div className="max-w-xl">
             <h2 className="text-xl font-bold sm:text-2xl">{title}</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">{text}</p>
@@ -27,8 +27,8 @@ export default function CtaBand({
             <Button as={Link} to={primaryTo} size="lg" iconRight={ArrowRight}>
               {primaryLabel}
             </Button>
-            <Button as="a" href={contact.phoneHref} variant="secondary" size="lg" icon={Phone}>
-              {contact.phone}
+            <Button as="a" href={primaryPhone(contact).href} variant="secondary" size="lg" icon={Phone}>
+              {primaryPhone(contact).number}
             </Button>
           </div>
         </Reveal>

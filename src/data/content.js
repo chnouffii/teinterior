@@ -1,14 +1,14 @@
 /** Contenus éditables depuis le panel admin (CMS léger). */
 
 export const HERO = {
-  kicker: 'Atelier indépendant — Toulouse',
+  kicker: 'Atelier indépendant — Brumath',
   title: 'Detailing, rétrofit CarPlay et vente de véhicules.',
   subtitle:
     'Un véhicule à la fois dans l’atelier. Vernis mesuré avant chaque passe de polish, faisceaux jamais coupés sur les intégrations multimédia, et des devis détaillés ligne par ligne.',
   primaryCta: 'Voir les prestations',
   secondaryCta: 'Faire estimer ma voiture',
   facts: [
-    { label: 'Véhicules traités depuis 2018', value: '1 400' },
+    { label: 'Véhicules traités depuis 2025', value: '1 400' },
     { label: 'Rétrofits CarPlay posés', value: '380' },
     { label: 'Délai de réponse sur devis', value: '24 h' },
     { label: 'Note moyenne sur 214 avis', value: '4,9' },
@@ -18,7 +18,7 @@ export const HERO = {
 export const WORKSHOP = {
   title: 'L’atelier',
   intro:
-    'Un local de 180 m² à Toulouse, chauffé et éclairé en 5 000 K pour travailler la peinture sans mauvaise surprise à la sortie.',
+    'Un local de 180 m² à Brumath, chauffé et éclairé en 5 000 K pour travailler la peinture sans mauvaise surprise à la sortie.',
   points: [
     {
       label: 'Cabine de polissage',
@@ -139,6 +139,7 @@ export const GALLERY_ITEMS = [
     meta: '14 h atelier · Menzerna 300/3800 · céramique 5 ans',
     scene: 'polish',
     palette: ['#2E1C22', '#6B3541'],
+    body: 'berline',
   },
   {
     id: 'r2',
@@ -155,6 +156,7 @@ export const GALLERY_ITEMS = [
     meta: 'Vendue en 11 jours au prix demandé · 6 plateformes',
     scene: 'sale',
     palette: ['#1B2333', '#38496B'],
+    body: 'suv',
   },
   {
     id: 'r4',
@@ -163,6 +165,7 @@ export const GALLERY_ITEMS = [
     meta: '3 h · 4 vitres latérales · garantie à vie du film',
     scene: 'tint',
     palette: ['#1A2226', '#33484F'],
+    body: 'citadine',
   },
   {
     id: 'r5',
@@ -187,6 +190,7 @@ export const GALLERY_ITEMS = [
     meta: 'Trouvée en Allemagne · expertise sur place · import géré',
     scene: 'sale',
     palette: ['#24282E', '#474F59'],
+    body: 'break',
   },
   {
     id: 'r8',
@@ -195,6 +199,7 @@ export const GALLERY_ITEMS = [
     meta: '2 jours · vernis mou, passe unique douce · garantie 3 ans',
     scene: 'polish',
     palette: ['#2A2E32', '#5C646C'],
+    body: 'berline',
   },
   {
     id: 'r9',
@@ -206,11 +211,18 @@ export const GALLERY_ITEMS = [
   },
 ];
 
+/** Synthèse affichée au-dessus des avis. Modifiable depuis Admin → Contenu. */
+export const REVIEW_SUMMARY = {
+  rating: '4,9',
+  scale: '5',
+  count: '214',
+};
+
 export const TESTIMONIALS = [
   {
     id: 't1',
     name: 'Julien M.',
-    city: 'Blagnac',
+    city: 'Vendenheim',
     service: 'Rénovation intégrale',
     rating: 5,
     date: 'Juin 2026',
@@ -219,7 +231,7 @@ export const TESTIMONIALS = [
   {
     id: 't2',
     name: 'Sabrina L.',
-    city: 'Toulouse',
+    city: 'Haguenau',
     service: 'Rétrofit CarPlay',
     rating: 5,
     date: 'Mai 2026',
@@ -228,7 +240,7 @@ export const TESTIMONIALS = [
   {
     id: 't3',
     name: 'Marc D.',
-    city: 'Colomiers',
+    city: 'Schiltigheim',
     service: 'Dépôt-vente',
     rating: 5,
     date: 'Avril 2026',
@@ -237,7 +249,7 @@ export const TESTIMONIALS = [
   {
     id: 't4',
     name: 'Élodie P.',
-    city: 'Balma',
+    city: 'Hoerdt',
     service: 'Remise en état intérieur',
     rating: 5,
     date: 'Mars 2026',
@@ -246,7 +258,7 @@ export const TESTIMONIALS = [
   {
     id: 't5',
     name: 'Karim B.',
-    city: 'Muret',
+    city: 'Bischwiller',
     service: 'Teintage',
     rating: 5,
     date: 'Février 2026',
@@ -255,7 +267,7 @@ export const TESTIMONIALS = [
   {
     id: 't6',
     name: 'Nathalie R.',
-    city: 'Tournefeuille',
+    city: 'Strasbourg',
     service: 'Sourcing',
     rating: 5,
     date: 'Janvier 2026',

@@ -3,7 +3,7 @@ import { Menu, Phone, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
 import Button from '../ui/Button.jsx';
-import { NAV_LINKS, ROUTES } from '../../data/site.js';
+import { NAV_LINKS, ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import useScrollPosition from '../../hooks/useScrollPosition.js';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll.js';
@@ -13,6 +13,7 @@ export default function Header() {
   const scrolled = useScrollPosition(24);
   const { pathname } = useLocation();
   const contact = useSiteStore((state) => state.contact);
+  const phone = primaryPhone(contact);
 
   useLockBodyScroll(menuOpen);
 
@@ -23,12 +24,12 @@ export default function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${
-        scrolled ? 'border-white/10 bg-ink-950/95 backdrop-blur' : 'border-transparent bg-ink-950'
+        scrolled ? 'border-white/10 bg-ink-950/95' : 'border-transparent bg-ink-950'
       }`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-6">
+      <div className="container-x flex h-16 items-center justify-between gap-4">
         <Link to={ROUTES.home} className="inline-flex min-h-[44px] items-center" aria-label="Teintérior — accueil">
-          <Logo />
+          <Logo size="lg" />
         </Link>
 
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Navigation principale">
@@ -37,7 +38,7 @@ export default function Header() {
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `inline-flex min-h-[40px] items-center rounded-2xl px-3 text-sm transition-colors ${
+                `inline-flex min-h-[40px] items-center whitespace-nowrap rounded-md px-2.5 text-sm transition-colors ${
                   isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }
@@ -49,14 +50,14 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <a
-            href={contact.phoneHref}
-            className="num hidden min-h-[40px] items-center gap-2 rounded-2xl border border-white/10 px-3 text-sm text-muted transition-colors hover:border-white/20 hover:text-fg md:inline-flex"
+            href={phone.href}
+            className="num hidden min-h-[40px] shrink-0 items-center gap-2 whitespace-nowrap rounded-md border border-white/10 px-3 text-sm text-muted transition-colors hover:border-white/20 hover:text-fg xl:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" aria-hidden="true" />
-            {contact.phone}
+            {phone.number}
           </a>
 
-          <Button as={Link} to={ROUTES.contact} size="sm" className="hidden sm:inline-flex">
+          <Button as={Link} to={ROUTES.contact} size="sm" className="hidden whitespace-nowrap sm:inline-flex">
             Prendre RDV / Devis
           </Button>
 
@@ -66,7 +67,7 @@ export default function Header() {
             aria-expanded={menuOpen}
             aria-controls="menu-mobile"
             aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 text-fg lg:hidden"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/10 text-fg lg:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -85,7 +86,7 @@ export default function Header() {
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `flex min-h-[48px] items-center rounded-2xl px-3 text-sm transition-colors ${
+                `flex min-h-[48px] items-center rounded-md px-3 text-sm transition-colors ${
                   isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }
@@ -97,8 +98,8 @@ export default function Header() {
             <Button as={Link} to={ROUTES.contact} size="md">
               Prendre RDV / Devis
             </Button>
-            <Button as="a" href={contact.phoneHref} variant="secondary" size="md" icon={Phone}>
-              {contact.phone}
+            <Button as="a" href={phone.href} variant="secondary" size="md" icon={Phone}>
+              {phone.number}
             </Button>
           </div>
         </nav>

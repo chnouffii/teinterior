@@ -7,6 +7,7 @@ import {
   BEFORE_AFTER,
   GALLERY_ITEMS,
   HERO,
+  REVIEW_SUMMARY,
   SOURCING_FACTS,
   SOURCING_PIPELINE,
   TESTIMONIALS,
@@ -21,8 +22,10 @@ import type {
   Lead,
   LeadStatus,
   RetrofitBrand,
+  ReviewSummary,
   ServiceOption,
   ServicePack,
+  Testimonial,
   Vehicle,
   VehicleStatus,
   WorkshopContent,
@@ -37,7 +40,8 @@ interface SiteState {
   workshop: WorkshopContent;
   beforeAfter: BeforeAfterCase[];
   gallery: typeof GALLERY_ITEMS;
-  testimonials: typeof TESTIMONIALS;
+  testimonials: Testimonial[];
+  reviewSummary: ReviewSummary;
   pipeline: typeof SOURCING_PIPELINE;
   sourcingFacts: typeof SOURCING_FACTS;
   contact: ContactInfo;
@@ -61,6 +65,10 @@ interface SiteState {
   updateWorkshop: (patch: Partial<WorkshopContent>) => void;
   updateContact: (patch: Partial<ContactInfo>) => void;
   updateBeforeAfter: (id: string, patch: Partial<BeforeAfterCase>) => void;
+  updateTestimonial: (id: string, patch: Partial<Testimonial>) => void;
+  addTestimonial: () => void;
+  removeTestimonial: (id: string) => void;
+  updateReviewSummary: (patch: Partial<ReviewSummary>) => void;
 
   addLead: (lead: Omit<Lead, 'id' | 'createdAt' | 'status'>) => Lead;
   setLeadStatus: (id: string, status: LeadStatus) => void;
@@ -78,7 +86,8 @@ const seed = () => ({
   workshop: WORKSHOP as WorkshopContent,
   beforeAfter: BEFORE_AFTER as BeforeAfterCase[],
   gallery: GALLERY_ITEMS,
-  testimonials: TESTIMONIALS,
+  testimonials: TESTIMONIALS as Testimonial[],
+  reviewSummary: REVIEW_SUMMARY as ReviewSummary,
   pipeline: SOURCING_PIPELINE,
   sourcingFacts: SOURCING_FACTS,
   contact: CONTACT as ContactInfo,
@@ -155,6 +164,35 @@ export const useSiteStore = create<SiteState>()(
           ),
         })),
 
+      updateTestimonial: (id, patch) =>
+        set((state) => ({
+          testimonials: state.testimonials.map((item) =>
+            item.id === id ? { ...item, ...patch } : item
+          ),
+        })),
+
+      addTestimonial: () =>
+        set((state) => ({
+          testimonials: [
+            ...state.testimonials,
+            {
+              id: `t${Date.now()}`,
+              name: '',
+              city: '',
+              service: '',
+              rating: 5,
+              date: '',
+              text: '',
+            },
+          ],
+        })),
+
+      removeTestimonial: (id) =>
+        set((state) => ({ testimonials: state.testimonials.filter((item) => item.id !== id) })),
+
+      updateReviewSummary: (patch) =>
+        set((state) => ({ reviewSummary: { ...state.reviewSummary, ...patch } })),
+
       addLead: (lead) => {
         const created: Lead = {
           ...lead,
@@ -177,7 +215,13 @@ export const useSiteStore = create<SiteState>()(
     }),
     {
       name: 'teinterior-site',
-      version: 1,
+      /**
+       * v2 : coordonnées de l'atelier (Brumath, deux lignes téléphoniques).
+       * Les états persistés antérieurs contiennent l'ancienne adresse ; on repart
+       * du jeu de données courant plutôt que de fusionner à l'aveugle.
+       */
+      version: 2,
+      migrate: () => seed(),
       storage: createJSONStorage(() => localStorage),
     }
   )

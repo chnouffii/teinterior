@@ -25,7 +25,7 @@ export default function Toaster() {
         return (
           <div
             key={item.id}
-            className="pointer-events-auto flex items-start gap-3 rounded-2xl border border-white/10 bg-ink-850 px-4 py-3 shadow-overlay animate-toast-in"
+            className="pointer-events-auto flex items-start gap-3 rounded-md border border-white/10 bg-ink-850 px-4 py-3 shadow-overlay animate-toast-in"
           >
             <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${tone.className}`} aria-hidden="true" />
             <p className="flex-1 text-sm text-fg">{item.message}</p>

@@ -14,13 +14,6 @@
 
   body {
     @apply bg-ink-950 font-sans text-muted antialiased;
-    background-image: radial-gradient(
-        70% 50% at 50% -10%,
-        rgba(217, 164, 65, 0.12) 0%,
-        rgba(6, 8, 11, 0) 60%
-      ),
-      radial-gradient(50% 40% at 90% 20%, rgba(127, 216, 255, 0.07) 0%, rgba(6, 8, 11, 0) 60%);
-    background-attachment: fixed;
   }
 
   h1,
@@ -87,23 +80,23 @@
   }
 
   .glass {
-    @apply border border-white/10 bg-white/[0.035] backdrop-blur-xl;
+    @apply border border-white/10 bg-ink-850;
   }
 
   .panel {
-    @apply rounded-3xl border border-white/10 bg-ink-850/70 shadow-card backdrop-blur-md;
+    @apply rounded-lg border border-white/10 bg-ink-850;
   }
 
   .panel-flat {
-    @apply rounded-2xl border border-white/10 bg-ink-850/60;
+    @apply rounded-md border border-white/10 bg-ink-850;
   }
 
   .rule,
   .hairline {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent;
+    @apply h-px w-full bg-white/10;
   }
 
-  .text-gradient-brass {
+  .text-accent {
     @apply bg-gradient-to-br from-accent-soft via-accent to-accent-deep bg-clip-text text-transparent;
   }
 
@@ -116,7 +109,7 @@
   }
 
   .field {
-    @apply w-full rounded-xl border border-white/10 bg-ink-900/80 px-4 py-3 text-sm text-fg
+    @apply w-full rounded border border-white/10 bg-ink-900 px-3.5 py-2.5 text-sm text-fg
       placeholder:text-faint transition-colors duration-200
       hover:border-white/20 focus:border-accent/70 focus:bg-ink-900 focus:outline-none
       focus:ring-1 focus:ring-accent/40;
@@ -127,7 +120,7 @@
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1
+    @apply inline-flex items-center gap-1.5 rounded border border-white/10 bg-ink-800 px-2.5 py-1
       text-[11px] font-medium text-muted;
   }
 
@@ -143,9 +136,8 @@
 @layer utilities {
   .reveal {
     opacity: 0;
-    transform: translateY(24px) scale(0.985);
-    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(10px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     will-change: opacity, transform;
   }
 

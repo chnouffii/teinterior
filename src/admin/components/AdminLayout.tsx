@@ -72,7 +72,7 @@ export default function AdminLayout() {
                 end={'end' in item ? item.end : false}
                 onClick={() => setMobileNav(false)}
                 className={({ isActive }) =>
-                  `flex min-h-[40px] items-center gap-3 rounded-2xl px-3 text-sm transition-colors ${
+                  `flex min-h-[40px] items-center gap-3 rounded-md px-3 text-sm transition-colors ${
                     isActive
                       ? 'bg-ink-800 text-fg'
                       : 'text-muted hover:bg-ink-850 hover:text-fg'
@@ -95,7 +95,7 @@ export default function AdminLayout() {
         <div className="space-y-1 border-t border-white/10 p-3">
           <Link
             to="/"
-            className="flex min-h-[40px] items-center gap-3 rounded-2xl px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
+            className="flex min-h-[40px] items-center gap-3 rounded-md px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
             title="Voir le site public"
           >
             <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -104,7 +104,7 @@ export default function AdminLayout() {
           <button
             type="button"
             onClick={handleLogout}
-            className="flex min-h-[40px] w-full items-center gap-3 rounded-2xl px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
+            className="flex min-h-[40px] w-full items-center gap-3 rounded-md px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
           >
             <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
             {!sidebarCollapsed ? <span>Déconnexion</span> : null}
@@ -121,7 +121,7 @@ export default function AdminLayout() {
       ) : null}
 
       <div className={`transition-[padding] duration-200 ${sidebarCollapsed ? 'lg:pl-[68px]' : 'lg:pl-60'}`}>
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-white/10 bg-ink-900/95 px-4 backdrop-blur">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-white/10 bg-ink-900/95 px-4">
           <button
             type="button"
             onClick={() => setMobileNav(true)}

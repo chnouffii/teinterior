@@ -7,16 +7,20 @@ import { useSiteStore } from '../../store/siteStore';
 
 export default function Testimonials({ limit = null, showAllLink = false }) {
   const testimonials = useSiteStore((state) => state.testimonials);
+  const summary = useSiteStore((state) => state.reviewSummary);
   const items = limit ? testimonials.slice(0, limit) : testimonials;
 
   return (
-    <section className="border-t border-white/5 py-14 lg:py-16">
+    <section className="border-t border-white/5 py-12 lg:py-14">
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <span className="flex items-center gap-2 text-xs text-faint">
               <Star className="h-3.5 w-3.5 fill-accent text-accent" aria-hidden="true" />
-              <span className="num text-muted">4,9 / 5</span> sur 214 avis vérifiés
+              <span className="num text-muted">
+                {summary.rating} / {summary.scale}
+              </span>{' '}
+              sur {summary.count} avis vérifiés
             </span>
             <h2 className="mt-3 text-xl font-bold sm:text-2xl">Ce que disent les clients</h2>
           </div>
@@ -37,7 +41,7 @@ export default function Testimonials({ limit = null, showAllLink = false }) {
             <Reveal
               key={testimonial.id}
               delay={(index % 3) * 60}
-              className="flex h-full flex-col rounded-3xl border border-white/10 bg-ink-900 p-5"
+              className="flex h-full flex-col rounded-lg border border-white/10 bg-ink-900 p-5"
             >
               <StarRating rating={testimonial.rating} />
               <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">

@@ -6,27 +6,97 @@ import { useId } from 'react';
  * comparateur avant / après et les vignettes de la galerie.
  */
 
-const BODY_PATH =
-  'M96 316 C84 296 86 268 104 252 L238 236 L318 170 C360 146 500 142 546 172 L626 232 L700 246 C724 252 736 274 732 300 L728 316 Z';
+/**
+ * Silhouettes par type de carrosserie.
+ *
+ * Toutes partagent le même sol (bas de roue à y = 370) pour rester comparables
+ * d'une vignette à l'autre. `wheels` donne l'entraxe et le rayon, `sill` la
+ * hauteur du bas de caisse, `lamps` la position des feux.
+ */
+const BODIES = {
+  berline: {
+    body:
+      'M96 316 C84 296 86 268 104 252 L238 236 L318 170 C360 146 500 142 546 172 L626 232 L700 246 C724 252 736 274 732 300 L728 316 Z',
+    frontGlass: 'M256 230 L330 178 L452 174 L452 230 Z',
+    rearGlass: 'M470 174 L540 176 L610 230 L470 230 Z',
+    pillar: { x: 452, y: 172, w: 16, h: 60 },
+    gloss: 'M104 252 L238 236 L318 170',
+    crease: 'M120 288 C280 268 520 266 716 286',
+    wheels: [232, 596],
+    radius: 54,
+    lamps: { front: [96, 266], rear: [712, 268] },
+    handle: [486, 252],
+  },
+  break: {
+    body:
+      'M96 316 C84 296 86 268 104 252 L238 236 L318 168 C356 146 520 142 600 150 L668 158 L692 232 L706 246 C726 252 736 274 732 300 L728 316 Z',
+    frontGlass: 'M256 230 L330 176 L452 172 L452 230 Z',
+    rearGlass: 'M470 172 L636 160 L666 230 L470 230 Z',
+    pillar: { x: 452, y: 170, w: 15, h: 62 },
+    gloss: 'M104 252 L238 236 L318 168',
+    crease: 'M120 288 C280 268 520 266 716 286',
+    wheels: [232, 604],
+    radius: 54,
+    lamps: { front: [96, 266], rear: [712, 266] },
+    handle: [486, 250],
+  },
+  suv: {
+    body:
+      'M100 302 C88 282 90 244 108 230 L226 214 L286 132 C322 110 522 106 578 134 L648 212 L700 226 C726 232 738 256 734 284 L730 302 Z',
+    frontGlass: 'M248 208 L306 142 L448 138 L448 208 Z',
+    rearGlass: 'M466 138 L570 142 L628 208 L466 208 Z',
+    pillar: { x: 448, y: 136, w: 16, h: 74 },
+    gloss: 'M108 230 L226 214 L286 132',
+    crease: 'M124 268 C284 248 524 246 718 266',
+    wheels: [230, 600],
+    radius: 62,
+    lamps: { front: [100, 244], rear: [714, 246] },
+    handle: [484, 228],
+  },
+  citadine: {
+    body:
+      'M124 316 C112 296 114 268 132 252 L248 238 L318 174 C358 150 486 146 528 176 L600 240 L668 250 C692 256 702 276 698 300 L694 316 Z',
+    frontGlass: 'M264 232 L334 182 L440 178 L440 232 Z',
+    rearGlass: 'M458 178 L512 180 L586 232 L458 232 Z',
+    pillar: { x: 440, y: 176, w: 15, h: 58 },
+    gloss: 'M132 252 L248 238 L318 174',
+    crease: 'M146 288 C292 270 512 268 684 286',
+    wheels: [252, 566],
+    radius: 52,
+    lamps: { front: [124, 266], rear: [678, 268] },
+    handle: [476, 254],
+  },
+  coupe: {
+    body:
+      'M96 320 C84 300 86 274 104 258 L246 244 L336 186 C388 156 512 152 566 188 L648 244 L702 252 C726 258 736 278 732 302 L728 320 Z',
+    frontGlass: 'M282 240 L352 194 L460 190 L460 240 Z',
+    rearGlass: 'M476 190 L546 198 L620 240 L476 240 Z',
+    pillar: { x: 460, y: 188, w: 14, h: 54 },
+    gloss: 'M104 258 L246 244 L336 186',
+    crease: 'M124 292 C284 274 520 272 716 290',
+    wheels: [236, 596],
+    radius: 54,
+    lamps: { front: [96, 272], rear: [712, 274] },
+    handle: [492, 258],
+  },
+};
 
-const FRONT_GLASS = 'M256 230 L330 178 L452 174 L452 230 Z';
-const REAR_GLASS = 'M470 174 L540 176 L610 230 L470 230 Z';
-
-function Wheel({ cx, rim }) {
+function Wheel({ cx, r = 54, rim, spokes = 6 }) {
+  const cy = 370 - r;
   return (
     <g>
-      <circle cx={cx} cy="316" r="54" fill="#05070A" />
-      <circle cx={cx} cy="316" r="42" fill="#0D1219" stroke={rim} strokeWidth="3" />
-      <circle cx={cx} cy="316" r="14" fill={rim} opacity="0.75" />
-      {Array.from({ length: 6 }).map((_, index) => {
-        const angle = (index * Math.PI) / 3;
+      <circle cx={cx} cy={cy} r={r} fill="#05070A" />
+      <circle cx={cx} cy={cy} r={r * 0.78} fill="#0D1219" stroke={rim} strokeWidth="3" />
+      <circle cx={cx} cy={cy} r={r * 0.26} fill={rim} opacity="0.75" />
+      {Array.from({ length: spokes }).map((_, index) => {
+        const angle = (index * 2 * Math.PI) / spokes;
         return (
           <line
             key={index}
-            x1={cx + Math.cos(angle) * 15}
-            y1={316 + Math.sin(angle) * 15}
-            x2={cx + Math.cos(angle) * 39}
-            y2={316 + Math.sin(angle) * 39}
+            x1={cx + Math.cos(angle) * r * 0.28}
+            y1={cy + Math.sin(angle) * r * 0.28}
+            x2={cx + Math.cos(angle) * r * 0.72}
+            y2={cy + Math.sin(angle) * r * 0.72}
             stroke={rim}
             strokeWidth="4"
             strokeLinecap="round"
@@ -38,7 +108,8 @@ function Wheel({ cx, rim }) {
   );
 }
 
-function CarScene({ uid, variant, palette, mode }) {
+function CarScene({ uid, variant, palette, mode, body = 'berline' }) {
+  const shape = BODIES[body] ?? BODIES.berline;
   const isAfter = variant === 'after';
   const [dark, light] = palette;
   const glossOpacity = isAfter ? 0.55 : 0.12;
@@ -53,10 +124,10 @@ function CarScene({ uid, variant, palette, mode }) {
     <g filter={isAfter ? undefined : `url(#${uid}-dull)`}>
       <ellipse cx="410" cy="374" rx="316" ry="16" fill="#000" opacity="0.6" />
 
-      <path d={BODY_PATH} fill={`url(#${uid}-body)`} stroke="#000" strokeOpacity="0.4" strokeWidth="2" />
+      <path d={shape.body} fill={`url(#${uid}-body)`} stroke="#000" strokeOpacity="0.4" strokeWidth="2" />
 
       <path
-        d="M104 252 L238 236 L318 170"
+        d={shape.gloss}
         fill="none"
         stroke="#fff"
         strokeOpacity={glossOpacity}
@@ -64,7 +135,7 @@ function CarScene({ uid, variant, palette, mode }) {
         strokeLinecap="round"
       />
       <path
-        d="M120 288 C280 268 520 266 716 286"
+        d={shape.crease}
         fill="none"
         stroke="#fff"
         strokeOpacity={glossOpacity * 0.6}
@@ -72,9 +143,16 @@ function CarScene({ uid, variant, palette, mode }) {
         strokeLinecap="round"
       />
 
-      <path d={FRONT_GLASS} fill={glassFill} />
-      <path d={REAR_GLASS} fill={glassFill} />
-      <rect x="452" y="172" width="16" height="60" fill={dark} opacity="0.9" />
+      <path d={shape.frontGlass} fill={glassFill} />
+      <path d={shape.rearGlass} fill={glassFill} />
+      <rect
+        x={shape.pillar.x}
+        y={shape.pillar.y}
+        width={shape.pillar.w}
+        height={shape.pillar.h}
+        fill={dark}
+        opacity="0.9"
+      />
 
       {isAfter ? (
         <g opacity="0.5">
@@ -99,27 +177,50 @@ function CarScene({ uid, variant, palette, mode }) {
         </g>
       )}
 
-      <path
-        d="M170 316 A 66 66 0 0 1 296 316"
-        fill="none"
-        stroke="#04060A"
-        strokeOpacity="0.85"
-        strokeWidth="8"
-      />
-      <path
-        d="M534 316 A 66 66 0 0 1 660 316"
-        fill="none"
-        stroke="#04060A"
-        strokeOpacity="0.85"
-        strokeWidth="8"
-      />
+      {shape.wheels.map((cx) => {
+        const arch = shape.radius + 12;
+        const cy = 370 - shape.radius;
+        return (
+          <path
+            key={`arch-${cx}`}
+            d={`M${cx - arch} ${cy} A ${arch} ${arch} 0 0 1 ${cx + arch} ${cy}`}
+            fill="none"
+            stroke="#04060A"
+            strokeOpacity="0.85"
+            strokeWidth="8"
+          />
+        );
+      })}
 
-      <Wheel cx={232} rim={isAfter ? '#D9D9DE' : '#7C7F86'} />
-      <Wheel cx={596} rim={isAfter ? '#D9D9DE' : '#7C7F86'} />
+      {shape.wheels.map((cx) => (
+        <Wheel key={cx} cx={cx} r={shape.radius} rim={isAfter ? '#D9D9DE' : '#7C7F86'} />
+      ))}
 
-      <rect x="96" y="266" width="26" height="16" rx="6" fill={isAfter ? '#FFF3CE' : '#C9C3A8'} />
-      <rect x="712" y="268" width="20" height="14" rx="5" fill={isAfter ? '#FF6B6B' : '#A15252'} />
-      <rect x="486" y="252" width="34" height="7" rx="3.5" fill={light} opacity="0.7" />
+      <rect
+        x={shape.lamps.front[0]}
+        y={shape.lamps.front[1]}
+        width="26"
+        height="16"
+        rx="4"
+        fill={isAfter ? '#FFF3CE' : '#C9C3A8'}
+      />
+      <rect
+        x={shape.lamps.rear[0]}
+        y={shape.lamps.rear[1]}
+        width="20"
+        height="14"
+        rx="4"
+        fill={isAfter ? '#FF6B6B' : '#A15252'}
+      />
+      <rect
+        x={shape.handle[0]}
+        y={shape.handle[1]}
+        width="34"
+        height="7"
+        rx="3"
+        fill={light}
+        opacity="0.7"
+      />
     </g>
   );
 }
@@ -254,6 +355,7 @@ function SaleScene({ uid, palette }) {
 export default function CarVisual({
   scene = 'polish',
   variant = 'after',
+  body = 'berline',
   palette = ['#12171F', '#2D3747'],
   className = '',
   title = 'Illustration véhicule Teintérior',
@@ -312,7 +414,7 @@ export default function CarVisual({
       ) : scene === 'sale' ? (
         <SaleScene uid={uid} palette={palette} />
       ) : (
-        <CarScene uid={uid} variant={variant} palette={palette} mode={scene} />
+        <CarScene uid={uid} variant={variant} palette={palette} mode={scene} body={body} />
       )}
     </svg>
   );

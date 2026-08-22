@@ -23,8 +23,8 @@ export default function Button({
 }) {
   return (
     <Tag
-      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded-full
-        font-semibold tracking-tight transition-all duration-300 active:scale-[0.97]
+      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded
+        font-semibold tracking-tight transition-colors duration-150
         disabled:cursor-not-allowed disabled:opacity-40
         ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...rest}

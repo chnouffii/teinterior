@@ -97,7 +97,7 @@ export default function ServicesPage() {
 
       <section>
         <h2 className="text-sm font-semibold text-fg">Options à la carte</h2>
-        <div className="mt-4 overflow-x-auto rounded-3xl border border-white/10">
+        <div className="mt-4 overflow-x-auto rounded-lg border border-white/10">
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-white/10 bg-ink-850 text-left">
@@ -143,7 +143,7 @@ export default function ServicesPage() {
           Tarif et compatibilité par système embarqué. Le configurateur public lit ces valeurs.
         </p>
 
-        <div className="mt-4 overflow-x-auto rounded-3xl border border-white/10">
+        <div className="mt-4 overflow-x-auto rounded-lg border border-white/10">
           <table className="w-full min-w-[860px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-white/10 bg-ink-850 text-left">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Save } from 'lucide-react';
+import { Plus, Save, Trash2 } from 'lucide-react';
 import { AdminButton, Field, TextArea, TextInput } from '../components/Field';
 import { toast } from '../components/toast';
 import { useSiteStore } from '../../store/siteStore';
@@ -10,6 +10,12 @@ export default function ContentPage() {
   const workshop = useSiteStore((state) => state.workshop);
   const contact = useSiteStore((state) => state.contact);
   const beforeAfter = useSiteStore((state) => state.beforeAfter);
+  const testimonials = useSiteStore((state) => state.testimonials);
+  const reviewSummary = useSiteStore((state) => state.reviewSummary);
+  const updateTestimonial = useSiteStore((state) => state.updateTestimonial);
+  const addTestimonial = useSiteStore((state) => state.addTestimonial);
+  const removeTestimonial = useSiteStore((state) => state.removeTestimonial);
+  const updateReviewSummary = useSiteStore((state) => state.updateReviewSummary);
   const updateHero = useSiteStore((state) => state.updateHero);
   const updateWorkshop = useSiteStore((state) => state.updateWorkshop);
   const updateContact = useSiteStore((state) => state.updateContact);
@@ -163,18 +169,23 @@ export default function ContentPage() {
         <h2 className="text-sm font-semibold text-fg">Coordonnées et horaires</h2>
         <div className="mt-4 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Téléphone">
-              <TextInput
-                value={contactDraft.phone}
-                onChange={(event) =>
-                  setContactDraft({
-                    ...contactDraft,
-                    phone: event.target.value,
-                    phoneHref: `tel:+33${event.target.value.replace(/\D/g, '').slice(1)}`,
-                  })
-                }
-              />
-            </Field>
+            {contactDraft.phones.map((line, index) => (
+              <Field key={line.id} label={index === 0 ? 'Téléphone principal' : 'Second téléphone'}>
+                <TextInput
+                  value={line.number}
+                  onChange={(event) => {
+                    const digits = event.target.value.replace(/\D/g, '');
+                    const phones = [...contactDraft.phones];
+                    phones[index] = {
+                      ...line,
+                      number: event.target.value,
+                      href: `tel:+33${digits.slice(1)}`,
+                    };
+                    setContactDraft({ ...contactDraft, phones });
+                  }}
+                />
+              </Field>
+            ))}
             <Field label="Email">
               <TextInput
                 value={contactDraft.email}
@@ -276,7 +287,7 @@ export default function ContentPage() {
 
         <div className="mt-4 space-y-4">
           {beforeAfter.map((item) => (
-            <div key={item.id} className="rounded-2xl border border-white/10 bg-ink-850 p-4">
+            <div key={item.id} className="rounded-md border border-white/10 bg-ink-850 p-4">
               <h3 className="text-xs font-semibold text-fg">
                 {item.label} — {item.vehicle}
               </h3>
@@ -384,7 +395,123 @@ export default function ContentPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-signal-danger/30 bg-signal-danger/5 p-5">
+      <section className="panel p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-fg">Avis clients</h2>
+            <p className="mt-1 text-xs text-faint">
+              Alimentent la page d’accueil et la page Réalisations. La synthèse ci-dessous est la
+              ligne « note / nombre d’avis » affichée au-dessus des témoignages.
+            </p>
+          </div>
+          <AdminButton variant="ghost" onClick={addTestimonial}>
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            Ajouter un avis
+          </AdminButton>
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <Field label="Note affichée">
+            <TextInput
+              value={reviewSummary.rating}
+              onChange={(event) => updateReviewSummary({ rating: event.target.value })}
+            />
+          </Field>
+          <Field label="Sur">
+            <TextInput
+              value={reviewSummary.scale}
+              onChange={(event) => updateReviewSummary({ scale: event.target.value })}
+            />
+          </Field>
+          <Field label="Nombre d’avis">
+            <TextInput
+              value={reviewSummary.count}
+              onChange={(event) => updateReviewSummary({ count: event.target.value })}
+            />
+          </Field>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="rounded-md border border-white/10 bg-ink-900 p-4">
+              <div className="grid gap-3 sm:grid-cols-4">
+                <Field label="Nom">
+                  <TextInput
+                    value={testimonial.name}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, { name: event.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Ville">
+                  <TextInput
+                    value={testimonial.city}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, { city: event.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Prestation">
+                  <TextInput
+                    value={testimonial.service}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, { service: event.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Date">
+                  <TextInput
+                    value={testimonial.date}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, { date: event.target.value })
+                    }
+                  />
+                </Field>
+              </div>
+
+              <div className="mt-3">
+                <Field label="Avis">
+                  <TextArea
+                    rows={3}
+                    value={testimonial.text}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, { text: event.target.value })
+                    }
+                  />
+                </Field>
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
+                <Field label="Note sur 5">
+                  <TextInput
+                    type="number"
+                    min={1}
+                    max={5}
+                    value={String(testimonial.rating)}
+                    onChange={(event) =>
+                      updateTestimonial(testimonial.id, {
+                        rating: Math.min(5, Math.max(1, Number(event.target.value) || 1)),
+                      })
+                    }
+                  />
+                </Field>
+                <AdminButton
+                  variant="danger"
+                  onClick={() => {
+                    removeTestimonial(testimonial.id);
+                    toast('Avis supprimé.', 'info');
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  Supprimer
+                </AdminButton>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-lg border border-signal-danger/30 bg-signal-danger/5 p-5">
         <h2 className="text-sm font-semibold text-fg">Réinitialisation</h2>
         <p className="mt-1 text-xs text-faint">
           Restaure le jeu de données de démonstration : véhicules, prestations, contenus et

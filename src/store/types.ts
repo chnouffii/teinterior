@@ -21,6 +21,8 @@ export interface Vehicle {
   color: string;
   /** Couple de teintes [sombre, clair] utilisé par l'illustration de repli. */
   palette: string[];
+  /** Silhouette utilisée par l'illustration de repli. */
+  body?: 'berline' | 'break' | 'suv' | 'citadine' | 'coupe';
   /** URLs des photos ; la couverture est donnée par coverIndex. */
   photos: string[];
   coverIndex: number;
@@ -116,15 +118,38 @@ export interface WorkshopContent {
   points: { label: string; detail: string }[];
 }
 
+export interface PhoneLine {
+  id: string;
+  label: string;
+  number: string;
+  href: string;
+}
+
 export interface ContactInfo {
-  phone: string;
-  phoneHref: string;
+  /** Lignes de l'atelier ; la première sert de contact principal. */
+  phones: PhoneLine[];
   email: string;
   emailHref: string;
   whatsapp: string;
   address: { street: string; zone: string; city: string; mapsUrl: string };
   hours: { day: string; value: string }[];
   socials: { id: string; label: string; url: string }[];
+}
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  city: string;
+  service: string;
+  rating: number;
+  date: string;
+  text: string;
+}
+
+export interface ReviewSummary {
+  rating: string;
+  scale: string;
+  count: string;
 }
 
 export type LeadType = 'estimation' | 'devis';

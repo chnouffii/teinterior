@@ -69,7 +69,7 @@ export default function LeadsPage() {
             key={item.status}
             type="button"
             onClick={() => setStatusFilter(statusFilter === item.status ? 'tous' : item.status)}
-            className={`rounded-3xl border p-4 text-left transition-colors ${
+            className={`rounded-lg border p-4 text-left transition-colors ${
               statusFilter === item.status
                 ? 'border-accent/50 bg-accent/5'
                 : 'border-white/10 bg-ink-900 hover:border-white/20'
@@ -98,7 +98,7 @@ export default function LeadsPage() {
         ))}
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10">
+      <div className="mt-5 overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-white/10 bg-ink-850 text-left">
@@ -171,21 +171,21 @@ export default function LeadsPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <a
                 href={`tel:${opened.phone.replace(/\s/g, '')}`}
-                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
+                className="flex items-center gap-2.5 rounded-md border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
               >
                 <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
                 <span className="num">{opened.phone}</span>
               </a>
               <a
                 href={`mailto:${opened.email}`}
-                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
+                className="flex items-center gap-2.5 rounded-md border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
               >
                 <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
                 <span className="truncate">{opened.email}</span>
               </a>
             </div>
 
-            <dl className="space-y-3 rounded-2xl border border-white/10 bg-ink-850 p-4 text-sm">
+            <dl className="space-y-3 rounded-md border border-white/10 bg-ink-850 p-4 text-sm">
               {opened.vehicle ? (
                 <div>
                   <dt className="label-xs">Véhicule</dt>

@@ -10,7 +10,7 @@ import {
   formatPrice,
 } from '../components/sections/Showroom.jsx';
 import { VEHICLE_STATUS } from '../data/vehicles.js';
-import { ROUTES } from '../data/site.js';
+import { ROUTES, primaryPhone } from '../data/site.js';
 import { useSiteStore } from '../store/siteStore';
 import { useQuote } from '../context/QuoteContext.jsx';
 import usePageMeta from '../hooks/usePageMeta.js';
@@ -81,7 +81,7 @@ export default function VehiculeDetailPage() {
       <section className="py-10">
         <div className="container-x grid gap-8 lg:grid-cols-12">
           <Reveal className="lg:col-span-7">
-            <figure className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
+            <figure className="overflow-hidden rounded-lg border border-white/10 bg-ink-900">
               <div className="relative">
                 <VehicleCover
                   vehicle={vehicle}
@@ -102,7 +102,7 @@ export default function VehiculeDetailPage() {
               </figcaption>
             </figure>
 
-            <div className="mt-4 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-4">
+            <div className="mt-4 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 sm:grid-cols-4">
               {specs.map((spec) => (
                 <div key={spec.label} className="bg-ink-900 px-4 py-3">
                   <p className="text-[11px] uppercase tracking-wider text-faint">{spec.label}</p>
@@ -111,7 +111,7 @@ export default function VehiculeDetailPage() {
               ))}
             </div>
 
-            <div className="mt-4 rounded-3xl border border-white/10 bg-ink-900 p-5">
+            <div className="mt-4 rounded-lg border border-white/10 bg-ink-900 p-5">
               <h2 className="text-sm font-semibold text-fg">Historique</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">{vehicle.history}</p>
 
@@ -131,7 +131,7 @@ export default function VehiculeDetailPage() {
           </Reveal>
 
           <div className="lg:col-span-5">
-            <Reveal delay={60} className="rounded-3xl border border-white/10 bg-ink-900 p-5">
+            <Reveal delay={60} className="rounded-lg border border-white/10 bg-ink-900 p-5">
               <h1 className="text-xl font-bold leading-snug sm:text-2xl">
                 {vehicle.brand} {vehicle.model}
               </h1>
@@ -165,8 +165,8 @@ export default function VehiculeDetailPage() {
                 >
                   {isSold ? 'Véhicule vendu' : 'Réserver un essai'}
                 </Button>
-                <Button as="a" href={contact.phoneHref} variant="secondary" size="lg">
-                  Poser une question — {contact.phone}
+                <Button as="a" href={primaryPhone(contact).href} variant="secondary" size="lg">
+                  Poser une question — {primaryPhone(contact).number}
                 </Button>
               </div>
 
@@ -198,7 +198,7 @@ export default function VehiculeDetailPage() {
                 <Link
                   key={item.id}
                   to={`${ROUTES.vehicules}/${item.id}`}
-                  className="group flex items-center gap-3 rounded-3xl border border-white/10 bg-ink-900 p-3 transition-colors hover:border-white/20"
+                  className="group flex items-center gap-3 rounded-lg border border-white/10 bg-ink-900 p-3 transition-colors hover:border-white/20"
                 >
                   <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded-lg object-cover" />
                   <span className="min-w-0">

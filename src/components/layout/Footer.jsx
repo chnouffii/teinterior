@@ -27,7 +27,7 @@ export default function Footer() {
                 href={social.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="tap inline-flex items-center rounded-2xl border border-white/10 px-3 text-xs text-muted transition-colors hover:border-white/20 hover:text-fg"
+                className="tap inline-flex items-center rounded-md border border-white/10 px-3 text-xs text-muted transition-colors hover:border-white/20 hover:text-fg"
               >
                 {social.label}
               </a>
@@ -57,18 +57,25 @@ export default function Footer() {
             <p>
               {contact.address.street}
               <br />
-              {contact.address.zone}
-              <br />
+              {contact.address.zone ? (
+                <>
+                  {contact.address.zone}
+                  <br />
+                </>
+              ) : null}
               {contact.address.city}
             </p>
             <p>
-              <a
-                href={contact.phoneHref}
-                className="num inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
-              >
-                {contact.phone}
-              </a>
-              <br />
+              {contact.phones.map((line) => (
+                <span key={line.id} className="block">
+                  <a
+                    href={line.href}
+                    className="num inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
+                  >
+                    {line.number}
+                  </a>
+                </span>
+              ))}
               <a
                 href={contact.emailHref}
                 className="inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
@@ -96,7 +103,9 @@ export default function Footer() {
 
       <div className="container-x flex flex-col gap-3 py-6 text-xs text-faint md:flex-row md:items-center md:justify-between">
         <p className="num">
-          © {year} {COMPANY.legalName} — SIRET {COMPANY.siret} — TVA {COMPANY.vat}
+          {[`© ${year} ${COMPANY.legalName}`, COMPANY.siret && `SIRET ${COMPANY.siret}`, COMPANY.vat && `TVA ${COMPANY.vat}`]
+            .filter(Boolean)
+            .join(' — ')}
         </p>
         <ul className="flex flex-wrap items-center gap-x-5 gap-y-1">
           {LEGAL_LINKS.map((link) => (

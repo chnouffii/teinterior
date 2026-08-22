@@ -39,7 +39,7 @@ export default function Modal({
     >
       <div
         onClick={(event) => event.stopPropagation()}
-        className={`flex max-h-[92vh] w-full flex-col rounded-t-lg border border-white/10 bg-ink-900 shadow-overlay animate-fade-in sm:rounded-3xl ${
+        className={`flex max-h-[92vh] w-full flex-col rounded-t-lg border border-white/10 bg-ink-900 shadow-overlay animate-fade-in sm:rounded-lg ${
           wide ? 'max-w-4xl' : 'max-w-2xl'
         }`}
       >

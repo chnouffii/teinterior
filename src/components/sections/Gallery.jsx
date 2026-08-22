@@ -13,7 +13,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
   const rows = limit ? filtered.slice(0, limit) : filtered;
 
   return (
-    <section className={`pb-14 lg:pb-16 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
+    <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
       <div className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           {hideHeading ? null : (
@@ -49,12 +49,13 @@ export default function Gallery({ hideHeading = false, limit = null }) {
             <Reveal
               key={item.id}
               delay={(index % 3) * 60}
-              className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900"
+              className="overflow-hidden rounded-lg border border-white/10 bg-ink-900"
             >
               <CarVisual
                 scene={item.scene}
                 variant="after"
                 palette={item.palette}
+                body={item.body}
                 className="aspect-[4/3] w-full"
                 title={item.title}
               />

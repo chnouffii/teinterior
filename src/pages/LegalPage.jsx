@@ -11,17 +11,27 @@ const CORE_SECTIONS = [
       {
         subtitle: 'Éditeur du site',
         lines: [
-          `${COMPANY.legalName} — société par actions simplifiée au capital de ${COMPANY.capital}`,
-          `SIRET ${COMPANY.siret} — ${COMPANY.rcs} — TVA intracommunautaire ${COMPANY.vat}`,
-          `Siège social : ${CONTACT.address.street}, ${CONTACT.address.zone}, ${CONTACT.address.city}`,
-          `Téléphone : ${CONTACT.phone} — Email : ${CONTACT.email}`,
+          COMPANY.capital
+            ? `${COMPANY.legalName} — capital de ${COMPANY.capital}`
+            : COMPANY.legalName,
+          [
+            COMPANY.siret && `SIRET ${COMPANY.siret}`,
+            COMPANY.rcs,
+            COMPANY.vat && `TVA intracommunautaire ${COMPANY.vat}`,
+          ]
+            .filter(Boolean)
+            .join(' — '),
+          `Siège social : ${[CONTACT.address.street, CONTACT.address.zone, CONTACT.address.city]
+            .filter(Boolean)
+            .join(', ')}`,
+          `Téléphone : ${CONTACT.phones.map((line) => line.number).join(' / ')} — Email : ${CONTACT.email}`,
           COMPANY.director,
         ],
       },
       { subtitle: 'Hébergement', lines: [COMPANY.host] },
       {
         subtitle: 'Assurance professionnelle',
-        lines: [COMPANY.insurance, 'Couverture géographique : France métropolitaine.'],
+        lines: [COMPANY.insurance, 'Couverture géographique : France métropolitaine.'].filter(Boolean),
       },
       {
         subtitle: 'Propriété intellectuelle',
@@ -150,7 +160,7 @@ export default function LegalPage() {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="flex min-h-[44px] items-center rounded-3xl border border-white/5 bg-ink-900/50 px-4 text-sm text-muted transition-colors hover:border-accent/40 hover:text-accent-soft"
+                    className="flex min-h-[44px] items-center rounded-lg border border-white/5 bg-ink-900/50 px-4 text-sm text-muted transition-colors hover:border-accent/40 hover:text-accent-soft"
                   >
                     {section.title}
                   </a>
@@ -176,7 +186,7 @@ export default function LegalPage() {
                         {block.subtitle}
                       </h3>
                       <div className="mt-3 space-y-2">
-                        {block.lines.map((line) => (
+                        {block.lines.filter(Boolean).map((line) => (
                           <p key={line} className="text-sm leading-relaxed text-muted">
                             {line}
                           </p>

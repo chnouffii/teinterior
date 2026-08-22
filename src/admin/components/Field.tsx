@@ -46,7 +46,7 @@ export function AdminButton({
   return (
     <button
       {...rest}
-      className={`inline-flex min-h-[38px] items-center justify-center gap-2 rounded-2xl px-3.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-[38px] items-center justify-center gap-2 rounded-md px-3.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
     />
   );
 }

@@ -63,6 +63,7 @@ export function VehicleCover({ vehicle, className = '' }) {
       scene="polish"
       variant="after"
       palette={vehicle.palette}
+      body={vehicle.body}
       className={className}
       title={`${vehicle.brand} ${vehicle.model}`}
     />
@@ -76,7 +77,7 @@ function VehicleCard({ vehicle, index, onTestDrive }) {
   return (
     <Reveal
       delay={index * 60}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-ink-900 transition-colors duration-200 hover:border-white/20"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-ink-900 transition-colors duration-200 hover:border-white/20"
     >
       <Link to={`${ROUTES.vehicules}/${vehicle.id}`} className="relative block">
         <VehicleCover
@@ -162,7 +163,7 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
   const rows = limit ? filtered.slice(0, limit) : filtered;
 
   return (
-    <section className={`pb-16 lg:pb-20 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
+    <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
       <div className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           {hideHeading ? null : (
@@ -214,7 +215,7 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
         </div>
 
         {rows.length === 0 ? (
-          <p className="mt-8 rounded-3xl border border-white/10 bg-ink-900 px-5 py-8 text-center text-sm text-faint">
+          <p className="mt-8 rounded-lg border border-white/10 bg-ink-900 px-5 py-8 text-center text-sm text-faint">
             Aucun véhicule dans cette catégorie. Dites-nous ce que vous cherchez : le service de
             sourcing s’en occupe.
           </p>

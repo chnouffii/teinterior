@@ -14,9 +14,9 @@ function PackCard({ pack, onSelect, index }) {
   return (
     <Reveal
       delay={index * 90}
-      className={`group relative flex h-full flex-col rounded-3xl border p-7 shadow-card backdrop-blur
-        transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50
-        ${popular ? 'border-accent/50 bg-ink-850/80' : 'border-white/10 bg-ink-850/60'}`}
+      className={`group relative flex h-full flex-col rounded-lg border p-7 shadow-card
+        transition-colors duration-150 hover:border-accent/50
+        ${popular ? 'border-accent/50 bg-ink-850/80' : 'border-white/10 bg-ink-850'}`}
     >
       {popular ? (
         <span className="absolute -top-3 left-7 rounded-full bg-gradient-to-r from-accent-soft to-accent-deep px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent-on">
@@ -71,7 +71,7 @@ function PackCard({ pack, onSelect, index }) {
         ))}
       </div>
 
-      <p className="mt-5 rounded-3xl border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-faint">
+      <p className="mt-5 rounded-lg border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-faint">
         {pack.note}
       </p>
 
@@ -117,13 +117,13 @@ export default function Detailing({ hideHeading = false }) {
           />
         )}
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-9 grid gap-5 lg:grid-cols-3">
           {packs.map((pack, index) => (
             <PackCard key={pack.id} pack={pack} index={index} onSelect={handleSelect} />
           ))}
         </div>
 
-        <Reveal className="mt-8 rounded-3xl border border-white/10 bg-ink-850/50 p-7 backdrop-blur">
+        <Reveal className="mt-8 rounded-lg border border-white/10 bg-ink-850/50 p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h3 className="flex items-center gap-2 text-lg font-bold">
               <Plus className="h-5 w-5 text-accent" aria-hidden="true" />
@@ -138,7 +138,7 @@ export default function Detailing({ hideHeading = false }) {
             {options.map((option) => (
               <li
                 key={option.id}
-                className="rounded-3xl border border-white/5 bg-ink-900/60 px-5 py-4 transition-colors hover:border-accent/30"
+                className="rounded-lg border border-white/5 bg-ink-900/60 px-5 py-4 transition-colors hover:border-accent/30"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium text-fg">{option.label}</span>
@@ -171,7 +171,7 @@ export default function Detailing({ hideHeading = false }) {
                     key={item.id}
                     type="button"
                     onClick={() => setActiveCase(item.id)}
-                    className={`tap inline-flex items-center rounded-full border px-4 text-xs font-semibold transition-all duration-300 ${
+                    className={`tap inline-flex items-center rounded-full border px-4 text-xs font-semibold transition-colors duration-150 ${
                       activeCase === item.id
                         ? 'border-accent bg-accent/15 text-accent-soft'
                         : 'border-white/10 bg-white/[0.03] text-muted hover:border-white/25 hover:text-fg'
@@ -182,7 +182,7 @@ export default function Detailing({ hideHeading = false }) {
                 ))}
               </div>
 
-              <div className="mt-8 rounded-3xl border border-white/10 bg-ink-900/60 p-6">
+              <div className="mt-8 rounded-lg border border-white/10 bg-ink-900/60 p-6">
                 <p className="text-xs uppercase tracking-[0.18em] text-faint">Véhicule</p>
                 <p className="mt-1.5 font-display text-lg font-semibold text-fg">
                   {current.vehicle}
@@ -193,9 +193,9 @@ export default function Detailing({ hideHeading = false }) {
                   {current.specs.map((spec) => (
                     <div
                       key={spec.label}
-                      className="rounded-3xl border border-white/5 bg-ink-950/70 px-4 py-3"
+                      className="rounded-lg border border-white/5 bg-ink-950/70 px-4 py-3"
                     >
-                      <p className="num font-display text-xl font-bold text-gradient-brass">
+                      <p className="num font-display text-xl font-bold text-accent">
                         {spec.value}
                       </p>
                       <p className="mt-1 text-[11px] uppercase tracking-wider text-faint">

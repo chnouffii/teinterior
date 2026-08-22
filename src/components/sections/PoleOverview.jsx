@@ -8,7 +8,7 @@ import { POLES } from '../../data/site.js';
 /** Les trois métiers de l'atelier, chacun renvoyant vers sa page dédiée. */
 export default function PoleOverview() {
   return (
-    <section id="poles" className="scroll-mt-24 py-20 lg:py-24">
+    <section id="poles" className="scroll-mt-24 py-12 lg:py-14">
       <div className="container-x">
         <SectionHeading
           eyebrow="Nos trois métiers"
@@ -17,19 +17,15 @@ export default function PoleOverview() {
           description="Chaque pôle a sa page dédiée : formules et tarifs pour l’esthétique, recherche de compatibilité pour le rétrofit, estimation en ligne pour la vente."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-9 grid gap-5 lg:grid-cols-3">
           {POLES.map((pole, index) => (
             <Reveal
               key={pole.id}
               delay={index * 90}
-              className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-ink-850/60 p-7 shadow-card backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40"
+              className="group flex h-full flex-col rounded-lg border border-white/10 bg-ink-850 p-7 transition-colors duration-150 hover:border-white/25"
             >
-              <span className="pointer-events-none absolute -right-4 -top-6 font-display text-7xl font-extrabold text-white/[0.04] transition-colors duration-500 group-hover:text-accent/10">
-                {pole.index}
-              </span>
-
               <span
-                className={`flex h-12 w-12 items-center justify-center rounded-3xl border ${
+                className={`flex h-12 w-12 items-center justify-center rounded-lg border ${
                   pole.accent === 'ice'
                     ? 'border-ice/30 bg-ice/10 text-ice'
                     : 'border-accent/30 bg-accent/10 text-accent'
@@ -56,7 +52,7 @@ export default function PoleOverview() {
 
               <Link
                 to={pole.to}
-                className="mt-7 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-accent-soft transition-colors hover:text-fg"
+                className="mt-7 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-fg"
               >
                 {pole.cta}
                 <ArrowRight

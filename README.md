@@ -3,8 +3,8 @@
 Application React + Vite + Tailwind CSS pour **Teintérior**, atelier d’esthétique automobile,
 de rétrofit multimédia (CarPlay / Android Auto) et de courtage / dépôt-vente de véhicules.
 
-Thème sombre « ardoise carbone », accent laiton (brass) et bleu glacier (ice), mobile-first,
-100 % interactif avec des données mockées réalistes.
+Atelier situé à **Brumath (67)**. Thème sombre « carbone », accent laiton (brass) et bleu
+glacier (ice), mobile-first, 100 % interactif avec des données mockées réalistes.
 
 ## Démarrage
 
@@ -105,11 +105,15 @@ le comparateur. Seules les polices Google (Sora, Inter) sont chargées à distan
 
 ## Direction artistique
 
-Thème sombre **carbone** (`#06080B` → `#12171F`) avec un voile radial laiton, accent
-principal **laiton `#D9A441`** en dégradé sur les boutons et les titres, accent secondaire
-**ice `#7FD8FF`** réservé au pôle rétrofit. Cartes très arrondies (`rounded-3xl`), boutons
-en pilule, halos `shadow-glow` et `backdrop-blur` sur les surfaces vitrées. Sora pour les
-titres, Inter pour le texte.
+Thème sombre **carbone** (`#06080B` → `#12171F`), fond plat sans voile ni grille.
+Accent **laiton `#D9A441`** réservé aux rubriques de section, aux liens d'action et aux
+boutons primaires — jamais en dégradé et jamais sur un titre coupé en deux couleurs.
+Accent secondaire **ice `#7FD8FF`** pour le pôle rétrofit. Surfaces opaques, rayons courts
+(`rounded-md` / `rounded-lg`), pas de halo ni de flou d'arrière-plan. Sora pour les titres,
+Inter pour le texte.
+
+Les en-têtes de page (`layout/PageHeader.jsx`) posent le titre et le chapô sur deux colonnes
+à partir de `lg`, pour occuper toute la largeur au lieu de laisser la moitié droite vide.
 
 Les pages publiques n'utilisent aucun tableau : formules, déroulé d'intervention et
 pipeline sont présentés en cartes. Les tableaux denses sont réservés au panel admin.
@@ -121,7 +125,15 @@ pipeline sont présentés en cartes. Les tableaux denses sont réservés au pane
 ### Logo
 
 Déposez le logo dans **`public/logo.png`** : le composant `ui/Logo.jsx` l'utilise
-automatiquement. Sans ce fichier, une version vectorielle de repli s'affiche.
+automatiquement dans le header et le pied de page. Sans ce fichier, un repli vectoriel
+s'affiche : silhouette de coupé dans le dégradé bleu → violet de la marque. Voir
+`public/README-logo.md`. Le `favicon.svg` reprend le même dessin.
+
+### Illustrations de véhicules
+
+`ui/CarVisual.jsx` expose cinq carrosseries (`berline`, `break`, `suv`, `citadine`,
+`coupe`) via la prop `body`. Chaque véhicule du showroom et chaque réalisation porte sa
+carrosserie et sa teinte, pour que deux fiches ne se ressemblent jamais.
 
 ## Panel d'administration (`/admin`)
 
@@ -132,7 +144,7 @@ Interface sombre dense, séparée du site public, protégée par une page de con
 | `/admin` | Tableau de bord : stock, valeur, marge potentielle, dernières demandes |
 | `/admin/vehicules` | CRUD complet : filtres par statut, formulaire, galerie photos, marge calculée, « marquer vendu » en un clic |
 | `/admin/prestations` | Packs (nom, prix, temps, étapes, produits), options à la carte, forfaits rétrofit par système |
-| `/admin/contenu` | CMS léger : accroche, présentation atelier, coordonnées, horaires, galerie avant/après, compte admin |
+| `/admin/contenu` | CMS léger : accroche et compteurs du hero, présentation atelier, coordonnées (deux lignes téléphoniques), horaires, galerie avant/après, avis clients et note affichée, compte admin |
 | `/admin/leads` | Demandes entrantes, filtres par type et statut (Nouveau, Contacté, RDV fixé, Clôturé) |
 
 ### État global
@@ -156,7 +168,13 @@ renvoyant un JWT signé, et protéger les écritures côté API.
 
 ## Données à personnaliser avant mise en ligne
 
-Les contenus sont des **données mockées réalistes** : adresse, téléphone, email, SIRET, tarifs,
-compatibilités rétrofit, véhicules du showroom et témoignages. Tout se modifie dans `src/data/`.
+Les coordonnées (adresse, téléphones, email, Instagram) sont réelles. Restent **fictifs** :
+les tarifs, les compatibilités rétrofit, les véhicules du showroom, les avis clients et les
+compteurs du hero (« 1 400 véhicules », « 380 rétrofits », « 214 avis »). Tout cela se modifie
+dans `src/data/` ou directement depuis Admin → Contenu.
+
+⚠ **SIRET, TVA, RCS, capital et assurance sont volontairement vides** dans `data/site.js`
+(`COMPANY`) : les mentions légales sont obligatoires et il valait mieux ne rien afficher que
+d'afficher des numéros inventés. À renseigner avant toute mise en ligne.
 Les formulaires n’envoient rien : brancher `handleSubmit` de `sections/Contact.jsx` et
 `sections/Sourcing.jsx` sur l’API ou le service d’emailing de votre choix.

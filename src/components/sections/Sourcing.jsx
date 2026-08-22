@@ -168,7 +168,7 @@ function EstimationForm() {
 
   if (sent) {
     return (
-      <div className="rounded-3xl border border-white/10 bg-ink-900 p-6">
+      <div className="rounded-lg border border-white/10 bg-ink-900 p-6">
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-signal-ok/40 bg-signal-ok/10">
           <Check className="h-4 w-4 text-signal-ok" aria-hidden="true" />
         </span>
@@ -180,7 +180,7 @@ function EstimationForm() {
           sur les ventes réelles des 90 derniers jours.
         </p>
 
-        <div className="mt-5 rounded-2xl border border-white/10 bg-ink-850 p-4">
+        <div className="mt-5 rounded-md border border-white/10 bg-ink-850 p-4">
           <p className="label-xs">Fourchette indicative immédiate</p>
           <p className="num mt-2 text-xl font-bold text-fg">
             {euro(sent.low)} — {euro(sent.high)}
@@ -208,7 +208,7 @@ function EstimationForm() {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="rounded-3xl border border-white/10 bg-ink-900 p-6">
+    <form onSubmit={submit} noValidate className="rounded-lg border border-white/10 bg-ink-900 p-6">
       <h3 className="text-base font-bold">Faire estimer mon véhicule</h3>
       <p className="mt-1 text-xs text-faint">
         2 minutes, sans engagement. Réponse sous 24 h ouvrées.
@@ -260,7 +260,7 @@ export default function Sourcing({ hideHeading = false }) {
   const facts = useSiteStore((state) => state.sourcingFacts);
 
   return (
-    <section className={`pb-16 lg:pb-20 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
+    <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
       <div className="container-x">
         {hideHeading ? null : (
           <SectionHeading
@@ -273,7 +273,7 @@ export default function Sourcing({ hideHeading = false }) {
 
         <div className="mt-10 grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <Reveal className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
+            <Reveal className="overflow-hidden rounded-lg border border-white/10 bg-ink-900">
               <div className="border-b border-white/10 px-5 py-3">
                 <h3 className="text-sm font-semibold text-fg">Déroulé d’un dépôt-vente</h3>
               </div>
@@ -294,7 +294,7 @@ export default function Sourcing({ hideHeading = false }) {
               </ol>
             </Reveal>
 
-            <Reveal delay={60} className="mt-5 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-3">
+            <Reveal delay={60} className="mt-5 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 sm:grid-cols-3">
               {facts.map((fact) => (
                 <div key={fact.value} className="bg-ink-900 px-4 py-4">
                   <p className="num text-lg font-semibold text-fg">{fact.value}</p>
@@ -303,7 +303,7 @@ export default function Sourcing({ hideHeading = false }) {
               ))}
             </Reveal>
 
-            <Reveal delay={90} className="mt-5 rounded-3xl border border-white/10 bg-ink-900 p-5">
+            <Reveal delay={90} className="mt-5 rounded-lg border border-white/10 bg-ink-900 p-5">
               <h3 className="text-sm font-semibold text-fg">Vous cherchez plutôt un véhicule ?</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 Cahier des charges défini avec vous, recherche en France et en Allemagne, expertise

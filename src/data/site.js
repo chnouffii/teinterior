@@ -1,7 +1,7 @@
 export const BRAND = {
   name: 'Teintérior',
-  baseline: 'Atelier automobile — Toulouse',
-  since: 2018,
+  baseline: 'Atelier automobile — Brumath',
+  since: 2025,
 };
 
 export const ROUTES = {
@@ -76,17 +76,24 @@ export const POLES = [
 ];
 
 export const CONTACT = {
-  phone: '06 32 18 47 90',
-  phoneHref: 'tel:+33632184790',
+  /**
+   * Les deux lignes de l'atelier. La première est celle affichée dans le header
+   * et sur la barre d'appel mobile ; les deux apparaissent en pied de page et
+   * sur la page contact. Modifiable depuis Admin → Contenu.
+   */
+  phones: [
+    { id: 'ligne-1', label: 'Atelier', number: '07 50 09 36 39', href: 'tel:+33750093639' },
+    { id: 'ligne-2', label: 'Second contact', number: '06 19 51 89 63', href: 'tel:+33619518963' },
+  ],
   email: 'contact@teinterior.fr',
   emailHref: 'mailto:contact@teinterior.fr',
-  whatsapp: 'https://wa.me/33632184790',
+  whatsapp: 'https://wa.me/33750093639',
   address: {
-    street: '14 rue de la Carrosserie',
-    zone: 'ZA des Chênes — Bâtiment C',
-    city: '31200 Toulouse',
+    street: '4 rue des Carrières',
+    zone: '',
+    city: '67170 Brumath',
     mapsUrl:
-      'https://www.google.com/maps/search/?api=1&query=14+rue+de+la+Carrosserie+31200+Toulouse',
+      'https://www.google.com/maps/search/?api=1&query=4+rue+des+Carrieres+67170+Brumath',
   },
   hours: [
     { day: 'Lundi — Vendredi', value: '08h30 — 19h00' },
@@ -94,11 +101,12 @@ export const CONTACT = {
     { day: 'Dimanche', value: 'Sur rendez-vous' },
   ],
   socials: [
-    { id: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
-    { id: 'facebook', label: 'Facebook', url: 'https://facebook.com' },
-    { id: 'youtube', label: 'YouTube', url: 'https://youtube.com' },
+    { id: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/teinterior_/' },
   ],
 };
+
+/** Ligne principale — raccourci utilisé par le header et la barre d'appel. */
+export const primaryPhone = (contact) => contact.phones?.[0] ?? { number: '', href: '' };
 
 export const SERVICE_OPTIONS = [
   { value: 'interieur', label: 'Remise en état intérieur' },
@@ -119,13 +127,17 @@ export const LEGAL_LINKS = [
 ];
 
 export const COMPANY = {
-  legalName: 'Teintérior SAS',
-  capital: '10 000 €',
-  siret: '902 481 337 00018',
-  rcs: 'RCS Toulouse 902 481 337',
-  vat: 'FR38902481337',
-  director: 'Direction de la publication : le représentant légal de Teintérior SAS',
+  legalName: 'Teintérior',
+  /**
+   * ⚠ À COMPLÉTER avant toute mise en ligne — ces mentions sont obligatoires
+   * (art. 6 III LCEN) et les valeurs ci-dessous sont volontairement vides
+   * plutôt que fictives.
+   */
+  capital: '',
+  siret: '',
+  rcs: '',
+  vat: '',
+  director: 'Direction de la publication : le représentant légal de Teintérior',
   host: 'Hébergeur : OVHcloud, 2 rue Kellermann, 59100 Roubaix, France',
-  insurance:
-    'Assurance responsabilité civile professionnelle : AXA France IARD, contrat n° 0928471',
+  insurance: '',
 };

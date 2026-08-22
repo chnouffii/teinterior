@@ -4,7 +4,7 @@ import usePageMeta from '../hooks/usePageMeta.js';
 
 export default function ContactPage() {
   usePageMeta({
-    title: 'Devis & contact — Atelier Teintérior Toulouse',
+    title: 'Devis & contact — Atelier Teintérior Brumath',
     description:
       'Demandez un devis gratuit : detailing, céramique, teintage, rétrofit CarPlay ou dépôt-vente. Coordonnées de l’atelier, horaires et plan d’accès.',
   });

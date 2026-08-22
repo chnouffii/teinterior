@@ -1,6 +1,6 @@
 import { CalendarCheck, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../data/site.js';
+import { ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import useScrollPosition from '../../hooks/useScrollPosition.js';
 
@@ -18,15 +18,15 @@ export default function MobileCallBar() {
     >
       <div className="flex gap-3">
         <a
-          href={contact.phoneHref}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-ink-850 py-3 text-sm font-semibold text-fg"
+          href={primaryPhone(contact).href}
+          className="flex flex-1 items-center justify-center gap-2 rounded-md border border-white/10 bg-ink-850 py-3 text-sm font-semibold text-fg"
         >
           <Phone className="h-4 w-4" aria-hidden="true" />
           Appeler
         </a>
         <Link
           to={ROUTES.contact}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-accent-on"
+          className="flex flex-1 items-center justify-center gap-2 rounded-md bg-accent py-3 text-sm font-semibold text-accent-on"
         >
           <CalendarCheck className="h-4 w-4" aria-hidden="true" />
           Devis

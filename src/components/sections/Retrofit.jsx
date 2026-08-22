@@ -70,7 +70,7 @@ function Finder() {
   const fitment = system ? FITMENT[system.fitment] : null;
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
+    <div className="overflow-hidden rounded-lg border border-white/10 bg-ink-900">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
         <h3 className="text-sm font-semibold text-fg">Recherche de compatibilité</h3>
         <button
@@ -222,7 +222,7 @@ export default function Retrofit({ hideHeading = false }) {
           />
         )}
 
-        <Reveal className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 lg:grid-cols-4">
+        <Reveal className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
           {RETROFIT_FACTS.map((fact) => (
             <div key={fact.label} className="bg-ink-950/90 px-6 py-6 text-center">
               <p className="num font-display text-2xl font-bold text-fg">{fact.value}</p>
@@ -239,7 +239,7 @@ export default function Retrofit({ hideHeading = false }) {
                 <Reveal
                   key={item.step}
                   delay={index * 60}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-ink-850/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-ice/40"
+                  className="group relative overflow-hidden rounded-lg border border-white/10 bg-ink-850 p-5 transition-colors duration-150 hover:border-ice/40"
                 >
                   <span className="pointer-events-none absolute -right-3 -top-5 font-display text-6xl font-extrabold text-white/[0.04] transition-colors duration-500 group-hover:text-ice/10">
                     {item.step}
@@ -255,7 +255,7 @@ export default function Retrofit({ hideHeading = false }) {
           </div>
 
           <Reveal delay={80} className="lg:col-span-4">
-            <div className="rounded-3xl border border-ice/20 bg-ice/[0.04] p-6">
+            <div className="rounded-lg border border-ice/20 bg-ice/[0.04] p-6">
               <h3 className="text-base font-bold text-fg">Ce qui reste d’origine</h3>
               <ul className="mt-4 space-y-3">
                 {RETROFIT_KEEPS.map((item) => (
