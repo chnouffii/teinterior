@@ -1,18 +1,8 @@
 export const BRAND = {
   name: 'Teintérior',
-  baseline: "L'art du détail automobile",
-  claim: 'Esthétique · Rétrofit multimédia · Sourcing & dépôt-vente',
-  foundedYear: 2018,
+  baseline: 'Atelier automobile — Toulouse',
+  since: 2018,
 };
-
-export const NAV_LINKS = [
-  { id: 'prestations', path: '/prestations', label: 'Prestations' },
-  { id: 'retrofit', path: '/retrofit-carplay', label: 'Rétrofit CarPlay' },
-  { id: 'vendre', path: '/vendre-sa-voiture', label: 'Vendre sa voiture' },
-  { id: 'vehicules', path: '/vehicules', label: 'Véhicules à vendre' },
-  { id: 'realisations', path: '/realisations', label: 'Réalisations' },
-  { id: 'contact', path: '/contact', label: 'Contact' },
-];
 
 export const ROUTES = {
   home: '/',
@@ -24,40 +14,58 @@ export const ROUTES = {
   contact: '/contact',
 };
 
-/** Les trois pôles présentés sur la page d'accueil, chacun renvoyant vers sa page dédiée. */
+export const LEGAL_ROUTE = '/mentions-legales';
+export const ADMIN_ROUTE = '/admin';
+
+export const NAV_LINKS = [
+  { id: 'prestations', path: ROUTES.prestations, label: 'Prestations' },
+  { id: 'retrofit', path: ROUTES.retrofit, label: 'Rétrofit CarPlay' },
+  { id: 'vendre', path: ROUTES.vendre, label: 'Vendre sa voiture' },
+  { id: 'vehicules', path: ROUTES.vehicules, label: 'Véhicules à vendre' },
+  { id: 'realisations', path: ROUTES.realisations, label: 'Réalisations' },
+  { id: 'contact', path: ROUTES.contact, label: 'Contact' },
+];
+
+/** Les trois métiers, présentés sur la page d'accueil. */
 export const POLES = [
   {
     id: 'esthetique',
-    icon: 'Gem',
-    eyebrow: 'Pôle 1',
-    title: 'Esthétique automobile',
-    text: 'Detailing intérieur et extérieur, correction de peinture, protection céramique 9H et teintage de vitres au film 3M.',
-    bullets: ['3 formules dès 149 €', 'Céramique garantie 3 ans', 'Comparatif avant / après'],
+    index: '01',
+    title: 'Esthétique',
+    lead: 'Remise en état intérieur, correction de peinture, céramique et teintage.',
+    points: [
+      'Vernis mesuré à la jauge avant chaque passe',
+      'Rupes LHR 15 Mark III, Menzerna, CarPro',
+      'Devis détaillé ligne par ligne, dès 149 €',
+    ],
     to: ROUTES.prestations,
-    cta: 'Voir les formules',
-    accent: 'brass',
+    cta: 'Voir le détail des packs',
   },
   {
     id: 'retrofit',
-    icon: 'MonitorSmartphone',
-    eyebrow: 'Pôle 2',
-    title: 'Rétrofit CarPlay & Android Auto',
-    text: 'Intégration sans fil dans votre écran d’usine, sans altérer le système d’origine ni couper le moindre faisceau.',
-    bullets: ['40+ constructeurs couverts', 'Pose en 2 h en moyenne', 'Garantie 2 ans pièces & pose'],
+    index: '02',
+    title: 'Rétrofit multimédia',
+    lead: 'CarPlay et Android Auto intégrés à l’écran d’usine, faisceau d’origine intact.',
+    points: [
+      '18 systèmes embarqués référencés',
+      'Aucun câble coupé, retour d’origine en 30 min',
+      'Garantie 2 ans pièces et pose',
+    ],
     to: ROUTES.retrofit,
-    cta: 'Tester ma compatibilité',
-    accent: 'ice',
+    cta: 'Chercher ma compatibilité',
   },
   {
     id: 'sourcing',
-    icon: 'Handshake',
-    eyebrow: 'Pôle 3',
-    title: 'Sourcing & dépôt-vente',
-    text: 'Nous préparons, mettons en scène et vendons votre véhicule — ou nous recherchons celui que vous cherchez.',
-    bullets: ['+12 % de prix de vente moyen', '23 jours de délai moyen', 'Transaction sécurisée'],
+    index: '03',
+    title: 'Vente et sourcing',
+    lead: 'Dépôt-vente préparé et photographié, ou recherche du véhicule que vous cherchez.',
+    points: [
+      '23 jours de délai moyen de vente',
+      'Commission unique de 4,9 %, rien si pas de vente',
+      'Fonds vérifiés avant remise des clés',
+    ],
     to: ROUTES.vendre,
-    cta: 'Faire estimer mon véhicule',
-    accent: 'brass',
+    cta: 'Faire estimer un véhicule',
   },
 ];
 
@@ -71,7 +79,8 @@ export const CONTACT = {
     street: '14 rue de la Carrosserie',
     zone: 'ZA des Chênes — Bâtiment C',
     city: '31200 Toulouse',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=14+rue+de+la+Carrosserie+31200+Toulouse',
+    mapsUrl:
+      'https://www.google.com/maps/search/?api=1&query=14+rue+de+la+Carrosserie+31200+Toulouse',
   },
   hours: [
     { day: 'Lundi — Vendredi', value: '08h30 — 19h00' },
@@ -79,61 +88,29 @@ export const CONTACT = {
     { day: 'Dimanche', value: 'Sur rendez-vous' },
   ],
   socials: [
-    { id: 'instagram', label: 'Instagram', handle: '@teinterior', url: 'https://instagram.com' },
-    { id: 'facebook', label: 'Facebook', handle: 'Teintérior Atelier', url: 'https://facebook.com' },
-    { id: 'youtube', label: 'YouTube', handle: 'Teintérior TV', url: 'https://youtube.com' },
-    { id: 'tiktok', label: 'TikTok', handle: '@teinterior', url: 'https://tiktok.com' },
+    { id: 'instagram', label: 'Instagram', url: 'https://instagram.com' },
+    { id: 'facebook', label: 'Facebook', url: 'https://facebook.com' },
+    { id: 'youtube', label: 'YouTube', url: 'https://youtube.com' },
   ],
 };
 
-export const REASSURANCE = [
-  {
-    id: 'soin',
-    icon: 'Sparkles',
-    title: 'Travail soigné',
-    text: 'Un seul véhicule à la fois dans l’atelier, contrôle qualité photo avant restitution.',
-  },
-  {
-    id: 'materiel',
-    icon: 'Wrench',
-    title: 'Matériel professionnel',
-    text: 'Polisseuses Rupes, injection-extraction, films 3M et céramiques certifiées.',
-  },
-  {
-    id: 'devis',
-    icon: 'Timer',
-    title: 'Devis rapide',
-    text: 'Réponse chiffrée en moins de 24h ouvrées, sans engagement.',
-  },
-];
-
-export const STATS = [
-  { id: 'vehicules', value: '1 400+', label: 'Véhicules traités' },
-  { id: 'note', value: '4,9/5', label: 'Note moyenne clients' },
-  { id: 'retrofit', value: '380', label: 'Rétrofits CarPlay posés' },
-  { id: 'delai', value: '24h', label: 'Délai de devis' },
-];
-
 export const SERVICE_OPTIONS = [
-  { value: 'detailing-interieur', label: 'Soin intérieur / nettoyage profond' },
-  { value: 'detailing-exterieur', label: 'Polissage / lustrage extérieur' },
-  { value: 'renovation-integrale', label: 'Pack rénovation intégrale' },
-  { value: 'ceramique', label: 'Protection céramique 9H' },
+  { value: 'interieur', label: 'Remise en état intérieur' },
+  { value: 'correction-1', label: 'Correction peinture — 1 passe' },
+  { value: 'integrale', label: 'Rénovation intégrale + céramique' },
   { value: 'teintage', label: 'Teintage de vitres' },
   { value: 'retrofit', label: 'Rétrofit CarPlay / Android Auto' },
-  { value: 'depot-vente', label: 'Dépôt-vente / estimation véhicule' },
-  { value: 'sourcing', label: 'Recherche de véhicule (sourcing)' },
+  { value: 'depot-vente', label: 'Dépôt-vente / estimation' },
+  { value: 'sourcing', label: 'Recherche de véhicule' },
   { value: 'autre', label: 'Autre demande' },
 ];
 
 export const LEGAL_LINKS = [
-  { id: 'mentions', path: '/mentions-legales#mentions', label: 'Mentions légales' },
-  { id: 'cgv', path: '/mentions-legales#cgv', label: 'Conditions générales de vente' },
-  { id: 'confidentialite', path: '/mentions-legales#confidentialite', label: 'Politique de confidentialité' },
-  { id: 'cookies', path: '/mentions-legales#cookies', label: 'Gestion des cookies' },
+  { id: 'mentions', path: `${LEGAL_ROUTE}#mentions`, label: 'Mentions légales' },
+  { id: 'cgv', path: `${LEGAL_ROUTE}#cgv`, label: 'CGV' },
+  { id: 'confidentialite', path: `${LEGAL_ROUTE}#confidentialite`, label: 'Confidentialité' },
+  { id: 'cookies', path: `${LEGAL_ROUTE}#cookies`, label: 'Cookies' },
 ];
-
-export const LEGAL_ROUTE = '/mentions-legales';
 
 export const COMPANY = {
   legalName: 'Teintérior SAS',
@@ -143,5 +120,6 @@ export const COMPANY = {
   vat: 'FR38902481337',
   director: 'Direction de la publication : le représentant légal de Teintérior SAS',
   host: 'Hébergeur : OVHcloud, 2 rue Kellermann, 59100 Roubaix, France',
-  insurance: 'Assurance responsabilité civile professionnelle : AXA France IARD, contrat n° 0928471',
+  insurance:
+    'Assurance responsabilité civile professionnelle : AXA France IARD, contrat n° 0928471',
 };

@@ -15,8 +15,7 @@ export default function RealisationsPage() {
     <>
       <PageHeader
         eyebrow="Réalisations"
-        title="Ce qui sort"
-        highlight="de notre atelier"
+        title="Ce qui sort de notre atelier"
         description="Un aperçu des véhicules passés entre nos mains ces derniers mois, filtrable par métier, et les retours des clients qui nous ont confié leur voiture."
       />
       <Gallery hideHeading />

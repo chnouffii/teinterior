@@ -1,50 +1,48 @@
-import { ArrowUpRight, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
-import { BRAND, CONTACT, LEGAL_LINKS, NAV_LINKS } from '../../data/site.js';
+import { BRAND, COMPANY, LEGAL_LINKS, NAV_LINKS } from '../../data/site.js';
+import { useSiteStore } from '../../store/siteStore';
 
 export default function Footer() {
+  const contact = useSiteStore((state) => state.contact);
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-24 border-t border-white/10 bg-carbon-950">
-      <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-brass/50 to-transparent" />
-
-      <div className="container-x grid gap-12 py-16 lg:grid-cols-12 lg:gap-8">
+    <footer className="border-t border-ink-800 bg-ink-950">
+      <div className="container-x grid gap-10 py-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo />
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-slate-300">
-            Atelier indépendant d’esthétique automobile, de rétrofit multimédia et de courtage
-            de véhicules. Un seul véhicule à la fois, du soin, et des comptes rendus photo à
-            chaque étape.
+          <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted">
+            Atelier indépendant : esthétique automobile, rétrofit multimédia et courtage de
+            véhicules. Un seul véhicule à la fois, compte rendu photo à chaque étape.
+          </p>
+          <p className="mt-4 text-xs text-faint">
+            {BRAND.baseline} · depuis {BRAND.since}
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-2">
-            {CONTACT.socials.map((social) => (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {contact.socials.map((social) => (
               <a
                 key={social.id}
                 href={social.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="tap inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-2.5 text-xs font-medium text-slate-300 transition-colors hover:border-brass/40 hover:text-white"
+                className="tap inline-flex items-center rounded-md border border-ink-700 px-3 text-xs text-muted transition-colors hover:border-ink-600 hover:text-fg"
               >
                 {social.label}
-                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Navigation
-          </h3>
-          <ul className="mt-5 space-y-3">
+        <div className="lg:col-span-3">
+          <h2 className="label-xs">Navigation</h2>
+          <ul className="mt-4 space-y-1">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
                 <Link
                   to={link.path}
-                  className="inline-flex min-h-[40px] items-center text-sm text-slate-300 transition-colors hover:text-brass-light"
+                  className="inline-flex min-h-[36px] items-center text-sm text-muted transition-colors hover:text-accent"
                 >
                   {link.label}
                 </Link>
@@ -54,76 +52,71 @@ export default function Footer() {
         </div>
 
         <div className="lg:col-span-3">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            L’atelier
-          </h3>
-          <ul className="mt-5 space-y-4 text-sm text-slate-300">
-            <li className="flex gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
-              <span>
-                {CONTACT.address.street}
-                <br />
-                {CONTACT.address.zone}
-                <br />
-                {CONTACT.address.city}
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+          <h2 className="label-xs">Atelier</h2>
+          <address className="mt-4 space-y-3 text-sm not-italic text-muted">
+            <p>
+              {contact.address.street}
+              <br />
+              {contact.address.zone}
+              <br />
+              {contact.address.city}
+            </p>
+            <p>
               <a
-                href={CONTACT.phoneHref}
-                className="inline-flex min-h-[40px] items-center transition-colors hover:text-white"
+                href={contact.phoneHref}
+                className="num inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
               >
-                {CONTACT.phone}
+                {contact.phone}
               </a>
-            </li>
-            <li className="flex gap-3">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+              <br />
               <a
-                href={CONTACT.emailHref}
-                className="inline-flex min-h-[40px] items-center transition-colors hover:text-white"
+                href={contact.emailHref}
+                className="inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
               >
-                {CONTACT.email}
+                {contact.email}
               </a>
-            </li>
-          </ul>
+            </p>
+          </address>
         </div>
 
-        <div className="lg:col-span-3">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Horaires
-          </h3>
-          <ul className="mt-5 space-y-3 text-sm">
-            {CONTACT.hours.map((slot) => (
-              <li key={slot.day} className="flex items-center justify-between gap-4">
-                <span className="flex items-center gap-2 text-slate-300">
-                  <Clock className="h-3.5 w-3.5 text-brass/70" aria-hidden="true" />
-                  {slot.day}
-                </span>
-                <span className="font-medium text-white">{slot.value}</span>
+        <div className="lg:col-span-2">
+          <h2 className="label-xs">Horaires</h2>
+          <ul className="mt-4 space-y-2 text-sm">
+            {contact.hours.map((slot) => (
+              <li key={slot.day}>
+                <span className="block text-muted">{slot.day}</span>
+                <span className="num block text-xs text-faint">{slot.value}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
 
-      <div className="hairline" />
+      <div className="rule" />
 
-      <div className="container-x flex flex-col gap-4 py-7 text-xs text-slate-400 md:flex-row md:items-center md:justify-between">
-        <p>
-          © {year} {BRAND.name} — SIRET 902 481 337 00018 — TVA FR38902481337. Tous droits réservés.
+      <div className="container-x flex flex-col gap-3 py-6 text-xs text-faint md:flex-row md:items-center md:justify-between">
+        <p className="num">
+          © {year} {COMPANY.legalName} — SIRET {COMPANY.siret} — TVA {COMPANY.vat}
         </p>
-        <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <ul className="flex flex-wrap items-center gap-x-5 gap-y-1">
           {LEGAL_LINKS.map((link) => (
             <li key={link.id}>
               <Link
                 to={link.path}
-                className="inline-flex min-h-[40px] items-center transition-colors hover:text-brass-light"
+                className="inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
               >
                 {link.label}
               </Link>
             </li>
           ))}
+          <li>
+            <Link
+              to="/admin"
+              className="inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
+            >
+              Espace atelier
+            </Link>
+          </li>
         </ul>
       </div>
     </footer>

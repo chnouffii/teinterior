@@ -10,24 +10,27 @@
 
 | Point | MASTER.md | Appliqué ici | Raison |
 |---|---|---|---|
-| Fond | `#F8FAFC` (clair) | `#06080B` → `#12171F` (carbone) | Brief client : dark theme obligatoire. Le style retenu (« Modern Dark / Cinema ») est lui-même *Dark Mode Primary* ; la palette « Automotive » livrée est sa déclinaison claire. |
-| Accent CTA | `#DC2626` (action red) | `#D9A441` (laiton) | Sur fond carbone, le laiton porte le positionnement premium/detailing (palette DB « Luxury » : accent or `#A16207`/`#CA8A04`). Le rouge est réservé au **destructif** (erreurs de formulaire, `rose-400`). |
-| Accent secondaire | — | `#7FD8FF` (ice) | Réservé au pôle technique (rétrofit CarPlay) pour séparer visuellement les deux métiers. Jamais utilisé comme CTA. |
-| Typographie | Bodoni Moda / Jost | Sora / Inter | Bodoni (didone mode/luxe) lit « maison de couture » plutôt qu'« atelier automobile ». Sora conserve le registre premium avec un dessin géométrique plus technique. Le **système de précision** de la fiche « Modern Dark Cinema » est repris : tracking serré sur les titres, labels 500 uppercase +0.12em. |
+| Fond | `#F8FAFC` (clair) | `#0F1115` → `#22262E` (ardoise / graphite mat) | Brief client : thème sombre, sans noir pur. |
+| Accent CTA | `#DC2626` (action red) | `#5B8DEF` (azur, repris du logo) | Le logo de la marque utilise un bleu ; l'accent en est extrait puis désaturé. Un seul accent sur tout le site, aucun dégradé, aucune lueur. |
+| Typographie | Bodoni Moda / Jost | Inter (titres et corps) + JetBrains Mono (chiffres, références, durées) | Registre atelier technique plutôt que maison de couture. Le mono distingue les données mesurables du discours. |
+| Rayons | — | `rounded` à `rounded-lg` (2 à 8 px) | Les grands rayons et les pilules lisaient « landing page générée ». |
+| Ombres | — | aucune ombre portée diffuse, séparation par bordures `border-ink-700` | Suppression des effets de lueur. |
 
-## Règles appliquées
+## Palette
 
-### Couleurs de texte (contraste vérifié sur `#06080B` → `#12171F`)
+| Rôle | Token | Hex | Contraste sur `#0F1115` |
+|---|---|---|---|
+| Fond | `ink-950` | `#0F1115` | — |
+| Surfaces | `ink-900` / `ink-850` / `ink-800` | `#14171C` / `#191D23` / `#22262E` | — |
+| Bordures | `ink-700` / `ink-600` | `#2C313A` / `#3A404B` | — |
+| Texte principal | `fg` | `#F2F4F7` | 17,2:1 |
+| Texte courant | `muted` | `#B4BAC4` | 9,7:1 |
+| Texte secondaire | `faint` | `#8A919E` | 6,0:1 |
+| Accent unique | `accent` | `#5B8DEF` | 5,9:1 |
+| États | `signal.ok` / `warn` / `danger` | `#6FA980` / `#C9973F` / `#D2726B` | ≥ 5,7:1 |
 
-| Rôle | Classe | Ratio min. |
-|---|---|---|
-| Titres | `text-white` | 17,9:1 |
-| Corps / listes | `text-slate-300` | 12,1:1 |
-| Méta, labels, notes | `text-slate-400` | 7,0:1 |
-| Accent / valeurs | `text-brass-light`, `text-gradient-brass` | 11,9:1 |
-| Erreurs | `text-rose-400` | 6,6:1 |
-
-`slate-500` (3,8:1) et `slate-600` (2,4:1) sont **interdits** pour du texte : ils échouent WCAG AA sur cette palette.
+Aucun texte ne descend sous 4,5:1. Interdits : dégradés multicolores, `box-shadow` de lueur,
+noir pur `#000`, rayons supérieurs à 8 px sur les blocs de contenu.
 
 ### Typographie
 

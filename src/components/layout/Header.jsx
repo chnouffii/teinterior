@@ -1,82 +1,62 @@
 import { useEffect, useState } from 'react';
-import { CalendarCheck, Menu, Phone, X } from 'lucide-react';
+import { Menu, Phone, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
 import Button from '../ui/Button.jsx';
-import { CONTACT, NAV_LINKS, ROUTES } from '../../data/site.js';
+import { NAV_LINKS, ROUTES } from '../../data/site.js';
+import { useSiteStore } from '../../store/siteStore';
 import useScrollPosition from '../../hooks/useScrollPosition.js';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll.js';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const scrolled = useScrollPosition(32);
+  const scrolled = useScrollPosition(24);
   const { pathname } = useLocation();
+  const contact = useSiteStore((state) => state.contact);
 
   useLockBodyScroll(menuOpen);
 
-  // Le menu mobile se referme dès qu'une page est chargée.
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-white/10 bg-carbon-950/85 backdrop-blur-xl'
-          : 'border-b border-transparent bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${
+        scrolled ? 'border-ink-700 bg-ink-950/95 backdrop-blur' : 'border-transparent bg-ink-950'
       }`}
     >
-      <div className="container-x flex h-[72px] items-center justify-between gap-6 lg:h-20">
-        <Link
-          to={ROUTES.home}
-          className="inline-flex min-h-[44px] shrink-0 items-center"
-          aria-label="Teintérior — retour à l’accueil"
-        >
+      <div className="container-x flex h-16 items-center justify-between gap-6">
+        <Link to={ROUTES.home} className="inline-flex min-h-[44px] items-center" aria-label="Teintérior — accueil">
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 xl:flex" aria-label="Navigation principale">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Navigation principale">
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `relative inline-flex min-h-[44px] items-center rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ${
-                  isActive ? 'text-white' : 'text-slate-300 hover:text-white'
+                `inline-flex min-h-[40px] items-center rounded-md px-3 text-sm transition-colors ${
+                  isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }
             >
-              {({ isActive }) => (
-                <>
-                  {link.label}
-                  <span
-                    className={`absolute inset-x-3 bottom-1 h-px origin-center bg-gradient-to-r from-transparent via-brass to-transparent transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0'
-                    }`}
-                  />
-                </>
-              )}
+              {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2">
           <a
-            href={CONTACT.phoneHref}
-            className="hidden min-h-[44px] items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:border-brass/40 hover:text-white lg:inline-flex"
+            href={contact.phoneHref}
+            className="num hidden min-h-[40px] items-center gap-2 rounded-md border border-ink-700 px-3 text-sm text-muted transition-colors hover:border-ink-600 hover:text-fg md:inline-flex"
           >
-            <Phone className="h-4 w-4" aria-hidden="true" />
-            {CONTACT.phone}
+            <Phone className="h-3.5 w-3.5" aria-hidden="true" />
+            {contact.phone}
           </a>
 
-          <Button
-            as={Link}
-            to={ROUTES.contact}
-            icon={CalendarCheck}
-            size="sm"
-            className="hidden sm:inline-flex"
-          >
+          <Button as={Link} to={ROUTES.contact} size="sm" className="hidden sm:inline-flex">
             Prendre RDV / Devis
           </Button>
 
@@ -86,7 +66,7 @@ export default function Header() {
             aria-expanded={menuOpen}
             aria-controls="menu-mobile"
             aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors hover:border-brass/40 xl:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-ink-700 text-fg lg:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -95,33 +75,30 @@ export default function Header() {
 
       <div
         id="menu-mobile"
-        className={`overflow-hidden border-t border-white/5 bg-carbon-950/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 xl:hidden ${
-          menuOpen ? 'max-h-[560px] opacity-100' : 'max-h-0 opacity-0'
+        className={`overflow-hidden border-t border-ink-800 bg-ink-950 transition-[max-height,opacity] duration-200 lg:hidden ${
+          menuOpen ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="container-x flex flex-col gap-1 py-5" aria-label="Navigation mobile">
+        <nav className="container-x flex flex-col gap-1 py-4" aria-label="Navigation mobile">
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `flex min-h-[48px] items-center rounded-2xl px-4 py-3 text-base font-medium transition-colors ${
-                  isActive
-                    ? 'bg-brass/10 text-brass-light'
-                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                `flex min-h-[48px] items-center rounded-md px-3 text-sm transition-colors ${
+                  isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }
             >
               {link.label}
             </NavLink>
           ))}
-
-          <div className="mt-3 flex flex-col gap-3">
-            <Button as={Link} to={ROUTES.contact} icon={CalendarCheck} size="md">
+          <div className="mt-3 flex flex-col gap-2">
+            <Button as={Link} to={ROUTES.contact} size="md">
               Prendre RDV / Devis
             </Button>
-            <Button as="a" href={CONTACT.phoneHref} variant="secondary" icon={Phone} size="md">
-              {CONTACT.phone}
+            <Button as="a" href={contact.phoneHref} variant="secondary" size="md" icon={Phone}>
+              {contact.phone}
             </Button>
           </div>
         </nav>

@@ -137,8 +137,7 @@ export default function LegalPage() {
     <>
       <PageHeader
         eyebrow="Informations légales"
-        title="Mentions légales"
-        highlight="& conditions"
+        title="Mentions légales et conditions"
         description="Éditeur du site, conditions générales de vente par pôle d’activité, traitement de vos données personnelles et politique de cookies."
       />
 
@@ -150,7 +149,7 @@ export default function LegalPage() {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="flex min-h-[44px] items-center rounded-xl border border-white/5 bg-carbon-900/50 px-4 text-sm text-slate-300 transition-colors hover:border-brass/40 hover:text-brass-light"
+                    className="flex min-h-[44px] items-center rounded-xl border border-ink-800 bg-ink-900/50 px-4 text-sm text-muted transition-colors hover:border-accent/40 hover:text-accent-soft"
                   >
                     {section.title}
                   </a>
@@ -172,12 +171,12 @@ export default function LegalPage() {
                 <div className="mt-6 space-y-7">
                   {section.blocks.map((block) => (
                     <div key={block.subtitle}>
-                      <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-brass-light">
+                      <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-soft">
                         {block.subtitle}
                       </h3>
                       <div className="mt-3 space-y-2">
                         {block.lines.map((line) => (
-                          <p key={line} className="text-sm leading-relaxed text-slate-300">
+                          <p key={line} className="text-sm leading-relaxed text-muted">
                             {line}
                           </p>
                         ))}
@@ -188,7 +187,7 @@ export default function LegalPage() {
               </Reveal>
             ))}
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-faint">
               Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}. Ces documents sont
               fournis à titre d’exemple et doivent être validés par un conseil juridique avant mise
               en ligne.

@@ -13,8 +13,7 @@ export default function ContactPage() {
     <>
       <PageHeader
         eyebrow="Contact"
-        title="Parlons de"
-        highlight="votre véhicule"
+        title="Parlons de votre véhicule"
         description="Un projet de rénovation, une envie de CarPlay ou une voiture à vendre ? Décrivez-nous votre besoin : nous répondons avec un devis détaillé, ligne par ligne, sous 24 h ouvrées."
       />
       <Contact hideHeading />

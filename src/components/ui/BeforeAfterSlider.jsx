@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoveHorizontal } from 'lucide-react';
+import { MoveHorizontal } from 'lucide-react';
 import CarVisual from './CarVisual.jsx';
 
 /**
- * Comparateur avant / après : l'utilisateur déplace le curseur horizontal
- * (souris, tactile ou clavier) pour révéler le résultat de la prestation.
+ * Comparateur avant / après, présenté comme un banc de contrôle :
+ * cadre technique, repères gradués, position affichée en pourcentage.
+ * Accepte de vraies photos (beforeImage / afterImage) ou retombe sur
+ * l'illustration vectorielle.
  */
 export default function BeforeAfterSlider({
   scene = 'polish',
-  palette = ['#12171F', '#2D3747'],
+  palette = ['#242A33', '#4A525C'],
   beforeCaption = 'Avant',
   afterCaption = 'Après',
+  beforeImage,
+  afterImage,
+  reference,
   className = '',
 }) {
   const [position, setPosition] = useState(50);
@@ -25,24 +30,8 @@ export default function BeforeAfterSlider({
     setPosition(Math.min(100, Math.max(0, ratio)));
   }, []);
 
-  const handlePointerDown = (event) => {
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-    setDragging(true);
-    updateFromClientX(event.clientX);
-  };
-
-  const handlePointerMove = (event) => {
-    if (!dragging) return;
-    updateFromClientX(event.clientX);
-  };
-
-  const stopDragging = (event) => {
-    event.currentTarget.releasePointerCapture?.(event.pointerId);
-    setDragging(false);
-  };
-
   const handleKeyDown = (event) => {
-    const step = event.shiftKey ? 10 : 3;
+    const step = event.shiftKey ? 10 : 2;
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
       setPosition((value) => Math.max(0, value - step));
@@ -69,73 +58,96 @@ export default function BeforeAfterSlider({
     };
   }, [dragging]);
 
-  return (
-    <div
-      ref={containerRef}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={stopDragging}
-      className={`relative aspect-[16/10] w-full cursor-ew-resize select-none overflow-hidden
-        rounded-3xl border border-white/10 bg-carbon-900 shadow-card ${className}`}
-    >
-      <div className="absolute inset-0">
-        <CarVisual
-          scene={scene}
-          variant="before"
-          palette={palette}
-          className="h-full w-full"
-          title={`${beforeCaption} — état initial`}
-        />
-      </div>
-
-      <div
-        className="absolute inset-0"
-        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
-      >
-        <CarVisual
-          scene={scene}
-          variant="after"
-          palette={palette}
-          className="h-full w-full"
-          title={`${afterCaption} — après passage à l’atelier`}
-        />
-      </div>
-
-      <span className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/15 bg-carbon-950/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300 backdrop-blur">
-        {beforeCaption}
-      </span>
-      <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-brass/40 bg-brass/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-brass-light backdrop-blur">
-        {afterCaption}
-      </span>
-
-      <div
-        className="pointer-events-none absolute inset-y-0 w-0.5 bg-white/90 shadow-[0_0_18px_rgba(255,255,255,0.6)]"
-        style={{ left: `${position}%` }}
+  const renderLayer = (image, variant, caption) =>
+    image ? (
+      <img src={image} alt={caption} className="h-full w-full object-cover" draggable={false} />
+    ) : (
+      <CarVisual
+        scene={scene}
+        variant={variant}
+        palette={palette}
+        className="h-full w-full"
+        title={caption}
       />
+    );
 
-      <button
-        type="button"
-        role="slider"
-        aria-label="Comparer l’avant et l’après"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={Math.round(position)}
-        aria-valuetext={`${Math.round(position)} % du résultat après prestation`}
-        onKeyDown={handleKeyDown}
-        onPointerDown={(event) => event.stopPropagation()}
-        className="absolute top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
-          items-center justify-center rounded-full border border-white/30 bg-carbon-950/90
-          text-white shadow-glow backdrop-blur transition-transform duration-200 hover:scale-110"
-        style={{ left: `${position}%` }}
+  return (
+    <figure className={`overflow-hidden rounded-lg border border-ink-700 bg-ink-900 ${className}`}>
+      <div className="flex items-center justify-between gap-3 border-b border-ink-700 px-4 py-2.5">
+        <span className="label-xs">Banc de comparaison</span>
+        {reference ? <span className="num text-[11px] text-faint">{reference}</span> : null}
+      </div>
+
+      <div
+        ref={containerRef}
+        onPointerDown={(event) => {
+          event.currentTarget.setPointerCapture?.(event.pointerId);
+          setDragging(true);
+          updateFromClientX(event.clientX);
+        }}
+        onPointerMove={(event) => {
+          if (dragging) updateFromClientX(event.clientX);
+        }}
+        onPointerUp={(event) => {
+          event.currentTarget.releasePointerCapture?.(event.pointerId);
+          setDragging(false);
+        }}
+        className="relative aspect-[16/10] w-full cursor-ew-resize select-none overflow-hidden"
       >
-        <ChevronLeft className="h-4 w-4 -mr-1" strokeWidth={2.4} aria-hidden="true" />
-        <ChevronRight className="h-4 w-4 -ml-1" strokeWidth={2.4} aria-hidden="true" />
-      </button>
+        <div className="absolute inset-0">{renderLayer(beforeImage, 'before', beforeCaption)}</div>
 
-      <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-carbon-950/80 px-4 py-1.5 text-[11px] font-medium text-slate-300 backdrop-blur">
-        <MoveHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
-        Glissez pour comparer
-      </span>
-    </div>
+        <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
+          {renderLayer(afterImage, 'after', afterCaption)}
+        </div>
+
+        <span className="pointer-events-none absolute left-3 top-3 rounded border border-ink-700 bg-ink-950/85 px-2 py-1 text-[11px] font-medium text-muted">
+          {beforeCaption}
+        </span>
+        <span className="pointer-events-none absolute right-3 top-3 rounded border border-accent/40 bg-ink-950/85 px-2 py-1 text-[11px] font-medium text-accent">
+          {afterCaption}
+        </span>
+
+        <div
+          className="pointer-events-none absolute inset-y-0 w-px bg-fg/80"
+          style={{ left: `${position}%` }}
+        />
+
+        <button
+          type="button"
+          role="slider"
+          aria-label="Comparer l’avant et l’après"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(position)}
+          aria-valuetext={`${Math.round(position)} % du résultat après intervention`}
+          onKeyDown={handleKeyDown}
+          onPointerDown={(event) => event.stopPropagation()}
+          className="absolute top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2
+            items-center justify-center rounded-md border border-ink-600 bg-ink-900 text-fg
+            transition-colors hover:border-accent"
+          style={{ left: `${position}%` }}
+        >
+          <MoveHorizontal className="h-4 w-4" aria-hidden="true" />
+        </button>
+
+        {/* Règle graduée façon banc de mesure */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-5 items-end justify-between border-t border-ink-700 bg-ink-950/70 px-1">
+          {Array.from({ length: 21 }).map((_, index) => (
+            <span
+              key={index}
+              className={`w-px bg-faint ${index % 5 === 0 ? 'h-2.5 opacity-80' : 'h-1.5 opacity-40'}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <figcaption className="flex items-center justify-between gap-3 border-t border-ink-700 px-4 py-2.5 text-[11px] text-faint">
+        <span className="flex items-center gap-1.5">
+          <MoveHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
+          Glissez ou utilisez les flèches du clavier
+        </span>
+        <span className="num">{Math.round(position)} %</span>
+      </figcaption>
+    </figure>
   );
 }

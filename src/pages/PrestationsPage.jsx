@@ -14,8 +14,7 @@ export default function PrestationsPage() {
     <>
       <PageHeader
         eyebrow="Prestations"
-        title="Esthétique automobile"
-        highlight="jusqu’au moindre détail"
+        title="Esthétique automobile, jusqu’au moindre détail"
         description="Trois formules lisibles, des tarifs annoncés avant l’intervention et un protocole détaillé étape par étape. Un seul véhicule à la fois dans l’atelier, photographié avant et après passage."
       />
       <Detailing hideHeading />

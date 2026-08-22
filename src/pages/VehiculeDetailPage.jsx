@@ -1,44 +1,35 @@
-import {
-  ArrowLeft,
-  CalendarCheck,
-  ChevronRight,
-  Fuel,
-  Gauge,
-  MapPin,
-  Palette,
-  Settings2,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react';
+import { ArrowLeft, CalendarCheck, ChevronRight, ShieldCheck, Wrench } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Button from '../components/ui/Button.jsx';
 import Reveal from '../components/ui/Reveal.jsx';
-import CarVisual from '../components/ui/CarVisual.jsx';
 import CtaBand from '../components/sections/CtaBand.jsx';
 import {
   STATUS_TONES,
+  VehicleCover,
   buildTestDriveRequest,
   formatPrice,
 } from '../components/sections/Showroom.jsx';
-import { VEHICLES, VEHICLE_STATUS } from '../data/vehicles.js';
-import { CONTACT, ROUTES } from '../data/site.js';
+import { VEHICLE_STATUS } from '../data/vehicles.js';
+import { ROUTES } from '../data/site.js';
+import { useSiteStore } from '../store/siteStore';
 import { useQuote } from '../context/QuoteContext.jsx';
 import usePageMeta from '../hooks/usePageMeta.js';
 import NotFoundPage from './NotFoundPage.jsx';
 
 export default function VehiculeDetailPage() {
   const { vehicleId } = useParams();
-  const vehicle = VEHICLES.find((item) => item.id === vehicleId);
+  const vehicles = useSiteStore((state) => state.vehicles);
+  const contact = useSiteStore((state) => state.contact);
   const { requestQuote } = useQuote();
+
+  const vehicle = vehicles.find((item) => item.id === vehicleId);
 
   usePageMeta({
     title: vehicle
-      ? `${vehicle.title} — ${formatPrice(vehicle.price)} | Teintérior`
+      ? `${vehicle.brand} ${vehicle.model} ${vehicle.trim} — ${formatPrice(vehicle.price)} | Teintérior`
       : 'Véhicule introuvable | Teintérior',
     description: vehicle
-      ? `${vehicle.title}, ${vehicle.year}, ${vehicle.km.toLocaleString('fr-FR')} km, ${
-          vehicle.energy
-        }, ${vehicle.gearbox}. Véhicule contrôlé et préparé par l’atelier Teintérior.`
+      ? `${vehicle.brand} ${vehicle.model} ${vehicle.trim}, ${vehicle.year}, ${vehicle.km.toLocaleString('fr-FR')} km, ${vehicle.fuel}, ${vehicle.gearbox}. Contrôlé et préparé par l’atelier Teintérior.`
       : undefined,
   });
 
@@ -48,114 +39,124 @@ export default function VehiculeDetailPage() {
 
   const status = VEHICLE_STATUS[vehicle.status];
   const isSold = vehicle.status === 'vendu';
-  const others = VEHICLES.filter(
-    (item) => item.id !== vehicle.id && item.status !== 'vendu'
-  ).slice(0, 3);
+  const others = vehicles
+    .filter((item) => item.id !== vehicle.id && item.status !== 'vendu')
+    .slice(0, 3);
 
   const specs = [
-    { icon: Gauge, label: 'Kilométrage', value: `${vehicle.km.toLocaleString('fr-FR')} km` },
-    { icon: Fuel, label: 'Énergie', value: vehicle.energy },
-    { icon: Settings2, label: 'Boîte de vitesses', value: vehicle.gearbox },
-    { icon: Zap, label: 'Puissance', value: vehicle.power },
-    { icon: Palette, label: 'Teinte', value: vehicle.color },
-    { icon: MapPin, label: 'Disponible à', value: vehicle.location },
+    { label: 'Année', value: vehicle.year },
+    { label: 'Kilométrage', value: `${vehicle.km.toLocaleString('fr-FR')} km` },
+    { label: 'Boîte', value: vehicle.gearbox },
+    { label: 'Énergie', value: vehicle.fuel },
+    { label: 'Puissance', value: `${vehicle.power} ch` },
+    { label: 'Teinte', value: vehicle.color },
+    { label: 'Mise en ligne', value: new Date(vehicle.listedAt).toLocaleDateString('fr-FR') },
+    { label: 'Localisation', value: vehicle.location },
   ];
 
   return (
     <>
-      <div className="pt-28 lg:pt-36">
+      <div className="border-b border-ink-800 pt-24 pb-6 lg:pt-28">
         <div className="container-x">
           <nav
             aria-label="Fil d’Ariane"
-            className="flex flex-wrap items-center gap-1.5 text-xs text-slate-400"
+            className="flex flex-wrap items-center gap-1.5 text-xs text-faint"
           >
-            <Link to={ROUTES.home} className="-my-2 inline-flex items-center py-2 transition-colors hover:text-brass-light">
+            <Link to={ROUTES.home} className="-my-2 inline-flex items-center py-2 hover:text-accent">
               Accueil
             </Link>
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-            <Link to={ROUTES.vehicules} className="-my-2 inline-flex items-center py-2 transition-colors hover:text-brass-light">
-              Véhicules à vendre
+            <Link
+              to={ROUTES.vehicules}
+              className="-my-2 inline-flex items-center py-2 hover:text-accent"
+            >
+              Véhicules
             </Link>
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="font-medium text-slate-300">{vehicle.title}</span>
+            <span className="num text-muted">{vehicle.ref}</span>
           </nav>
         </div>
       </div>
 
-      <section className="py-10 lg:py-14">
-        <div className="container-x grid gap-10 lg:grid-cols-12">
+      <section className="py-10">
+        <div className="container-x grid gap-8 lg:grid-cols-12">
           <Reveal className="lg:col-span-7">
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-carbon-900 shadow-card">
-              <CarVisual
-                scene="sale"
-                variant="after"
-                palette={vehicle.palette}
-                className={`aspect-[16/10] w-full ${isSold ? 'opacity-60 grayscale' : ''}`}
-                title={vehicle.title}
-              />
-              <span
-                className={`absolute right-5 top-5 rounded-full border px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider ${
-                  STATUS_TONES[status.tone]
-                }`}
-              >
-                {status.label}
-              </span>
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {specs.map((spec) => (
-                <div
-                  key={spec.label}
-                  className="rounded-2xl border border-white/10 bg-carbon-850/60 px-4 py-4"
+            <figure className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
+              <div className="relative">
+                <VehicleCover
+                  vehicle={vehicle}
+                  className={`aspect-[16/10] w-full ${isSold ? 'opacity-50 grayscale' : ''}`}
+                />
+                <span
+                  className={`absolute left-4 top-4 rounded border px-2 py-0.5 text-[11px] font-semibold ${
+                    STATUS_TONES[status.tone]
+                  }`}
                 >
-                  <span className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-slate-400">
-                    <spec.icon className="h-3.5 w-3.5 text-brass" aria-hidden="true" />
-                    {spec.label}
-                  </span>
-                  <p className="mt-1.5 text-sm font-semibold text-white">{spec.value}</p>
+                  {status.label}
+                </span>
+              </div>
+              <figcaption className="num border-t border-ink-700 px-4 py-2.5 text-[11px] text-faint">
+                {vehicle.photos.length > 0
+                  ? `${vehicle.photos.length} photo(s) — ${vehicle.ref}`
+                  : `Illustration de repli — ${vehicle.ref}`}
+              </figcaption>
+            </figure>
+
+            <div className="mt-4 grid gap-px overflow-hidden rounded-lg border border-ink-700 bg-ink-700 sm:grid-cols-4">
+              {specs.map((spec) => (
+                <div key={spec.label} className="bg-ink-900 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-wider text-faint">{spec.label}</p>
+                  <p className="num mt-1 text-sm font-semibold text-fg">{spec.value}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-4 rounded-lg border border-ink-700 bg-ink-900 p-5">
+              <h2 className="text-sm font-semibold text-fg">Historique</h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{vehicle.history}</p>
+
+              <h2 className="mt-6 flex items-center gap-2 text-sm font-semibold text-fg">
+                <Wrench className="h-4 w-4 text-accent" aria-hidden="true" />
+                Travaux réalisés par l’atelier
+              </h2>
+              <ul className="mt-2 space-y-1.5">
+                {vehicle.workshopWork.map((item) => (
+                  <li key={item} className="flex gap-2.5 text-sm text-muted">
+                    <span className="mt-2 h-1 w-1 shrink-0 bg-accent" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
 
           <div className="lg:col-span-5">
-            <Reveal delay={80} className="panel p-7">
-              <span className="chip">{vehicle.year}</span>
-              <h1 className="mt-4 text-2xl font-bold leading-snug sm:text-3xl">{vehicle.title}</h1>
+            <Reveal delay={60} className="rounded-lg border border-ink-700 bg-ink-900 p-5">
+              <h1 className="text-xl font-bold leading-snug sm:text-2xl">
+                {vehicle.brand} {vehicle.model}
+              </h1>
+              <p className="mt-1 text-sm text-muted">{vehicle.trim}</p>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {vehicle.badges.map((badge) => (
-                  <span
-                    key={badge}
-                    className="rounded-full border border-brass/30 bg-brass/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-brass-light"
-                  >
-                    {badge}
-                  </span>
-                ))}
-              </div>
+              <p className="num mt-5 border-t border-ink-800 pt-5 text-3xl font-bold text-fg">
+                {formatPrice(vehicle.price)}
+              </p>
+              <p className="mt-1 text-xs text-faint">
+                Prix affiché, frais de dossier inclus. Reprise de votre véhicule possible.
+              </p>
 
-              <div className="mt-7 border-t border-white/5 pt-6">
-                <p className="font-display text-3xl font-bold text-white">
-                  {formatPrice(vehicle.price)}
-                </p>
-                <p className="mt-1 text-xs text-slate-400">
-                  ou {vehicle.monthly} €/mois — financement partenaire, sous conditions
-                </p>
-              </div>
-
-              <h2 className="mt-8 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              <h2 className="mt-6 text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
                 Points forts
               </h2>
-              <ul className="mt-3 space-y-2.5">
+              <ul className="mt-3 space-y-2">
                 {vehicle.highlights.map((item) => (
-                  <li key={item} className="flex gap-3 text-sm text-slate-300">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                  <li key={item} className="flex gap-2.5 text-sm text-muted">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                     {item}
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-8 flex flex-col gap-3">
+              <div className="mt-6 flex flex-col gap-2">
                 <Button
                   onClick={() => requestQuote(buildTestDriveRequest(vehicle))}
                   size="lg"
@@ -164,25 +165,24 @@ export default function VehiculeDetailPage() {
                 >
                   {isSold ? 'Véhicule vendu' : 'Réserver un essai'}
                 </Button>
-                <Button as="a" href={CONTACT.phoneHref} variant="secondary" size="lg">
-                  Poser une question — {CONTACT.phone}
+                <Button as="a" href={contact.phoneHref} variant="secondary" size="lg">
+                  Poser une question — {contact.phone}
                 </Button>
               </div>
 
-              <p className="mt-5 text-xs leading-relaxed text-slate-400">
-                Véhicule contrôlé sur 120 points, préparé à l’atelier et livré avec son historique
-                d’entretien complet. Essai sur rendez-vous, permis et justificatif de domicile
-                requis.
+              <p className="mt-4 text-[11px] leading-relaxed text-faint">
+                Contrôle 120 points, préparation à l’atelier, historique d’entretien remis avec le
+                véhicule. Essai sur rendez-vous, permis et justificatif de domicile requis.
               </p>
             </Reveal>
 
-            <Reveal delay={160} className="mt-6">
+            <Reveal delay={120} className="mt-4">
               <Link
                 to={ROUTES.vehicules}
-                className="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-slate-300 transition-colors hover:text-brass-light"
+                className="inline-flex min-h-[40px] items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                Retour à tous les véhicules
+                Retour aux véhicules
               </Link>
             </Reveal>
           </div>
@@ -190,28 +190,22 @@ export default function VehiculeDetailPage() {
       </section>
 
       {others.length > 0 ? (
-        <section className="pb-8">
+        <section className="pb-10">
           <div className="container-x">
-            <h2 className="text-lg font-bold">Autres véhicules disponibles</h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <h2 className="text-sm font-semibold text-fg">Autres véhicules disponibles</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
               {others.map((item) => (
                 <Link
                   key={item.id}
                   to={`${ROUTES.vehicules}/${item.id}`}
-                  className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-carbon-850/60 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-brass/40"
+                  className="group flex items-center gap-3 rounded-lg border border-ink-700 bg-ink-900 p-3 transition-colors hover:border-ink-600"
                 >
-                  <CarVisual
-                    scene="sale"
-                    variant="after"
-                    palette={item.palette}
-                    className="h-16 w-24 shrink-0 rounded-xl"
-                    title={item.title}
-                  />
-                  <span>
-                    <span className="block text-sm font-semibold leading-snug text-white transition-colors group-hover:text-brass-light">
-                      {item.title}
+                  <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded object-cover" />
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-medium text-fg transition-colors group-hover:text-accent">
+                      {item.brand} {item.model}
                     </span>
-                    <span className="mt-1 block text-xs text-slate-400">
+                    <span className="num block truncate text-xs text-faint">
                       {item.year} · {formatPrice(item.price)}
                     </span>
                   </span>
@@ -224,7 +218,7 @@ export default function VehiculeDetailPage() {
 
       <CtaBand
         title="Ce véhicule vous intéresse ?"
-        text="Essai sur rendez-vous du lundi au samedi, reprise de votre ancien véhicule possible et financement partenaire étudié sur place."
+        text="Essai sur rendez-vous du lundi au samedi, reprise possible et financement partenaire étudié sur place."
         primaryLabel="Prendre rendez-vous"
       />
     </>

@@ -1,18 +1,14 @@
 const VARIANTS = {
-  primary:
-    'bg-gradient-to-br from-brass-light via-brass to-brass-deep text-carbon-950 shadow-glow hover:brightness-110 active:brightness-95',
-  secondary:
-    'border border-white/15 bg-white/[0.04] text-white backdrop-blur hover:border-brass/50 hover:bg-white/[0.08]',
-  ghost: 'text-slate-300 hover:text-white',
-  ice: 'bg-gradient-to-br from-ice via-ice to-ice-deep text-carbon-950 shadow-glow-ice hover:brightness-110',
-  outline:
-    'border border-brass/40 text-brass-light hover:border-brass hover:bg-brass/10',
+  primary: 'bg-accent text-accent-on hover:bg-accent-soft',
+  secondary: 'border border-ink-700 bg-ink-850 text-fg hover:border-ink-600 hover:bg-ink-800',
+  outline: 'border border-accent/50 text-accent hover:border-accent hover:bg-accent/10',
+  ghost: 'text-muted hover:text-fg',
 };
 
 const SIZES = {
-  sm: 'min-h-[44px] px-4 py-2.5 text-xs',
-  md: 'min-h-[46px] px-5 py-3 text-sm',
-  lg: 'min-h-[52px] px-7 py-4 text-sm sm:text-base',
+  sm: 'min-h-[40px] px-3.5 text-xs',
+  md: 'min-h-[44px] px-4 text-sm',
+  lg: 'min-h-[48px] px-6 text-sm',
 };
 
 export default function Button({
@@ -27,18 +23,18 @@ export default function Button({
 }) {
   return (
     <Tag
-      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded-full
-        font-semibold tracking-tight transition-all duration-300 active:scale-[0.97]
-        disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100
+      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded-md
+        font-semibold tracking-tight transition-colors duration-150 active:translate-y-px
+        disabled:cursor-not-allowed disabled:opacity-40
         ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...rest}
     >
-      {Icon ? <Icon className="h-4 w-4 shrink-0" strokeWidth={2.2} aria-hidden="true" /> : null}
+      {Icon ? <Icon className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" /> : null}
       <span>{children}</span>
       {IconRight ? (
         <IconRight
-          className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
-          strokeWidth={2.2}
+          className="h-4 w-4 shrink-0 transition-transform duration-150 group-hover:translate-x-0.5"
+          strokeWidth={2}
           aria-hidden="true"
         />
       ) : null}

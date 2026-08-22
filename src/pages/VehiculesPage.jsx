@@ -17,8 +17,7 @@ export default function VehiculesPage() {
     <>
       <PageHeader
         eyebrow="Véhicules à vendre"
-        title="Nos véhicules"
-        highlight="disponibles"
+        title="Nos véhicules disponibles"
         description={`${available} véhicules immédiatement disponibles, tous passés par notre atelier : contrôle sur 120 points, préparation esthétique complète et reportage photo. Vous achetez une voiture déjà prête à rouler.`}
       />
       <Showroom hideHeading />
