@@ -1,0 +1,451 @@
+export const COMPAT_LEVELS = {
+  excellente: {
+    id: 'excellente',
+    label: 'Compatibilité excellente',
+    short: 'Plug & Play',
+    tone: 'emerald',
+    description:
+      'Interface directement enfichable sur le faisceau d’origine. Aucune découpe, aucun câble apparent.',
+  },
+  bonne: {
+    id: 'bonne',
+    label: 'Compatibilité confirmée',
+    short: 'Module dédié',
+    tone: 'brass',
+    description:
+      'Module vidéo dédié à votre génération d’autoradio, posé derrière l’écran avec codage du véhicule.',
+  },
+  partielle: {
+    id: 'partielle',
+    label: 'Compatibilité partielle',
+    short: 'Avec réserve',
+    tone: 'amber',
+    description:
+      'Intégration possible mais certaines commandes d’origine restent limitées. Détail donné avant réservation.',
+  },
+  etude: {
+    id: 'etude',
+    label: 'Étude nécessaire',
+    short: 'Sur devis',
+    tone: 'ice',
+    description:
+      'Configuration rare : nous validons la référence de votre unité multimédia avant toute installation.',
+  },
+};
+
+export const RETROFIT_BENEFITS = [
+  {
+    id: 'origine',
+    icon: 'ShieldCheck',
+    title: 'Système d’origine préservé',
+    text: 'Aucun découpage du faisceau, aucune modification du tableau de bord. Retour à l’état d’usine en 30 minutes.',
+  },
+  {
+    id: 'sansfil',
+    icon: 'Wifi',
+    title: 'CarPlay & Android Auto sans fil',
+    text: 'Connexion automatique dès l’ouverture de la portière, avec double appairage Bluetooth conservé.',
+  },
+  {
+    id: 'commandes',
+    icon: 'Joystick',
+    title: 'Commandes d’origine conservées',
+    text: 'Molette iDrive, MMI, COMAND, boutons au volant et micro de série restent pleinement fonctionnels.',
+  },
+  {
+    id: 'garantie',
+    icon: 'BadgeCheck',
+    title: 'Garantie 2 ans pièces & pose',
+    text: 'Mises à jour du firmware offertes à vie, interventions réalisées dans notre atelier climatisé.',
+  },
+];
+
+export const RETROFIT_FEATURES_BASE = [
+  'Apple CarPlay sans fil',
+  'Android Auto sans fil',
+  'Mirroring smartphone iOS / Android',
+  'Entrée caméra de recul additionnelle',
+];
+
+export const RETROFIT_BRANDS = [
+  {
+    id: 'bmw',
+    name: 'BMW',
+    models: [
+      {
+        id: 'serie1',
+        name: 'Série 1 / Série 2',
+        generations: [
+          {
+            id: 'f20-cic',
+            years: '2011 — 2015',
+            system: 'Écran CIC 6,5" / 8,8"',
+            compat: 'bonne',
+            price: 449,
+            duration: '2 h 30',
+            features: ['Molette iDrive conservée', 'Caméra de recul en option', 'Split-screen d’origine'],
+            note: 'Le module se glisse derrière l’écran, aucun perçage de la planche de bord.',
+          },
+          {
+            id: 'f40-nbtevo',
+            years: '2016 — 2022',
+            system: 'NBT EVO ID5 / ID6',
+            compat: 'excellente',
+            price: 529,
+            duration: '2 h',
+            features: ['CarPlay sans fil natif', 'Android Auto ajouté', 'Activation FSC officielle'],
+            note: 'Sur les modèles équipés d’origine, nous activons simplement le code constructeur.',
+          },
+        ],
+      },
+      {
+        id: 'serie3',
+        name: 'Série 3 / Série 4',
+        generations: [
+          {
+            id: 'f30-nbt',
+            years: '2012 — 2018',
+            system: 'NBT 6,5" / 8,8"',
+            compat: 'excellente',
+            price: 499,
+            duration: '2 h',
+            features: ['Plug & Play sur faisceau NBT', 'Sortie vidéo caméra 360°', 'Streaming audio HD'],
+            note: 'La configuration la plus posée à l’atelier : compatibilité totale.',
+          },
+          {
+            id: 'g20',
+            years: '2019 — 2024',
+            system: 'iDrive 7 / Live Cockpit',
+            compat: 'bonne',
+            price: 589,
+            duration: '2 h 30',
+            features: ['Android Auto sans fil ajouté', 'Écran tactile conservé', 'Codage E-Sys inclus'],
+            note: 'Android Auto est ajouté sur les véhicules livrés CarPlay seul.',
+          },
+        ],
+      },
+      {
+        id: 'x3x5',
+        name: 'X3 / X5',
+        generations: [
+          {
+            id: 'f25-f15',
+            years: '2011 — 2017',
+            system: 'CIC / NBT',
+            compat: 'excellente',
+            price: 519,
+            duration: '2 h 15',
+            features: ['Interface 1080p', 'Caméra de recul incluse', 'Commandes au volant actives'],
+            note: 'Idéal pour redonner une seconde vie au multimédia des SUV de première main.',
+          },
+          {
+            id: 'g01-g05',
+            years: '2018 — 2023',
+            system: 'iDrive 7 tactile',
+            compat: 'bonne',
+            price: 599,
+            duration: '2 h 30',
+            features: ['CarPlay & Android Auto sans fil', 'Écran arrière compatible', 'Mise à jour à vie'],
+            note: 'Compatible avec les packs Harman Kardon et Bowers & Wilkins.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'audi',
+    name: 'Audi',
+    models: [
+      {
+        id: 'a3',
+        name: 'A3 / S3',
+        generations: [
+          {
+            id: '8v-mib2',
+            years: '2013 — 2020',
+            system: 'MMI MIB2 / Concert',
+            compat: 'excellente',
+            price: 479,
+            duration: '2 h',
+            features: ['Molette MMI conservée', 'CarPlay filaire et sans fil', 'Caméra de recul OEM'],
+            note: 'Activation possible du CarPlay natif si le véhicule est équipé MIB2 High.',
+          },
+          {
+            id: '8y-mib3',
+            years: '2021 — 2024',
+            system: 'MIB3 tactile',
+            compat: 'partielle',
+            price: 629,
+            duration: '3 h',
+            features: ['Android Auto sans fil', 'Mirroring iOS', 'Commandes vocales natives conservées'],
+            note: 'Sur MIB3 le mirroring vidéo est bridé par le constructeur : nous le contournons via module HDMI.',
+          },
+        ],
+      },
+      {
+        id: 'a4a5',
+        name: 'A4 / A5',
+        generations: [
+          {
+            id: 'b8',
+            years: '2009 — 2016',
+            system: 'MMI 3G / 3G+',
+            compat: 'bonne',
+            price: 499,
+            duration: '2 h 30',
+            features: ['Interface vidéo dédiée 3G+', 'Entrée caméra AV', 'Micro externe fourni'],
+            note: 'Le module remplace l’ancien lecteur DVD, sans perte de fonction d’origine.',
+          },
+          {
+            id: 'b9',
+            years: '2017 — 2023',
+            system: 'MIB2 / Virtual Cockpit',
+            compat: 'excellente',
+            price: 559,
+            duration: '2 h',
+            features: ['Affichage CarPlay sur Virtual Cockpit', 'Connexion sans fil', 'Navigation au combiné'],
+            note: 'Le duplicata de la carte sur le combiné numérique reste actif.',
+          },
+        ],
+      },
+      {
+        id: 'q5',
+        name: 'Q3 / Q5',
+        generations: [
+          {
+            id: 'q5-8r',
+            years: '2010 — 2017',
+            system: 'MMI 3G',
+            compat: 'bonne',
+            price: 509,
+            duration: '2 h 30',
+            features: ['CarPlay filaire', 'Caméra de recul additionnelle', 'Radars conservés'],
+            note: 'Pose invisible : le module se loge dans le vide-poche central.',
+          },
+          {
+            id: 'q5-fy',
+            years: '2018 — 2024',
+            system: 'MIB2 High',
+            compat: 'excellente',
+            price: 569,
+            duration: '2 h',
+            features: ['Connexion sans fil', 'Split-screen conservé', 'Audio Bang & Olufsen compatible'],
+            note: 'Aucun impact sur la garantie constructeur : rien n’est coupé.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mercedes',
+    name: 'Mercedes-Benz',
+    models: [
+      {
+        id: 'classe-a',
+        name: 'Classe A / CLA',
+        generations: [
+          {
+            id: 'w176',
+            years: '2013 — 2018',
+            system: 'Audio 20 / NTG 5',
+            compat: 'bonne',
+            price: 529,
+            duration: '2 h 30',
+            features: ['Commodo conservé', 'CarPlay sans fil', 'Entrée caméra 360°'],
+            note: 'Nous reprogrammons la molette d’origine pour naviguer dans CarPlay.',
+          },
+          {
+            id: 'w177',
+            years: '2019 — 2024',
+            system: 'MBUX',
+            compat: 'partielle',
+            price: 649,
+            duration: '3 h',
+            features: ['Android Auto ajouté', 'Assistant vocal conservé', 'Écran tactile actif'],
+            note: 'MBUX étant fermé, l’intégration passe par un module vidéo certifié.',
+          },
+        ],
+      },
+      {
+        id: 'classe-c',
+        name: 'Classe C / GLC',
+        generations: [
+          {
+            id: 'w205-ntg5',
+            years: '2014 — 2018',
+            system: 'COMAND NTG 5.0 / 5.1',
+            compat: 'excellente',
+            price: 549,
+            duration: '2 h 15',
+            features: ['Plug & Play COMAND', 'CarPlay + Android Auto', 'Caméra de recul HD incluse'],
+            note: 'Configuration la plus fiable de la gamme Mercedes.',
+          },
+          {
+            id: 'w205-ntg55',
+            years: '2019 — 2021',
+            system: 'COMAND NTG 5.5',
+            compat: 'bonne',
+            price: 599,
+            duration: '2 h 30',
+            features: ['Connexion sans fil', 'Touchpad conservé', 'Retour caméra automatique'],
+            note: 'Le retour à l’interface d’origine se fait par appui long sur la touche Media.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'porsche',
+    name: 'Porsche',
+    models: [
+      {
+        id: '911-cayman',
+        name: '911 / 718 Cayman',
+        generations: [
+          {
+            id: '991-pcm31',
+            years: '2012 — 2016',
+            system: 'PCM 3.1',
+            compat: 'bonne',
+            price: 749,
+            duration: '3 h',
+            features: ['Interface PCM dédiée', 'CarPlay sans fil', 'Sortie caméra arrière'],
+            note: 'Alternative moins coûteuse au kit de rétrofit officiel Porsche Classic.',
+          },
+          {
+            id: '992-pcm6',
+            years: '2019 — 2024',
+            system: 'PCM 6.0',
+            compat: 'excellente',
+            price: 690,
+            duration: '2 h 15',
+            features: ['Android Auto ajouté', 'CarPlay natif conservé', 'Codage constructeur'],
+            note: 'Ajout d’Android Auto, absent d’origine sur une grande partie du parc.',
+          },
+        ],
+      },
+      {
+        id: 'macan-cayenne',
+        name: 'Macan / Cayenne',
+        generations: [
+          {
+            id: '95b-pcm41',
+            years: '2014 — 2018',
+            system: 'PCM 4.0 / 4.1',
+            compat: 'excellente',
+            price: 719,
+            duration: '2 h 30',
+            features: ['Plug & Play PCM 4.x', 'Connexion sans fil', 'Compatible Burmester'],
+            note: 'Aucune dépose de planche de bord nécessaire.',
+          },
+          {
+            id: 'e3',
+            years: '2019 — 2023',
+            system: 'PCM 6.0 tactile',
+            compat: 'bonne',
+            price: 769,
+            duration: '3 h',
+            features: ['Double appairage Bluetooth', 'Caméra 360° conservée', 'Mise à jour à vie'],
+            note: 'Installation avec codage constructeur et procès-verbal de conformité.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'volkswagen',
+    name: 'Volkswagen',
+    models: [
+      {
+        id: 'golf',
+        name: 'Golf VII / VIII',
+        generations: [
+          {
+            id: 'golf7',
+            years: '2013 — 2019',
+            system: 'Composition / Discover Media',
+            compat: 'excellente',
+            price: 399,
+            duration: '1 h 45',
+            features: ['App-Connect activé', 'CarPlay filaire ou sans fil', 'Caméra RVC compatible'],
+            note: 'Souvent réalisable par simple activation logicielle sur Discover Media.',
+          },
+          {
+            id: 'golf8',
+            years: '2020 — 2024',
+            system: 'MIB3 Discover Pro',
+            compat: 'bonne',
+            price: 489,
+            duration: '2 h',
+            features: ['Connexion sans fil', 'Widgets d’origine conservés', 'Profils conducteurs actifs'],
+            note: 'Compatible avec les finitions GTI, GTD et R.',
+          },
+        ],
+      },
+      {
+        id: 'tiguan',
+        name: 'Tiguan / Passat',
+        generations: [
+          {
+            id: 'tiguan2',
+            years: '2016 — 2023',
+            system: 'MIB2 / MIB2.5',
+            compat: 'excellente',
+            price: 429,
+            duration: '2 h',
+            features: ['App-Connect complet', 'Caméra de recul intégrée', 'Audio Dynaudio compatible'],
+            note: 'Nous fournissons le certificat d’activation App-Connect.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'renault-peugeot',
+    name: 'Renault / Peugeot',
+    models: [
+      {
+        id: 'megane-clio',
+        name: 'Mégane / Clio',
+        generations: [
+          {
+            id: 'rlink2',
+            years: '2016 — 2022',
+            system: 'R-Link 2',
+            compat: 'partielle',
+            price: 449,
+            duration: '2 h 30',
+            features: ['CarPlay filaire', 'Commandes au volant actives', 'Retour radio d’origine'],
+            note: 'Certaines versions R-Link 2 nécessitent une mise à jour préalable en concession.',
+          },
+        ],
+      },
+      {
+        id: '3008-508',
+        name: '3008 / 508',
+        generations: [
+          {
+            id: 'nac',
+            years: '2017 — 2023',
+            system: 'NAC Peugeot Connect',
+            compat: 'bonne',
+            price: 419,
+            duration: '2 h',
+            features: ['Mirror Screen activé', 'Android Auto sans fil', 'i-Cockpit conservé'],
+            note: 'Activation via mise à jour firmware NAC officielle et module sans fil.',
+          },
+          {
+            id: 'smeg',
+            years: '2012 — 2016',
+            system: 'SMEG / SMEG+',
+            compat: 'etude',
+            price: 469,
+            duration: '3 h',
+            features: ['Module vidéo dédié', 'Entrée caméra', 'Audio Bluetooth conservé'],
+            note: 'Référence exacte de l’unité à vérifier : envoyez-nous une photo de l’écran.',
+          },
+        ],
+      },
+    ],
+  },
+];
