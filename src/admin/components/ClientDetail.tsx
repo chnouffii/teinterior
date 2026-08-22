@@ -6,6 +6,7 @@ import StatusPill from './StatusPill';
 import { toast } from './toast';
 import { useSiteStore } from '../../store/siteStore';
 import { CLIENT_STATUSES } from '../pages/ClientsPage';
+import { SectionDepotVente, SectionRecherche } from './ClientProjets';
 import { LEAD_STATUSES, LEAD_TYPES } from '../../data/leads.js';
 import type { Client, ClientStatus } from '../../store/types';
 
@@ -154,6 +155,8 @@ export default function ClientDetail({ client, onClose }: { client: Client; onCl
 
         <ListeVehicules client={client} onSave={enregistrer} />
         <ListeInterventions client={client} total={total} onSave={enregistrer} />
+        <SectionDepotVente client={client} onSave={enregistrer} />
+        <SectionRecherche client={client} onSave={enregistrer} />
 
         {demandes.length > 0 ? (
           <section>

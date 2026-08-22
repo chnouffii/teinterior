@@ -123,6 +123,14 @@ function nouvelIdDemande(demandes) {
 
 /** Champs acceptés pour une demande entrante, pour ne rien stocker d'arbitraire. */
 const STATUTS_CLIENT = ['prospect', 'client', 'inactif'];
+const STATUTS_DEPOT = ['a_estimer', 'estime', 'en_depot', 'en_vente', 'vendu', 'abandonne'];
+const STATUTS_RECHERCHE = ['en_recherche', 'propositions', 'trouve', 'livre', 'abandonne'];
+
+/** Nombre positif, ou `undefined` si la valeur n'en est pas un. */
+function montant(valeur) {
+  const n = Number(valeur);
+  return Number.isFinite(n) && n >= 0 ? n : undefined;
+}
 
 function texte(valeur, max = 300) {
   return typeof valeur === 'string' ? valeur.trim().slice(0, max) : '';
@@ -201,6 +209,65 @@ function nettoyerClient(brut, { partiel = false } = {}) {
       },
       500
     );
+  }
+
+  if (fourni('consignments')) {
+    resultat.consignments = liste(source.consignments, (d) => {
+      const vehicule = texte(d?.vehicle, 200);
+      if (!vehicule) return null;
+      return {
+        id: texte(d?.id, 40) || randomBytes(6).toString('hex'),
+        vehicle: vehicule,
+        plate: texte(d?.plate, 20),
+        status: STATUTS_DEPOT.includes(d?.status) ? d.status : 'a_estimer',
+        expectedPrice: montant(d?.expectedPrice),
+        agreedPrice: montant(d?.agreedPrice),
+        soldPrice: montant(d?.soldPrice),
+        commission: montant(d?.commission),
+        startedAt: texte(d?.startedAt, 20),
+        soldAt: texte(d?.soldAt, 20),
+        vehicleId: texte(d?.vehicleId, 60),
+        notes: texte(d?.notes, 2000),
+      };
+    });
+  }
+
+  if (fourni('searches')) {
+    resultat.searches = liste(source.searches, (r) => {
+      const cahier = texte(r?.brief, 400);
+      if (!cahier) return null;
+      return {
+        id: texte(r?.id, 40) || randomBytes(6).toString('hex'),
+        brief: cahier,
+        status: STATUTS_RECHERCHE.includes(r?.status) ? r.status : 'en_recherche',
+        budgetMax: montant(r?.budgetMax),
+        yearMin: montant(r?.yearMin),
+        kmMax: montant(r?.kmMax),
+        gearbox: texte(r?.gearbox, 20),
+        fuel: texte(r?.fuel, 20),
+        startedAt: texte(r?.startedAt, 20),
+        notes: texte(r?.notes, 2000),
+        candidates: Array.isArray(r?.candidates)
+          ? r.candidates
+              .slice(0, 50)
+              .map((c) => {
+                const libelle = texte(c?.label, 200);
+                if (!libelle) return null;
+                const lien = texte(c?.url, 500);
+                return {
+                  id: texte(c?.id, 40) || randomBytes(6).toString('hex'),
+                  label: libelle,
+                  price: montant(c?.price),
+                  // Seuls http(s) : un lien `javascript:` collé depuis une
+                  // annonce deviendrait exécutable au clic dans le panel.
+                  url: /^https?:\/\//i.test(lien) ? lien : '',
+                  note: texte(c?.note, 500),
+                };
+              })
+              .filter(Boolean)
+          : [],
+      };
+    });
   }
 
   if (fourni('leadIds')) {
@@ -387,6 +454,8 @@ const serveur = http.createServer(async (requete, reponse) => {
       const champs = {
         vehicles: [],
         interventions: [],
+        consignments: [],
+        searches: [],
         notes: [],
         leadIds: [],
         status: 'prospect',

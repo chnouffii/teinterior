@@ -17,7 +17,7 @@ export default function StatusPill({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
         TONES[tone] ?? TONES.neutral
       } ${className}`}
     >

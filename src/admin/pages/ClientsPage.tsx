@@ -7,6 +7,7 @@ import { toast } from '../components/toast';
 import { useSiteStore } from '../../store/siteStore';
 import { useAdminUi } from '../adminUi';
 import ClientDetail from '../components/ClientDetail';
+import { DEPOT_CLOS, RECHERCHE_CLOSE } from '../components/ClientProjets';
 import type { Client, ClientStatus } from '../../store/types';
 
 export const CLIENT_STATUSES: Record<ClientStatus, { label: string; tone: string }> = {
@@ -29,6 +30,7 @@ export default function ClientsPage() {
   const { query } = useAdminUi();
 
   const [filtre, setFiltre] = useState<'tous' | ClientStatus>('tous');
+  const [affaire, setAffaire] = useState<'toutes' | 'depot' | 'recherche'>('toutes');
   const [ouvert, setOuvert] = useState<string | null>(null);
   const [creation, setCreation] = useState(false);
   const [nouveau, setNouveau] = useState({ name: '', phone: '', email: '', city: '', source: '' });
@@ -36,9 +38,19 @@ export default function ClientsPage() {
 
   const recherche = normaliser(query);
 
+  const depotsEnCours = (c: Client) =>
+    (c.consignments ?? []).filter((d) => !DEPOT_CLOS.includes(d.status));
+  const recherchesEnCours = (c: Client) =>
+    (c.searches ?? []).filter((r) => !RECHERCHE_CLOSE.includes(r.status));
+
   const listeFiltree = useMemo(() => {
     return clients
       .filter((c) => (filtre === 'tous' ? true : c.status === filtre))
+      .filter((c) => {
+        if (affaire === 'depot') return depotsEnCours(c).length > 0;
+        if (affaire === 'recherche') return recherchesEnCours(c).length > 0;
+        return true;
+      })
       .filter((c) => {
         if (!recherche) return true;
         const champs = [
@@ -47,11 +59,13 @@ export default function ClientsPage() {
           c.email,
           c.city,
           ...c.vehicles.map((v) => `${v.label} ${v.plate ?? ''}`),
+          ...(c.consignments ?? []).map((d) => `${d.vehicle} ${d.plate ?? ''}`),
+          ...(c.searches ?? []).map((r) => r.brief),
         ];
         return champs.some((champ) => normaliser(champ ?? '').includes(recherche));
       })
       .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''));
-  }, [clients, filtre, recherche]);
+  }, [clients, filtre, affaire, recherche]);
 
   const aujourdhui = new Date().toISOString().slice(0, 10);
   const relancesDues = clients.filter((c) => c.nextAction && c.nextAction.date <= aujourdhui);
@@ -137,6 +151,38 @@ export default function ClientsPage() {
         ))}
       </div>
 
+      <div className="flex flex-wrap gap-2">
+        {(
+          [
+            ['toutes', 'Toutes les affaires'],
+            ['depot', 'Dépôt-vente en cours'],
+            ['recherche', 'Recherche en cours'],
+          ] as const
+        ).map(([id, libelle]) => {
+          const nombre =
+            id === 'depot'
+              ? clients.filter((c) => depotsEnCours(c).length > 0).length
+              : id === 'recherche'
+                ? clients.filter((c) => recherchesEnCours(c).length > 0).length
+                : clients.length;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setAffaire(id)}
+              className={`inline-flex min-h-[38px] items-center gap-2 rounded-md border px-3 text-sm transition-colors ${
+                affaire === id
+                  ? 'border-accent/50 bg-accent/10 text-accent'
+                  : 'border-white/10 text-muted hover:border-white/20 hover:text-fg'
+              }`}
+            >
+              {libelle}
+              <span className="num text-xs text-faint">{nombre}</span>
+            </button>
+          );
+        })}
+      </div>
+
       {listeFiltree.length === 0 ? (
         <p className="panel px-5 py-10 text-center text-sm text-faint">
           {clients.length === 0 ? (
@@ -159,6 +205,7 @@ export default function ClientsPage() {
                 <th className="label-xs px-4 py-3">Client</th>
                 <th className="label-xs px-4 py-3">Contact</th>
                 <th className="label-xs px-4 py-3">Véhicules</th>
+                <th className="label-xs px-4 py-3">Affaires</th>
                 <th className="label-xs px-4 py-3">Demandes</th>
                 <th className="label-xs px-4 py-3">Suivi</th>
                 <th className="label-xs px-4 py-3">Statut</th>
@@ -209,6 +256,25 @@ export default function ClientsPage() {
                       ) : (
                         <span className="text-faint">—</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col items-start gap-1">
+                        {depotsEnCours(c).length > 0 ? (
+                          <StatusPill
+                            label={`Dépôt ×${depotsEnCours(c).length}`}
+                            tone="accent"
+                          />
+                        ) : null}
+                        {recherchesEnCours(c).length > 0 ? (
+                          <StatusPill
+                            label={`Recherche ×${recherchesEnCours(c).length}`}
+                            tone="warn"
+                          />
+                        ) : null}
+                        {depotsEnCours(c).length === 0 && recherchesEnCours(c).length === 0 ? (
+                          <span className="text-faint">—</span>
+                        ) : null}
+                      </div>
                     </td>
                     <td className="num px-4 py-3 text-muted">{demandes || '—'}</td>
                     <td className="px-4 py-3">

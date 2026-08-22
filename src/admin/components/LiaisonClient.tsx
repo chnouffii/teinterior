@@ -37,6 +37,23 @@ export default function LiaisonClient({ lead }: { lead: Lead }) {
   async function creerDepuisDemande() {
     setEnCours(true);
     try {
+      // Une demande « vendre ma voiture » est déjà un dépôt-vente en puissance :
+      // on ouvre l'affaire directement, avec le prix espéré saisi par le client.
+      const depot =
+        lead.type === 'estimation' && lead.vehicle
+          ? [
+              {
+                id: `d${Date.now()}`,
+                vehicle: lead.vehicle,
+                plate: lead.plate ?? '',
+                status: 'a_estimer' as const,
+                expectedPrice: lead.expectedPrice,
+                startedAt: new Date().toISOString().slice(0, 10),
+                notes: lead.message ?? '',
+              },
+            ]
+          : [];
+
       const cree = await creerClient({
         name: lead.name,
         phone: lead.phone,
@@ -46,6 +63,7 @@ export default function LiaisonClient({ lead }: { lead: Lead }) {
         vehicles: lead.vehicle
           ? [{ id: `v${Date.now()}`, label: lead.vehicle, plate: lead.plate ?? '' }]
           : [],
+        consignments: depot,
       });
       await rattacherDemande(lead.id, cree.id);
       toast('Fiche client créée et demande rattachée.');

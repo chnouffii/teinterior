@@ -176,6 +176,61 @@ export interface ClientIntervention {
   amount?: number;
 }
 
+/** Avancement d'un dépôt-vente, de l'estimation à la remise des clés. */
+export type ConsignmentStatus =
+  | 'a_estimer'
+  | 'estime'
+  | 'en_depot'
+  | 'en_vente'
+  | 'vendu'
+  | 'abandonne';
+
+/** Un véhicule que le client confie à l'atelier pour le vendre. */
+export interface Consignment {
+  id: string;
+  vehicle: string;
+  plate?: string;
+  status: ConsignmentStatus;
+  /** Ce que le client espère en tirer. */
+  expectedPrice?: number;
+  /** Prix d'affichage convenu ensemble. */
+  agreedPrice?: number;
+  soldPrice?: number;
+  commission?: number;
+  startedAt?: string;
+  soldAt?: string;
+  /** Fiche du showroom correspondante, si le véhicule y est publié. */
+  vehicleId?: string;
+  notes?: string;
+}
+
+/** Avancement d'une recherche personnalisée. */
+export type SearchStatus = 'en_recherche' | 'propositions' | 'trouve' | 'livre' | 'abandonne';
+
+/** Un véhicule proposé au client dans le cadre d'une recherche. */
+export interface SearchCandidate {
+  id: string;
+  label: string;
+  price?: number;
+  url?: string;
+  note?: string;
+}
+
+/** Une recherche de véhicule menée pour le compte du client. */
+export interface VehicleSearch {
+  id: string;
+  brief: string;
+  status: SearchStatus;
+  budgetMax?: number;
+  yearMin?: number;
+  kmMax?: number;
+  gearbox?: string;
+  fuel?: string;
+  startedAt?: string;
+  candidates: SearchCandidate[];
+  notes?: string;
+}
+
 export interface Client {
   id: string;
   createdAt: string;
@@ -189,6 +244,10 @@ export interface Client {
   source: string;
   vehicles: ClientVehicle[];
   interventions: ClientIntervention[];
+  /** Véhicules confiés à l'atelier pour la vente. */
+  consignments: Consignment[];
+  /** Recherches de véhicule menées pour ce client. */
+  searches: VehicleSearch[];
   notes: ClientNote[];
   /** Identifiants des demandes entrantes rattachées à cette fiche. */
   leadIds: string[];

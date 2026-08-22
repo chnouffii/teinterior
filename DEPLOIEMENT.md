@@ -259,6 +259,21 @@ coordonnées, véhicules, interventions réalisées avec leur montant, et un jou
 de notes daté. La date de chaque note est posée par le serveur, pas par le
 navigateur : l'historique reste fiable.
 
+Deux types d'affaires se suivent dans le temps sur chaque fiche :
+
+- **Dépôt-vente** — les véhicules que le client confie à l'atelier. Avancement
+  (à estimer, estimé, en dépôt, en vente, vendu, abandonné), prix espéré par le
+  client, prix d'affichage convenu, commission, et prix de vente réel une fois
+  la vente faite. Une demande « vendre ma voiture » venue du site ouvre
+  directement le dépôt correspondant quand on crée la fiche depuis la demande.
+- **Recherche de véhicule** — les recherches menées pour le compte du client.
+  Cahier des charges, budget maximum, année et kilométrage limites, boîte et
+  énergie, puis la liste des véhicules proposés avec leur prix et le lien de
+  l'annonce.
+
+La liste des clients affiche une pastille par affaire en cours, et deux filtres
+permettent de ne voir que les dépôts-vente ou que les recherches en cours.
+
 Une **relance** peut être programmée sur une fiche (date + ce qu'il y a à faire).
 Les relances arrivées à échéance s'affichent en haut de l'écran Clients.
 
@@ -279,7 +294,7 @@ les fiches dont vous n'avez plus l'usage.
 
 | Écran | Contenus |
 | --- | --- |
-| Clients | Fiches de suivi : coordonnées, véhicules, interventions, notes, relances |
+| Clients | Fiches de suivi : coordonnées, véhicules, interventions, dépôts-vente, recherches, notes, relances |
 | Page d'accueil | Accroche, les quatre chiffres, les trois métiers et leurs arguments |
 | Prestations | Formules, opérations, produits, options à la carte, forfaits rétrofit |
 | Avant / après | Cas du comparateur, légendes, chiffres, adresses de vraies photos |
