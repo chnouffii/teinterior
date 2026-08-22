@@ -3,10 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { KeyRound, Loader2, ShieldAlert } from 'lucide-react';
 import { AdminButton, Field, TextInput } from '../components/Field';
 import { DEFAULT_ADMIN_EMAIL, useAuthStore } from '../../store/authStore';
+import usePageMeta from '../../hooks/usePageMeta.js';
 import Toaster from '../components/Toaster';
 import { toast } from '../components/toast';
 
 export default function LoginPage() {
+  usePageMeta({
+    title: 'Connexion — Administration Teintérior',
+    description: 'Accès réservé à l’équipe de l’atelier.',
+  });
+
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
   const [email, setEmail] = useState(DEFAULT_ADMIN_EMAIL);

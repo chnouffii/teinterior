@@ -7,9 +7,9 @@ import usePageMeta from '../hooks/usePageMeta.js';
 
 export default function HomePage() {
   usePageMeta({
-    title: 'Teintérior — Detailing premium, rétrofit CarPlay & vente automobile',
+    title: 'Teintérior — Detailing, rétrofit CarPlay et vente de véhicules · Toulouse',
     description:
-      'Atelier d’esthétique automobile à Toulouse : detailing, polissage, céramique, teintage de vitres, rétrofit CarPlay / Android Auto et dépôt-vente de véhicules. Devis sous 24 h.',
+      'Atelier automobile à Toulouse : correction de peinture, céramique, teintage, rétrofit CarPlay et Android Auto sur écran d’origine, dépôt-vente et sourcing. Devis détaillé sous 24 h.',
   });
 
   return (
