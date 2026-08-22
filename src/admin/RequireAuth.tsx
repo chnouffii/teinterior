@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
+import { useSiteStore } from '../store/siteStore';
 
 /**
  * Barrière d'accès au panel.
@@ -14,10 +15,21 @@ export default function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
   const connecte = useAuthStore((state) => state.connecte);
   const verifierSession = useAuthStore((state) => state.verifierSession);
+  const chargerDemandes = useSiteStore((state) => state.chargerDemandes);
+  const chargerClients = useSiteStore((state) => state.chargerClients);
 
   useEffect(() => {
     if (connecte === null) verifierSession();
   }, [connecte, verifierSession]);
+
+  // Demandes et fiches clients contiennent des données personnelles : elles ne
+  // sont pas servies avec les contenus publics du site, et se chargent donc ici,
+  // une fois la session confirmée.
+  useEffect(() => {
+    if (connecte !== true) return;
+    void chargerDemandes();
+    void chargerClients();
+  }, [connecte, chargerDemandes, chargerClients]);
 
   if (connecte === null) {
     return (

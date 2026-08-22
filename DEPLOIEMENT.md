@@ -252,10 +252,34 @@ Une photo retirée d'une fiche est effacée du disque dans la foulée. En cas de
 fichiers restés orphelins (suppression interrompue, import raté), le bouton
 **Nettoyer les images inutilisées** du tableau de bord repasse derrière.
 
+### Le suivi client
+
+L'écran **Clients** garde la mémoire de chaque personne passée à l'atelier :
+coordonnées, véhicules, interventions réalisées avec leur montant, et un journal
+de notes daté. La date de chaque note est posée par le serveur, pas par le
+navigateur : l'historique reste fiable.
+
+Une **relance** peut être programmée sur une fiche (date + ce qu'il y a à faire).
+Les relances arrivées à échéance s'affichent en haut de l'écran Clients.
+
+Depuis une demande entrante (écran **Demandes**), le bloc « Fiche client » permet
+de créer une fiche pré-remplie ou de rattacher la demande à une fiche existante.
+Les fiches partageant le même téléphone, email ou nom sont proposées d'abord :
+un même client qui redemande un devis six mois plus tard ne crée pas de doublon.
+
+Supprimer une fiche efface ses notes et son historique, mais conserve les
+demandes entrantes rattachées, qui perdent simplement leur lien.
+
+⚠ **Ces fiches contiennent des données personnelles.** Elles ne sont accessibles
+qu'après connexion et ne sont jamais servies au site public. Elles vivent dans le
+même fichier que les contenus, donc dans la même sauvegarde. Pensez à supprimer
+les fiches dont vous n'avez plus l'usage.
+
 ### Ce que le panel permet de modifier
 
 | Écran | Contenus |
 | --- | --- |
+| Clients | Fiches de suivi : coordonnées, véhicules, interventions, notes, relances |
 | Page d'accueil | Accroche, les quatre chiffres, les trois métiers et leurs arguments |
 | Prestations | Formules, opérations, produits, options à la carte, forfaits rétrofit |
 | Avant / après | Cas du comparateur, légendes, chiffres, adresses de vraies photos |

@@ -122,6 +122,102 @@ function nouvelIdDemande(demandes) {
 }
 
 /** Champs acceptés pour une demande entrante, pour ne rien stocker d'arbitraire. */
+const STATUTS_CLIENT = ['prospect', 'client', 'inactif'];
+
+function texte(valeur, max = 300) {
+  return typeof valeur === 'string' ? valeur.trim().slice(0, max) : '';
+}
+
+function nouvelIdentifiant(prefixe, existants) {
+  const nombres = existants
+    .map((e) => Number.parseInt(String(e.id).replace(/\D/g, ''), 10))
+    .filter(Number.isFinite);
+  const max = nombres.length > 0 ? Math.max(...nombres) : 1000;
+  return `${prefixe}-${max + 1}`;
+}
+
+/**
+ * Ne conserve que les champs attendus d'une fiche client, et les borne.
+ *
+ * Ne renvoie **que les clés réellement présentes** dans le corps reçu : une
+ * modification partielle (changer le statut, par exemple) ne doit pas remettre à
+ * zéro les notes, les véhicules ou les interventions absents de la requête.
+ */
+function nettoyerClient(brut, { partiel = false } = {}) {
+  const source = brut && typeof brut === 'object' ? brut : {};
+  const fourni = (cle) => !partiel || Object.prototype.hasOwnProperty.call(source, cle);
+  const resultat = {};
+
+  const liste = (valeur, transforme, limite = 100) =>
+    Array.isArray(valeur) ? valeur.slice(0, limite).map(transforme).filter(Boolean) : [];
+
+  for (const cle of ['name', 'phone', 'email', 'city', 'source']) {
+    if (fourni(cle)) {
+      resultat[cle] = texte(source[cle], cle === 'email' ? 160 : 120);
+    }
+  }
+
+  if (fourni('status')) {
+    resultat.status = STATUTS_CLIENT.includes(source.status) ? source.status : 'prospect';
+  }
+
+  if (fourni('vehicles')) {
+    resultat.vehicles = liste(source.vehicles, (v) => {
+      const label = texte(v?.label, 160);
+      if (!label) return null;
+      return {
+        id: texte(v?.id, 40) || randomBytes(6).toString('hex'),
+        label,
+        plate: texte(v?.plate, 20),
+      };
+    });
+  }
+
+  if (fourni('interventions')) {
+    resultat.interventions = liste(source.interventions, (i) => {
+      const label = texte(i?.label, 200);
+      if (!label) return null;
+      const montant = Number(i?.amount);
+      return {
+        id: texte(i?.id, 40) || randomBytes(6).toString('hex'),
+        date: texte(i?.date, 20),
+        label,
+        ...(Number.isFinite(montant) && montant >= 0 ? { amount: montant } : {}),
+      };
+    });
+  }
+
+  if (fourni('notes')) {
+    resultat.notes = liste(
+      source.notes,
+      (n) => {
+        const contenu = texte(n?.text, 4000);
+        if (!contenu) return null;
+        return {
+          id: texte(n?.id, 40) || randomBytes(6).toString('hex'),
+          createdAt: texte(n?.createdAt, 40) || new Date().toISOString(),
+          text: contenu,
+        };
+      },
+      500
+    );
+  }
+
+  if (fourni('leadIds')) {
+    resultat.leadIds = liste(source.leadIds, (id) => texte(id, 40) || null);
+  }
+
+  if (fourni('nextAction')) {
+    const date = texte(source.nextAction?.date, 20);
+    // `null` ou une date vide annule la relance.
+    resultat.nextAction = date
+      ? { date, label: texte(source.nextAction?.label, 200) }
+      : undefined;
+  }
+
+  return resultat;
+}
+
 function nettoyerDemande(brut) {
   const texte = (valeur, max = 2000) => String(valeur ?? '').slice(0, max);
   return {
@@ -147,7 +243,12 @@ const serveur = http.createServer(async (requete, reponse) => {
   try {
     // --- Contenus publics -------------------------------------------------
     if (chemin === '/api/content' && methode === 'GET') {
-      return json(reponse, 200, store.lire());
+      // Cette route est publique : c'est elle qui alimente le site. Elle ne doit
+      // renvoyer que ce qui est destiné à être affiché. Les demandes entrantes
+      // et les fiches clients contiennent des données personnelles et ne sortent
+      // que par leurs propres routes, derrière authentification.
+      const { leads: _demandes, clients: _clients, ...publics } = store.lire();
+      return json(reponse, 200, publics);
     }
 
     // --- Connexion --------------------------------------------------------
@@ -250,7 +351,7 @@ const serveur = http.createServer(async (requete, reponse) => {
       }
       // Les demandes ne se modifient que par leurs propres routes : une
       // sauvegarde de contenus ne doit pas pouvoir les écraser.
-      const { leads: _ignore, ...contenus } = corps;
+      const { leads: _demandes, clients: _clients, ...contenus } = corps;
       const suivant = await store.modifier((donnees) => ({ ...donnees, ...contenus }));
       return json(reponse, 200, suivant);
     }
@@ -275,6 +376,102 @@ const serveur = http.createServer(async (requete, reponse) => {
       return json(reponse, 200, resultat);
     }
 
+    // --- Fiches clients ---------------------------------------------------
+    // Comme les demandes, elles ont leurs propres routes : une sauvegarde de
+    // contenus depuis le panel ne doit jamais pouvoir les écraser.
+    if (chemin === '/api/clients' && methode === 'GET') {
+      return json(reponse, 200, store.lire().clients ?? []);
+    }
+
+    if (chemin === '/api/clients' && methode === 'POST') {
+      const champs = {
+        vehicles: [],
+        interventions: [],
+        notes: [],
+        leadIds: [],
+        status: 'prospect',
+        phone: '',
+        email: '',
+        city: '',
+        source: '',
+        ...nettoyerClient(await lireCorps(requete)),
+      };
+      if (!champs.name) {
+        return json(reponse, 400, { error: 'Le nom est obligatoire.' });
+      }
+
+      let creee;
+      await store.modifier((donnees) => {
+        const clients = donnees.clients ?? [];
+        const maintenant = new Date().toISOString();
+        creee = {
+          ...champs,
+          id: nouvelIdentifiant('CL', clients),
+          createdAt: maintenant,
+          updatedAt: maintenant,
+        };
+        return { ...donnees, clients: [creee, ...clients] };
+      });
+      return json(reponse, 201, creee);
+    }
+
+    const clientCible = chemin.match(/^\/api\/clients\/([A-Za-z0-9_-]+)$/);
+    if (clientCible) {
+      const id = clientCible[1];
+
+      if (methode === 'PATCH') {
+        const champs = nettoyerClient(await lireCorps(requete), { partiel: true });
+        let modifiee = null;
+        await store.modifier((donnees) => ({
+          ...donnees,
+          clients: (donnees.clients ?? []).map((c) => {
+            if (c.id !== id) return c;
+            modifiee = { ...c, ...champs, updatedAt: new Date().toISOString() };
+            return modifiee;
+          }),
+        }));
+        if (!modifiee) return json(reponse, 404, { error: 'Fiche introuvable.' });
+        return json(reponse, 200, modifiee);
+      }
+
+      if (methode === 'DELETE') {
+        await store.modifier((donnees) => ({
+          ...donnees,
+          clients: (donnees.clients ?? []).filter((c) => c.id !== id),
+          // Les demandes rattachées survivent, mais perdent leur lien.
+          leads: (donnees.leads ?? []).map((d) =>
+            d.clientId === id ? { ...d, clientId: undefined } : d
+          ),
+        }));
+        return json(reponse, 204, {});
+      }
+    }
+
+    // Ajout d'une note : l'horodatage et l'identifiant sont posés par le
+    // serveur, pour que le journal reste fiable.
+    const noteCible = chemin.match(/^\/api\/clients\/([A-Za-z0-9_-]+)\/notes$/);
+    if (noteCible && methode === 'POST') {
+      const id = noteCible[1];
+      const contenu = texte((await lireCorps(requete))?.text, 4000);
+      if (!contenu) return json(reponse, 400, { error: 'Note vide.' });
+
+      let note = null;
+      await store.modifier((donnees) => ({
+        ...donnees,
+        clients: (donnees.clients ?? []).map((c) => {
+          if (c.id !== id) return c;
+          note = {
+            id: randomBytes(8).toString('hex'),
+            createdAt: new Date().toISOString(),
+            text: contenu,
+          };
+          return { ...c, notes: [note, ...(c.notes ?? [])], updatedAt: note.createdAt };
+        }),
+      }));
+      if (!note) return json(reponse, 404, { error: 'Fiche introuvable.' });
+      return json(reponse, 201, note);
+    }
+
     if (chemin === '/api/leads' && methode === 'GET') {
       return json(reponse, 200, store.lire().leads ?? []);
     }
@@ -284,14 +481,29 @@ const serveur = http.createServer(async (requete, reponse) => {
       const id = correspondance[1];
 
       if (methode === 'PATCH') {
-        const { status } = await lireCorps(requete);
-        const permis = ['nouveau', 'contacte', 'rdv', 'cloture'];
-        if (!permis.includes(status)) {
-          return json(reponse, 400, { error: 'Statut inconnu.' });
+        const corps = await lireCorps(requete);
+        const modifications = {};
+
+        if (corps.status !== undefined) {
+          const permis = ['nouveau', 'contacte', 'rdv', 'cloture'];
+          if (!permis.includes(corps.status)) {
+            return json(reponse, 400, { error: 'Statut inconnu.' });
+          }
+          modifications.status = corps.status;
         }
+
+        // `null` détache la demande de sa fiche client.
+        if (corps.clientId !== undefined) {
+          modifications.clientId = corps.clientId === null ? undefined : texte(corps.clientId, 40);
+        }
+
+        if (Object.keys(modifications).length === 0) {
+          return json(reponse, 400, { error: 'Rien à modifier.' });
+        }
+
         const suivant = await store.modifier((donnees) => ({
           ...donnees,
-          leads: (donnees.leads ?? []).map((d) => (d.id === id ? { ...d, status } : d)),
+          leads: (donnees.leads ?? []).map((d) => (d.id === id ? { ...d, ...modifications } : d)),
         }));
         return json(reponse, 200, suivant.leads.find((d) => d.id === id) ?? null);
       }

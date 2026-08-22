@@ -7,6 +7,7 @@ import AdminVehiclesPage from './pages/VehiclesPage';
 import ServicesPage from './pages/ServicesPage';
 import ContentPage from './pages/ContentPage';
 import LeadsPage from './pages/LeadsPage';
+import ClientsPage from './pages/ClientsPage';
 import AccueilPage from './pages/AccueilPage';
 import RetrofitAdminPage from './pages/RetrofitPage';
 import VendreAdminPage from './pages/VendrePage';
@@ -37,6 +38,7 @@ export default function AdminRoutes() {
         <Route path="prestations" element={<ServicesPage />} />
         <Route path="contenu" element={<ContentPage />} />
         <Route path="leads" element={<LeadsPage />} />
+        <Route path="clients" element={<ClientsPage />} />
         <Route path="accueil" element={<AccueilPage />} />
         <Route path="retrofit" element={<RetrofitAdminPage />} />
         <Route path="vendre" element={<VendreAdminPage />} />

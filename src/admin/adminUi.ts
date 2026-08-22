@@ -26,6 +26,7 @@ export const useAdminUi = create<AdminUiState>((set) => ({
 export const ADMIN_NAV = [
   { to: '/admin', label: 'Tableau de bord', icon: 'LayoutDashboard', end: true, groupe: 'Suivi' },
   { to: '/admin/leads', label: 'Demandes', icon: 'Inbox', groupe: 'Suivi' },
+  { to: '/admin/clients', label: 'Clients', icon: 'Users', groupe: 'Suivi' },
 
   { to: '/admin/accueil', label: 'Page d’accueil', icon: 'Home', groupe: 'Pages' },
   { to: '/admin/prestations', label: 'Prestations', icon: 'Wrench', groupe: 'Pages' },

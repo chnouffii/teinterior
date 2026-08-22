@@ -83,6 +83,14 @@ export const api = {
   /** Retire du disque les images qu'aucun contenu ne référence plus. */
   nettoyerImages: () => appeler('/media/nettoyer', { method: 'POST' }),
 
+  lireClients: () => appeler('/clients'),
+  creerClient: (client) => appeler('/clients', { method: 'POST', body: JSON.stringify(client) }),
+  modifierClient: (id, patch) =>
+    appeler(`/clients/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
+  supprimerClient: (id) => appeler(`/clients/${id}`, { method: 'DELETE' }),
+  ajouterNote: (id, text) =>
+    appeler(`/clients/${id}/notes`, { method: 'POST', body: JSON.stringify({ text }) }),
+
   /** Dépôt d'une demande entrante — accessible sans être connecté. */
   creerDemande: (demande) =>
     appeler('/leads', { method: 'POST', body: JSON.stringify(demande) }),
@@ -93,4 +101,8 @@ export const api = {
     appeler(`/leads/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
 
   supprimerDemande: (id) => appeler(`/leads/${id}`, { method: 'DELETE' }),
+
+  /** Rattache une demande à une fiche client, ou l'en détache avec `null`. */
+  rattacherDemande: (id, clientId) =>
+    appeler(`/leads/${id}`, { method: 'PATCH', body: JSON.stringify({ clientId }) }),
 };

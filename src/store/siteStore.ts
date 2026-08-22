@@ -22,6 +22,8 @@ import {
 import { LEADS } from '../data/leads.js';
 import { BRAND, COMPANY, CONTACT, NAV_LINKS, POLES } from '../data/site.js';
 import type {
+  Client,
+  ClientNote,
   BeforeAfterCase,
   ContactInfo,
   HeroContent,
@@ -91,6 +93,14 @@ interface SiteState {
   /** Recharge les demandes depuis le serveur (panel d'administration). */
   chargerDemandes: () => Promise<void>;
 
+  clients: Client[];
+  chargerClients: () => Promise<void>;
+  creerClient: (champs: Partial<Client>) => Promise<Client>;
+  modifierClient: (id: string, patch: Partial<Client>) => Promise<Client>;
+  supprimerClient: (id: string) => Promise<void>;
+  ajouterNote: (id: string, text: string) => Promise<ClientNote>;
+  rattacherDemande: (leadId: string, clientId: string | null) => Promise<void>;
+
   resetAll: () => void;
 
   /** Remplace une section entière de contenus et enregistre sur le serveur. */
@@ -112,6 +122,7 @@ interface SiteState {
 type SiteContent = Omit<
   SiteState,
   | 'leads'
+  | 'clients'
   | 'chargement'
   | 'enregistrement'
   | 'erreurSync'
@@ -146,6 +157,7 @@ const seed = () => ({
   sourcingFacts: SOURCING_FACTS,
   contact: CONTACT as ContactInfo,
   leads: LEADS as Lead[],
+  clients: [] as Client[],
 });
 
 
@@ -346,6 +358,67 @@ export const useSiteStore = create<SiteState>()((set, get) => {
       chargerDemandes: async () => {
         const leads = (await api.lireDemandes()) as Lead[];
         set({ leads });
+      },
+
+      // --- Fiches clients ---------------------------------------------------
+      chargerClients: async () => {
+        const clients = (await api.lireClients()) as Client[];
+        set({ clients });
+      },
+
+      creerClient: async (champs) => {
+        const cree = (await api.creerClient(champs)) as Client;
+        set((state) => ({ clients: [cree, ...state.clients] }));
+        return cree;
+      },
+
+      modifierClient: async (id, patch) => {
+        const suivant = (await api.modifierClient(id, patch)) as Client;
+        set((state) => ({
+          clients: state.clients.map((c) => (c.id === id ? suivant : c)),
+        }));
+        return suivant;
+      },
+
+      supprimerClient: async (id) => {
+        await api.supprimerClient(id);
+        set((state) => ({
+          clients: state.clients.filter((c) => c.id !== id),
+          leads: state.leads.map((d) =>
+            d.clientId === id ? { ...d, clientId: undefined } : d
+          ),
+        }));
+      },
+
+      ajouterNote: async (id, text) => {
+        const note = (await api.ajouterNote(id, text)) as ClientNote;
+        set((state) => ({
+          clients: state.clients.map((c) =>
+            c.id === id
+              ? { ...c, notes: [note, ...c.notes], updatedAt: note.createdAt }
+              : c
+          ),
+        }));
+        return note;
+      },
+
+      rattacherDemande: async (leadId, clientId) => {
+        await api.rattacherDemande(leadId, clientId);
+        set((state) => ({
+          leads: state.leads.map((d) =>
+            d.id === leadId ? { ...d, clientId: clientId ?? undefined } : d
+          ),
+          clients: state.clients.map((c) => {
+            const rattachee = c.leadIds.includes(leadId);
+            if (c.id === clientId && !rattachee) {
+              return { ...c, leadIds: [...c.leadIds, leadId] };
+            }
+            if (c.id !== clientId && rattachee) {
+              return { ...c, leadIds: c.leadIds.filter((i) => i !== leadId) };
+            }
+            return c;
+          }),
+        }));
       },
 
       resetAll: () => modifier({ ...seed() }),

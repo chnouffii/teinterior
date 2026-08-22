@@ -152,6 +152,50 @@ export interface ReviewSummary {
   count: string;
 }
 
+export type ClientStatus = 'prospect' | 'client' | 'inactif';
+
+/** Une note datée dans le journal de suivi d'un client. */
+export interface ClientNote {
+  id: string;
+  createdAt: string;
+  text: string;
+}
+
+/** Un véhicule connu du client — pas forcément vendu par l'atelier. */
+export interface ClientVehicle {
+  id: string;
+  label: string;
+  plate?: string;
+}
+
+/** Une prestation réalisée, pour retrouver l'historique et le chiffre d'affaires. */
+export interface ClientIntervention {
+  id: string;
+  date: string;
+  label: string;
+  amount?: number;
+}
+
+export interface Client {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  phone: string;
+  email: string;
+  city: string;
+  status: ClientStatus;
+  /** D'où vient le client : site, recommandation, passage… */
+  source: string;
+  vehicles: ClientVehicle[];
+  interventions: ClientIntervention[];
+  notes: ClientNote[];
+  /** Identifiants des demandes entrantes rattachées à cette fiche. */
+  leadIds: string[];
+  /** Prochaine relance à ne pas oublier. */
+  nextAction?: { date: string; label: string };
+}
+
 export type LeadType = 'estimation' | 'devis';
 export type LeadStatus = 'nouveau' | 'contacte' | 'rdv' | 'cloture';
 
@@ -170,4 +214,6 @@ export interface Lead {
   /** Demandes de devis. */
   service?: string;
   plate?: string;
+  /** Fiche client à laquelle la demande a été rattachée. */
+  clientId?: string;
 }

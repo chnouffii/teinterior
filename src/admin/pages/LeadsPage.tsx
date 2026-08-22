@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Mail, Phone, Trash2 } from 'lucide-react';
 import Modal from '../components/Modal';
+import LiaisonClient from '../components/LiaisonClient';
 import StatusPill from '../components/StatusPill';
 import { AdminButton, Select } from '../components/Field';
 import { toast } from '../components/toast';
 import { useAdminUi } from '../adminUi';
 import { useSiteStore } from '../../store/siteStore';
 import { LEAD_STATUSES, LEAD_TYPES } from '../../data/leads.js';
-import type { Lead, LeadStatus } from '../../store/types';
+import type { LeadStatus } from '../../store/types';
 
 const STATUS_ORDER: LeadStatus[] = ['nouveau', 'contacte', 'rdv', 'cloture'];
 const statusMeta = LEAD_STATUSES as Record<string, { label: string; tone: string }>;
@@ -30,7 +31,8 @@ export default function LeadsPage() {
 
   const [typeFilter, setTypeFilter] = useState<'tous' | 'estimation' | 'devis'>('tous');
   const [statusFilter, setStatusFilter] = useState<'tous' | LeadStatus>('tous');
-  const [opened, setOpened] = useState<Lead | null>(null);
+  const [openedId, setOpenedId] = useState<string | null>(null);
+  const opened = openedId ? (leads.find((lead) => lead.id === openedId) ?? null) : null;
 
   const rows = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -117,7 +119,7 @@ export default function LeadsPage() {
               <tr
                 key={lead.id}
                 className="cursor-pointer border-b border-white/5 last:border-0 hover:bg-ink-850/60"
-                onClick={() => setOpened(lead)}
+                onClick={() => setOpenedId(lead.id)}
               >
                 <td className="num px-3 py-2.5 text-xs text-faint">{lead.id}</td>
                 <td className="num px-3 py-2.5 text-xs text-muted">{formatDate(lead.createdAt)}</td>
@@ -160,9 +162,9 @@ export default function LeadsPage() {
         <Modal
           title={`${opened.name} — ${opened.id}`}
           subtitle={formatDate(opened.createdAt)}
-          onClose={() => setOpened(null)}
+          onClose={() => setOpenedId(null)}
           footer={
-            <AdminButton variant="ghost" onClick={() => setOpened(null)}>
+            <AdminButton variant="ghost" onClick={() => setOpenedId(null)}>
               Fermer
             </AdminButton>
           }
@@ -218,6 +220,8 @@ export default function LeadsPage() {
               </div>
             </dl>
 
+            <LiaisonClient lead={opened} />
+
             <div>
               <span className="field-label">Suivi</span>
               <Select
@@ -225,7 +229,6 @@ export default function LeadsPage() {
                 onChange={(event) => {
                   const status = event.target.value as LeadStatus;
                   setLeadStatus(opened.id, status);
-                  setOpened({ ...opened, status });
                   toast('Statut mis à jour.');
                 }}
               >

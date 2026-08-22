@@ -14,6 +14,7 @@ import {
   Scale,
   Search,
   SlidersHorizontal,
+  Users,
   Wrench,
   X,
 } from 'lucide-react';
@@ -37,6 +38,7 @@ const ICONS = {
   Images,
   Scale,
   SlidersHorizontal,
+  Users,
 } as const;
 
 export default function AdminLayout() {
