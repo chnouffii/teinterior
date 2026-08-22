@@ -3,8 +3,9 @@ import { Check, Clock, ExternalLink, Mail, MapPin, Paperclip, Phone, RotateCcw, 
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
-import { SERVICE_OPTIONS } from '../../data/site.js';
+import { SERVICE_OPTIONS, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
+import { sendLead } from '../../lib/sendLead.js';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
 const EMPTY = { service: '', name: '', phone: '', email: '', plate: '', message: '', consent: false };
@@ -87,7 +88,10 @@ function QuoteForm() {
   const [form, setForm] = useState(EMPTY);
   const [files, setFiles] = useState([]);
   const [errors, setErrors] = useState({});
+  const contact = useSiteStore((state) => state.contact);
   const [sent, setSent] = useState(null);
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const [envoiErreur, setEnvoiErreur] = useState(null);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
@@ -142,7 +146,7 @@ function QuoteForm() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
@@ -154,7 +158,33 @@ function QuoteForm() {
 
     const serviceLabel =
       SERVICE_OPTIONS.find((option) => option.value === form.service)?.label ?? 'Demande';
+    const message = `${form.message}${
+      files.length > 0 ? ` — ${files.length} pièce(s) jointe(s), à demander au client` : ''
+    }`;
 
+    setEnvoiErreur(null);
+    setEnvoiEnCours(true);
+    try {
+      await sendLead({
+        sujet: `Devis — ${serviceLabel} — ${form.name}`,
+        replyTo: form.email,
+        champs: {
+          Prestation: serviceLabel,
+          Nom: form.name,
+          Téléphone: form.phone,
+          Email: form.email,
+          Immatriculation: form.plate.toUpperCase() || '—',
+          Message: message,
+        },
+      });
+    } catch (error) {
+      setEnvoiErreur(error.message);
+      setEnvoiEnCours(false);
+      return;
+    }
+    setEnvoiEnCours(false);
+
+    // Copie locale : alimente le panel d'administration en développement.
     const lead = addLead({
       type: 'devis',
       name: form.name,
@@ -162,7 +192,7 @@ function QuoteForm() {
       email: form.email,
       service: serviceLabel,
       plate: form.plate.toUpperCase(),
-      message: `${form.message}${files.length > 0 ? ` — ${files.length} pièce(s) jointe(s)` : ''}`,
+      message,
     });
 
     setSent({ reference: lead.id, name: form.name, phone: form.phone, service: serviceLabel });
@@ -344,8 +374,27 @@ function QuoteForm() {
         ) : null}
       </div>
 
-      <Button type="submit" size="lg" icon={Send} className="mt-6 w-full">
-        Envoyer ma demande
+      {envoiErreur ? (
+        <p
+          role="alert"
+          className="mt-6 rounded border border-signal-danger/40 bg-signal-danger/10 px-4 py-3 text-sm text-signal-danger"
+        >
+          {envoiErreur} Vous pouvez nous joindre au{' '}
+          <a href={primaryPhone(contact).href} className="num font-semibold underline">
+            {primaryPhone(contact).number}
+          </a>
+          .
+        </p>
+      ) : null}
+
+      <Button
+        type="submit"
+        size="lg"
+        icon={Send}
+        disabled={envoiEnCours}
+        className={`w-full ${envoiErreur ? 'mt-3' : 'mt-6'}`}
+      >
+        {envoiEnCours ? 'Envoi en cours…' : 'Envoyer ma demande'}
       </Button>
     </form>
   );

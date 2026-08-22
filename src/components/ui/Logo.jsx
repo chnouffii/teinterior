@@ -10,23 +10,27 @@ import { useState } from 'react';
 export default function Logo({ withWordmark = true, size = 'md', className = '' }) {
   const [useFile, setUseFile] = useState(true);
 
-  const mark = size === 'lg' ? 'h-11 w-11' : 'h-10 w-10';
+  // Le logo fourni est un badge carré qui porte déjà le nom « Teintérior ».
+  // Quand il s'affiche, on n'ajoute pas le mot-symbole textuel : il ferait
+  // doublon. Le repli vectoriel, lui, n'est qu'une silhouette et garde le texte.
+  const showWordmark = withWordmark && !useFile;
+  const mark = size === 'lg' ? 'h-12 w-12' : 'h-10 w-10';
   const word = size === 'lg' ? 'text-lg' : 'text-[17px]';
 
   return (
-    <span className={`flex items-center gap-3 ${className}`}>
+    <span className={`flex items-center ${showWordmark ? 'gap-3' : ''} ${className}`}>
       {useFile ? (
         <img
           src="/logo.png"
-          alt=""
-          width="44"
-          height="44"
+          alt="Teintérior"
+          width="48"
+          height="48"
           className={`${mark} shrink-0 rounded-md object-contain`}
           onError={() => setUseFile(false)}
         />
       ) : (
         <span
-          className={`${mark} flex shrink-0 items-center justify-center rounded-md bg-ink-900 ring-1 ring-inset ring-white/10`}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-ink-900 ring-1 ring-inset ring-white/10"
         >
           <svg viewBox="0 0 64 34" className="h-6 w-6" aria-hidden="true">
             <defs>
@@ -57,7 +61,7 @@ export default function Logo({ withWordmark = true, size = 'md', className = '' 
         </span>
       )}
 
-      {withWordmark ? (
+      {showWordmark ? (
         <span
           className={`font-display ${word} font-extrabold italic leading-none tracking-[-0.02em] text-fg`}
         >

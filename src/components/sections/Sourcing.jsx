@@ -5,6 +5,8 @@ import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
 import { FUELS, GEARBOXES } from '../../data/vehicles.js';
 import { useSiteStore } from '../../store/siteStore';
+import { primaryPhone } from '../../data/site.js';
+import { sendLead } from '../../lib/sendLead.js';
 
 const EMPTY = {
   brand: '',
@@ -115,6 +117,9 @@ function EstimationForm() {
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(null);
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const [envoiErreur, setEnvoiErreur] = useState(null);
+  const contact = useSiteStore((state) => state.contact);
 
   const update = (field) => (event) => {
     setForm((previous) => ({ ...previous, [field]: event.target.value }));
@@ -136,7 +141,7 @@ function EstimationForm() {
     });
   };
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
@@ -147,12 +152,37 @@ function EstimationForm() {
     }
 
     const price = Number(form.expectedPrice);
+    const vehicule = `${form.brand} ${form.model} — ${form.year} · ${Number(form.km).toLocaleString('fr-FR')} km · ${form.gearbox} · ${form.fuel}`;
+
+    setEnvoiErreur(null);
+    setEnvoiEnCours(true);
+    try {
+      await sendLead({
+        sujet: `Estimation — ${form.brand} ${form.model} — ${form.name}`,
+        replyTo: form.email,
+        champs: {
+          Véhicule: vehicule,
+          'Prix espéré': `${price} €`,
+          Nom: form.name,
+          Téléphone: form.phone,
+          Email: form.email,
+          Précisions: form.message || 'Aucun commentaire.',
+        },
+      });
+    } catch (error) {
+      setEnvoiErreur(error.message);
+      setEnvoiEnCours(false);
+      return;
+    }
+    setEnvoiEnCours(false);
+
+    // Copie locale : alimente le panel d'administration en développement.
     const lead = addLead({
       type: 'estimation',
       name: form.name,
       phone: form.phone,
       email: form.email,
-      vehicle: `${form.brand} ${form.model} — ${form.year} · ${Number(form.km).toLocaleString('fr-FR')} km · ${form.gearbox} · ${form.fuel}`,
+      vehicle: vehicule,
       expectedPrice: price,
       message: form.message || 'Aucun commentaire.',
     });
@@ -245,8 +275,35 @@ function EstimationForm() {
         </div>
       </div>
 
-      <Button type="submit" size="lg" icon={Send} className="mt-6 w-full">
-        Obtenir mon estimation
+      {envoiErreur ? (
+
+        <p
+
+          role="alert"
+
+          className="mt-6 rounded border border-signal-danger/40 bg-signal-danger/10 px-4 py-3 text-sm text-signal-danger"
+
+        >
+
+          {envoiErreur} Vous pouvez nous joindre au{' '}
+
+          <a href={primaryPhone(contact).href} className="num font-semibold underline">
+
+            {primaryPhone(contact).number}
+
+          </a>
+
+          .
+
+        </p>
+
+      ) : null}
+
+
+      <Button type="submit" size="lg" icon={Send} className="mt-6 w-full" disabled={envoiEnCours}>
+
+        {envoiEnCours ? 'Envoi en cours…' : 'Obtenir mon estimation'}
+
       </Button>
       <p className="mt-3 text-center text-[11px] text-faint">
         Données utilisées uniquement pour traiter votre demande. Aucune revente à des tiers.
