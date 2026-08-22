@@ -31,6 +31,8 @@ export const POLES = [
   {
     id: 'esthetique',
     index: '01',
+    icon: 'Gem',
+    accent: 'brass',
     title: 'Esthétique',
     lead: 'Remise en état intérieur, correction de peinture, céramique et teintage.',
     points: [
@@ -44,6 +46,8 @@ export const POLES = [
   {
     id: 'retrofit',
     index: '02',
+    icon: 'MonitorSmartphone',
+    accent: 'ice',
     title: 'Rétrofit multimédia',
     lead: 'CarPlay et Android Auto intégrés à l’écran d’usine, faisceau d’origine intact.',
     points: [
@@ -57,6 +61,8 @@ export const POLES = [
   {
     id: 'sourcing',
     index: '03',
+    icon: 'Handshake',
+    accent: 'brass',
     title: 'Vente et sourcing',
     lead: 'Dépôt-vente préparé et photographié, ou recherche du véhicule que vous cherchez.',
     points: [

@@ -10,7 +10,7 @@ export default function Testimonials({ limit = null, showAllLink = false }) {
   const items = limit ? testimonials.slice(0, limit) : testimonials;
 
   return (
-    <section className="border-t border-ink-800 py-14 lg:py-16">
+    <section className="border-t border-white/5 py-14 lg:py-16">
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -37,13 +37,13 @@ export default function Testimonials({ limit = null, showAllLink = false }) {
             <Reveal
               key={testimonial.id}
               delay={(index % 3) * 60}
-              className="flex h-full flex-col rounded-lg border border-ink-700 bg-ink-900 p-5"
+              className="flex h-full flex-col rounded-3xl border border-white/10 bg-ink-900 p-5"
             >
               <StarRating rating={testimonial.rating} />
               <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
                 « {testimonial.text} »
               </p>
-              <div className="mt-5 border-t border-ink-800 pt-4">
+              <div className="mt-5 border-t border-white/5 pt-4">
                 <p className="text-sm font-semibold text-fg">{testimonial.name}</p>
                 <p className="mt-0.5 text-[11px] text-faint">
                   {testimonial.city} · {testimonial.service} · {testimonial.date}

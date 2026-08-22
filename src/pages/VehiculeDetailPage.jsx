@@ -56,7 +56,7 @@ export default function VehiculeDetailPage() {
 
   return (
     <>
-      <div className="border-b border-ink-800 pt-24 pb-6 lg:pt-28">
+      <div className="border-b border-white/5 pt-24 pb-6 lg:pt-28">
         <div className="container-x">
           <nav
             aria-label="Fil d’Ariane"
@@ -81,28 +81,28 @@ export default function VehiculeDetailPage() {
       <section className="py-10">
         <div className="container-x grid gap-8 lg:grid-cols-12">
           <Reveal className="lg:col-span-7">
-            <figure className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
+            <figure className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
               <div className="relative">
                 <VehicleCover
                   vehicle={vehicle}
                   className={`aspect-[16/10] w-full ${isSold ? 'opacity-50 grayscale' : ''}`}
                 />
                 <span
-                  className={`absolute left-4 top-4 rounded border px-2 py-0.5 text-[11px] font-semibold ${
+                  className={`absolute left-4 top-4 rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
                     STATUS_TONES[status.tone]
                   }`}
                 >
                   {status.label}
                 </span>
               </div>
-              <figcaption className="num border-t border-ink-700 px-4 py-2.5 text-[11px] text-faint">
+              <figcaption className="num border-t border-white/10 px-4 py-2.5 text-[11px] text-faint">
                 {vehicle.photos.length > 0
                   ? `${vehicle.photos.length} photo(s) — ${vehicle.ref}`
                   : `Illustration de repli — ${vehicle.ref}`}
               </figcaption>
             </figure>
 
-            <div className="mt-4 grid gap-px overflow-hidden rounded-lg border border-ink-700 bg-ink-700 sm:grid-cols-4">
+            <div className="mt-4 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-4">
               {specs.map((spec) => (
                 <div key={spec.label} className="bg-ink-900 px-4 py-3">
                   <p className="text-[11px] uppercase tracking-wider text-faint">{spec.label}</p>
@@ -111,7 +111,7 @@ export default function VehiculeDetailPage() {
               ))}
             </div>
 
-            <div className="mt-4 rounded-lg border border-ink-700 bg-ink-900 p-5">
+            <div className="mt-4 rounded-3xl border border-white/10 bg-ink-900 p-5">
               <h2 className="text-sm font-semibold text-fg">Historique</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">{vehicle.history}</p>
 
@@ -131,13 +131,13 @@ export default function VehiculeDetailPage() {
           </Reveal>
 
           <div className="lg:col-span-5">
-            <Reveal delay={60} className="rounded-lg border border-ink-700 bg-ink-900 p-5">
+            <Reveal delay={60} className="rounded-3xl border border-white/10 bg-ink-900 p-5">
               <h1 className="text-xl font-bold leading-snug sm:text-2xl">
                 {vehicle.brand} {vehicle.model}
               </h1>
               <p className="mt-1 text-sm text-muted">{vehicle.trim}</p>
 
-              <p className="num mt-5 border-t border-ink-800 pt-5 text-3xl font-bold text-fg">
+              <p className="num mt-5 border-t border-white/5 pt-5 text-3xl font-bold text-fg">
                 {formatPrice(vehicle.price)}
               </p>
               <p className="mt-1 text-xs text-faint">
@@ -198,9 +198,9 @@ export default function VehiculeDetailPage() {
                 <Link
                   key={item.id}
                   to={`${ROUTES.vehicules}/${item.id}`}
-                  className="group flex items-center gap-3 rounded-lg border border-ink-700 bg-ink-900 p-3 transition-colors hover:border-ink-600"
+                  className="group flex items-center gap-3 rounded-3xl border border-white/10 bg-ink-900 p-3 transition-colors hover:border-white/20"
                 >
-                  <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded object-cover" />
+                  <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded-lg object-cover" />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-medium text-fg transition-colors group-hover:text-accent">
                       {item.brand} {item.model}

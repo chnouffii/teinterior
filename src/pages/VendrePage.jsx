@@ -18,7 +18,8 @@ export default function VendrePage() {
     <>
       <PageHeader
         eyebrow="Vendre sa voiture"
-        title="Confiez-nous la vente de votre voiture"
+        title="Confiez-nous"
+        highlight="la vente de votre voiture"
         description="Vous n’avez ni le temps ni l’envie de gérer les appels, les visites et les acheteurs peu sérieux ? Nous prenons le véhicule en dépôt, le préparons, le mettons en scène et gérons la transaction jusqu’à la remise des clés."
       >
         <Button as={Link} to={ROUTES.vehicules} variant="secondary" size="md" iconRight={ArrowRight}>

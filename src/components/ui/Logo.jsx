@@ -16,11 +16,11 @@ export default function Logo({ withWordmark = true, className = '' }) {
           alt=""
           width="36"
           height="36"
-          className="h-9 w-9 rounded object-cover"
+          className="h-9 w-9 rounded-lg object-cover"
           onError={() => setUseFile(false)}
         />
       ) : (
-        <span className="flex h-9 w-9 items-center justify-center rounded border border-ink-700 bg-ink-900">
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-ink-900">
           <svg viewBox="0 0 48 28" className="h-5 w-5" aria-hidden="true">
             <path
               d="M3 21c0-1.4.9-2.4 2.3-2.8l5.4-1.5 5-4.6c1.6-1.5 3.7-2.3 5.9-2.3h8.6c2.6 0 5.1 1 6.9 2.9l3.1 3.1 3 .9c1.7.5 2.8 2 2.8 3.8V21c0 .8-.7 1.5-1.5 1.5H4.5c-.8 0-1.5-.7-1.5-1.5Z"

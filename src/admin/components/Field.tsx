@@ -39,14 +39,14 @@ export function AdminButton({
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'ghost' | 'danger' }) {
   const variants = {
     primary: 'bg-accent text-accent-on hover:bg-accent-soft',
-    ghost: 'border border-ink-700 text-muted hover:border-ink-600 hover:text-fg',
+    ghost: 'border border-white/10 text-muted hover:border-white/20 hover:text-fg',
     danger: 'border border-signal-danger/40 text-signal-danger hover:bg-signal-danger/10',
   } as const;
 
   return (
     <button
       {...rest}
-      className={`inline-flex min-h-[38px] items-center justify-center gap-2 rounded-md px-3.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-[38px] items-center justify-center gap-2 rounded-2xl px-3.5 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
     />
   );
 }

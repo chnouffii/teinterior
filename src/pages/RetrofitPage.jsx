@@ -14,7 +14,8 @@ export default function RetrofitPage() {
     <>
       <PageHeader
         eyebrow="Rétrofit CarPlay"
-        title="CarPlay et Android Auto sans toucher à l’origine"
+        title="CarPlay et Android Auto,"
+        highlight="sans toucher à l’origine"
         description="Nous intégrons Apple CarPlay et Android Auto sans fil directement dans votre écran d’usine. Molette, boutons au volant, caméras et enceintes d’origine restent intacts — et tout est réversible en trente minutes."
       />
       <Retrofit hideHeading />

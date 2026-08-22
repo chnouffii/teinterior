@@ -18,8 +18,9 @@ export default function Gallery({ hideHeading = false, limit = null }) {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           {hideHeading ? null : (
             <SectionHeading
-              index="06 — Réalisations"
-              title="Ce qui sort de l’atelier"
+              eyebrow="Réalisations"
+              title="Ce qui sort"
+              highlight="de notre atelier"
               description="Véhicules passés entre nos mains ces derniers mois, avec le temps passé et les produits utilisés."
             />
           )}
@@ -31,10 +32,10 @@ export default function Gallery({ hideHeading = false, limit = null }) {
                 type="button"
                 onClick={() => setFilter(item.id)}
                 aria-pressed={filter === item.id}
-                className={`tap inline-flex items-center rounded-md border px-3 text-xs font-semibold transition-colors ${
+                className={`tap inline-flex items-center rounded-full border px-4 text-xs font-semibold transition-colors ${
                   filter === item.id
                     ? 'border-accent/50 bg-accent/10 text-accent'
-                    : 'border-ink-700 text-muted hover:border-ink-600 hover:text-fg'
+                    : 'border-white/10 text-muted hover:border-white/20 hover:text-fg'
                 }`}
               >
                 {item.label}
@@ -48,7 +49,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
             <Reveal
               key={item.id}
               delay={(index % 3) * 60}
-              className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900"
+              className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900"
             >
               <CarVisual
                 scene={item.scene}
@@ -57,7 +58,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
                 className="aspect-[4/3] w-full"
                 title={item.title}
               />
-              <div className="border-t border-ink-700 px-4 py-3">
+              <div className="border-t border-white/10 px-4 py-3">
                 <h3 className="text-sm font-semibold text-fg">{item.title}</h3>
                 <p className="num mt-1 text-[11px] leading-relaxed text-faint">{item.meta}</p>
               </div>

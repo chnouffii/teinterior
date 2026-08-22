@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${
-        scrolled ? 'border-ink-700 bg-ink-950/95 backdrop-blur' : 'border-transparent bg-ink-950'
+        scrolled ? 'border-white/10 bg-ink-950/95 backdrop-blur' : 'border-transparent bg-ink-950'
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6">
@@ -37,7 +37,7 @@ export default function Header() {
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `inline-flex min-h-[40px] items-center rounded-md px-3 text-sm transition-colors ${
+                `inline-flex min-h-[40px] items-center rounded-2xl px-3 text-sm transition-colors ${
                   isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }
@@ -50,7 +50,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <a
             href={contact.phoneHref}
-            className="num hidden min-h-[40px] items-center gap-2 rounded-md border border-ink-700 px-3 text-sm text-muted transition-colors hover:border-ink-600 hover:text-fg md:inline-flex"
+            className="num hidden min-h-[40px] items-center gap-2 rounded-2xl border border-white/10 px-3 text-sm text-muted transition-colors hover:border-white/20 hover:text-fg md:inline-flex"
           >
             <Phone className="h-3.5 w-3.5" aria-hidden="true" />
             {contact.phone}
@@ -66,7 +66,7 @@ export default function Header() {
             aria-expanded={menuOpen}
             aria-controls="menu-mobile"
             aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            className="flex h-11 w-11 items-center justify-center rounded-md border border-ink-700 text-fg lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 text-fg lg:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -75,7 +75,7 @@ export default function Header() {
 
       <div
         id="menu-mobile"
-        className={`overflow-hidden border-t border-ink-800 bg-ink-950 transition-[max-height,opacity] duration-200 lg:hidden ${
+        className={`overflow-hidden border-t border-white/5 bg-ink-950 transition-[max-height,opacity] duration-200 lg:hidden ${
           menuOpen ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -85,7 +85,7 @@ export default function Header() {
               key={link.id}
               to={link.path}
               className={({ isActive }) =>
-                `flex min-h-[48px] items-center rounded-md px-3 text-sm transition-colors ${
+                `flex min-h-[48px] items-center rounded-2xl px-3 text-sm transition-colors ${
                   isActive ? 'bg-ink-850 text-fg' : 'text-muted hover:text-fg'
                 }`
               }

@@ -72,8 +72,8 @@ export default function BeforeAfterSlider({
     );
 
   return (
-    <figure className={`overflow-hidden rounded-lg border border-ink-700 bg-ink-900 ${className}`}>
-      <div className="flex items-center justify-between gap-3 border-b border-ink-700 px-4 py-2.5">
+    <figure className={`overflow-hidden rounded-3xl border border-white/10 bg-ink-900 ${className}`}>
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
         <span className="label-xs">Banc de comparaison</span>
         {reference ? <span className="num text-[11px] text-faint">{reference}</span> : null}
       </div>
@@ -100,10 +100,10 @@ export default function BeforeAfterSlider({
           {renderLayer(afterImage, 'after', afterCaption)}
         </div>
 
-        <span className="pointer-events-none absolute left-3 top-3 rounded border border-ink-700 bg-ink-950/85 px-2 py-1 text-[11px] font-medium text-muted">
+        <span className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/15 bg-ink-950/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted backdrop-blur">
           {beforeCaption}
         </span>
-        <span className="pointer-events-none absolute right-3 top-3 rounded border border-accent/40 bg-ink-950/85 px-2 py-1 text-[11px] font-medium text-accent">
+        <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-accent/40 bg-accent/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-soft backdrop-blur">
           {afterCaption}
         </span>
 
@@ -122,26 +122,16 @@ export default function BeforeAfterSlider({
           aria-valuetext={`${Math.round(position)} % du résultat après intervention`}
           onKeyDown={handleKeyDown}
           onPointerDown={(event) => event.stopPropagation()}
-          className="absolute top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2
-            items-center justify-center rounded-md border border-ink-600 bg-ink-900 text-fg
-            transition-colors hover:border-accent"
+          className="absolute top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
+            items-center justify-center rounded-full border border-white/30 bg-ink-950/90 text-fg
+            shadow-glow backdrop-blur transition-transform duration-200 hover:scale-110"
           style={{ left: `${position}%` }}
         >
           <MoveHorizontal className="h-4 w-4" aria-hidden="true" />
         </button>
-
-        {/* Règle graduée façon banc de mesure */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-5 items-end justify-between border-t border-ink-700 bg-ink-950/70 px-1">
-          {Array.from({ length: 21 }).map((_, index) => (
-            <span
-              key={index}
-              className={`w-px bg-faint ${index % 5 === 0 ? 'h-2.5 opacity-80' : 'h-1.5 opacity-40'}`}
-            />
-          ))}
-        </div>
       </div>
 
-      <figcaption className="flex items-center justify-between gap-3 border-t border-ink-700 px-4 py-2.5 text-[11px] text-faint">
+      <figcaption className="flex items-center justify-between gap-3 border-t border-white/10 px-4 py-2.5 text-[11px] text-faint">
         <span className="flex items-center gap-1.5">
           <MoveHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
           Glissez ou utilisez les flèches du clavier

@@ -1,6 +1,6 @@
 const VARIANTS = {
   primary: 'bg-accent text-accent-on hover:bg-accent-soft',
-  secondary: 'border border-ink-700 bg-ink-850 text-fg hover:border-ink-600 hover:bg-ink-800',
+  secondary: 'border border-white/10 bg-ink-850 text-fg hover:border-white/20 hover:bg-ink-800',
   outline: 'border border-accent/50 text-accent hover:border-accent hover:bg-accent/10',
   ghost: 'text-muted hover:text-fg',
 };
@@ -23,8 +23,8 @@ export default function Button({
 }) {
   return (
     <Tag
-      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded-md
-        font-semibold tracking-tight transition-colors duration-150 active:translate-y-px
+      className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded-full
+        font-semibold tracking-tight transition-all duration-300 active:scale-[0.97]
         disabled:cursor-not-allowed disabled:opacity-40
         ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...rest}

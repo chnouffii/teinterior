@@ -13,7 +13,7 @@ import { useQuote } from '../../context/QuoteContext.jsx';
 export const STATUS_TONES = {
   ok: 'border-signal-ok/40 bg-signal-ok/10 text-signal-ok',
   warn: 'border-signal-warn/40 bg-signal-warn/10 text-signal-warn',
-  neutral: 'border-ink-600 bg-ink-800 text-faint',
+  neutral: 'border-white/20 bg-ink-800 text-faint',
 };
 
 const FILTERS = [
@@ -76,7 +76,7 @@ function VehicleCard({ vehicle, index, onTestDrive }) {
   return (
     <Reveal
       delay={index * 60}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-ink-700 bg-ink-900 transition-colors duration-200 hover:border-ink-600"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-ink-900 transition-colors duration-200 hover:border-white/20"
     >
       <Link to={`${ROUTES.vehicules}/${vehicle.id}`} className="relative block">
         <VehicleCover
@@ -84,13 +84,13 @@ function VehicleCard({ vehicle, index, onTestDrive }) {
           className={`aspect-[16/10] w-full ${isSold ? 'opacity-50 grayscale' : ''}`}
         />
         <span
-          className={`absolute left-3 top-3 rounded border px-2 py-0.5 text-[11px] font-semibold ${
+          className={`absolute left-3 top-3 rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
             STATUS_TONES[status.tone]
           }`}
         >
           {status.label}
         </span>
-        <span className="num absolute right-3 top-3 rounded border border-ink-700 bg-ink-950/85 px-2 py-0.5 text-[11px] text-muted">
+        <span className="num absolute right-3 top-3 rounded-lg border border-white/10 bg-ink-950/85 px-2 py-0.5 text-[11px] text-muted">
           {vehicle.ref}
         </span>
       </Link>
@@ -106,7 +106,7 @@ function VehicleCard({ vehicle, index, onTestDrive }) {
         </h3>
         <p className="mt-0.5 text-xs text-muted">{vehicle.trim}</p>
 
-        <dl className="num mt-4 grid grid-cols-4 gap-px overflow-hidden rounded border border-ink-800 bg-ink-800 text-center">
+        <dl className="num mt-4 grid grid-cols-4 gap-px overflow-hidden rounded-lg border border-white/5 bg-ink-800 text-center">
           {[
             { label: 'Année', value: vehicle.year },
             { label: 'Km', value: `${Math.round(vehicle.km / 1000)}k` },
@@ -167,8 +167,9 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           {hideHeading ? null : (
             <SectionHeading
-              index="05 — Showroom"
-              title="Véhicules disponibles"
+              eyebrow="Mini showroom"
+              title="Nos véhicules"
+              highlight="disponibles"
               description="Chaque voiture est passée par l’atelier : contrôle 120 points, préparation esthétique et reportage photo avant mise en ligne."
             />
           )}
@@ -186,10 +187,10 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
                     type="button"
                     onClick={() => setFilter(item.id)}
                     aria-pressed={filter === item.id}
-                    className={`tap inline-flex items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors ${
+                    className={`tap inline-flex items-center gap-2 rounded-full border px-4 text-xs font-semibold transition-colors ${
                       filter === item.id
                         ? 'border-accent/50 bg-accent/10 text-accent'
-                        : 'border-ink-700 text-muted hover:border-ink-600 hover:text-fg'
+                        : 'border-white/10 text-muted hover:border-white/20 hover:text-fg'
                     }`}
                   >
                     {item.label}
@@ -213,7 +214,7 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
         </div>
 
         {rows.length === 0 ? (
-          <p className="mt-8 rounded-lg border border-ink-700 bg-ink-900 px-5 py-8 text-center text-sm text-faint">
+          <p className="mt-8 rounded-3xl border border-white/10 bg-ink-900 px-5 py-8 text-center text-sm text-faint">
             Aucun véhicule dans cette catégorie. Dites-nous ce que vous cherchez : le service de
             sourcing s’en occupe.
           </p>

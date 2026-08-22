@@ -69,10 +69,10 @@ export default function LeadsPage() {
             key={item.status}
             type="button"
             onClick={() => setStatusFilter(statusFilter === item.status ? 'tous' : item.status)}
-            className={`rounded-lg border p-4 text-left transition-colors ${
+            className={`rounded-3xl border p-4 text-left transition-colors ${
               statusFilter === item.status
                 ? 'border-accent/50 bg-accent/5'
-                : 'border-ink-700 bg-ink-900 hover:border-ink-600'
+                : 'border-white/10 bg-ink-900 hover:border-white/20'
             }`}
           >
             <span className="num block text-2xl font-semibold text-fg">{item.count}</span>
@@ -87,10 +87,10 @@ export default function LeadsPage() {
             key={type}
             type="button"
             onClick={() => setTypeFilter(type)}
-            className={`inline-flex min-h-[34px] items-center rounded-md border px-3 text-xs font-semibold transition-colors ${
+            className={`inline-flex min-h-[34px] items-center rounded-full border px-4 text-xs font-semibold transition-colors ${
               typeFilter === type
                 ? 'border-accent/50 bg-accent/10 text-accent'
-                : 'border-ink-700 text-muted hover:border-ink-600 hover:text-fg'
+                : 'border-white/10 text-muted hover:border-white/20 hover:text-fg'
             }`}
           >
             {type === 'tous' ? 'Toutes' : typeMeta[type].label}
@@ -98,10 +98,10 @@ export default function LeadsPage() {
         ))}
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-lg border border-ink-700">
+      <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10">
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead>
-            <tr className="border-b border-ink-700 bg-ink-850 text-left">
+            <tr className="border-b border-white/10 bg-ink-850 text-left">
               {['Réf.', 'Reçue le', 'Type', 'Contact', 'Objet', 'Statut', ''].map((head, index) => (
                 <th
                   key={head || index}
@@ -116,7 +116,7 @@ export default function LeadsPage() {
             {rows.map((lead) => (
               <tr
                 key={lead.id}
-                className="cursor-pointer border-b border-ink-800 last:border-0 hover:bg-ink-850/60"
+                className="cursor-pointer border-b border-white/5 last:border-0 hover:bg-ink-850/60"
                 onClick={() => setOpened(lead)}
               >
                 <td className="num px-3 py-2.5 text-xs text-faint">{lead.id}</td>
@@ -141,7 +141,7 @@ export default function LeadsPage() {
                       toast('Demande supprimée.', 'danger');
                     }}
                     title="Supprimer"
-                    className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-signal-danger"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-signal-danger"
                   >
                     <Trash2 className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -171,21 +171,21 @@ export default function LeadsPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <a
                 href={`tel:${opened.phone.replace(/\s/g, '')}`}
-                className="flex items-center gap-2.5 rounded-md border border-ink-700 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
+                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
               >
                 <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
                 <span className="num">{opened.phone}</span>
               </a>
               <a
                 href={`mailto:${opened.email}`}
-                className="flex items-center gap-2.5 rounded-md border border-ink-700 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
+                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2.5 text-sm text-muted transition-colors hover:text-fg"
               >
                 <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
                 <span className="truncate">{opened.email}</span>
               </a>
             </div>
 
-            <dl className="space-y-3 rounded-md border border-ink-700 bg-ink-850 p-4 text-sm">
+            <dl className="space-y-3 rounded-2xl border border-white/10 bg-ink-850 p-4 text-sm">
               {opened.vehicle ? (
                 <div>
                   <dt className="label-xs">Véhicule</dt>

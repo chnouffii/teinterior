@@ -67,7 +67,7 @@ export default function ServicesPage() {
                     setStepsText(stepsToText(pack.steps));
                   }}
                   title="Modifier"
-                  className="-m-1 flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-fg"
+                  className="-m-1 flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-fg"
                 >
                   <Pencil className="h-4 w-4" aria-hidden="true" />
                 </button>
@@ -97,10 +97,10 @@ export default function ServicesPage() {
 
       <section>
         <h2 className="text-sm font-semibold text-fg">Options à la carte</h2>
-        <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
+        <div className="mt-4 overflow-x-auto rounded-3xl border border-white/10">
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-ink-700 bg-ink-850 text-left">
+              <tr className="border-b border-white/10 bg-ink-850 text-left">
                 {['Option', 'Détail', 'Durée', 'Prix', ''].map((head, index) => (
                   <th
                     key={head || index}
@@ -113,7 +113,7 @@ export default function ServicesPage() {
             </thead>
             <tbody>
               {options.map((option) => (
-                <tr key={option.id} className="border-b border-ink-800 last:border-0">
+                <tr key={option.id} className="border-b border-white/5 last:border-0">
                   <td className="px-3 py-2.5 font-medium text-fg">{option.label}</td>
                   <td className="max-w-[22rem] truncate px-3 py-2.5 text-xs text-muted">
                     {option.detail}
@@ -124,7 +124,7 @@ export default function ServicesPage() {
                     <button
                       type="button"
                       onClick={() => setOptionDraft({ ...option })}
-                      className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-fg"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-fg"
                       title="Modifier"
                     >
                       <Pencil className="h-4 w-4" aria-hidden="true" />
@@ -143,10 +143,10 @@ export default function ServicesPage() {
           Tarif et compatibilité par système embarqué. Le configurateur public lit ces valeurs.
         </p>
 
-        <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
+        <div className="mt-4 overflow-x-auto rounded-3xl border border-white/10">
           <table className="w-full min-w-[860px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-ink-700 bg-ink-850 text-left">
+              <tr className="border-b border-white/10 bg-ink-850 text-left">
                 {['Marque', 'Modèle', 'Système', 'Réf.', 'Compatibilité', 'Durée', 'Tarif', ''].map(
                   (head, index) => (
                     <th
@@ -165,7 +165,7 @@ export default function ServicesPage() {
                   model.systems.map((system) => (
                     <tr
                       key={`${brand.id}-${model.id}-${system.id}`}
-                      className="border-b border-ink-800 last:border-0"
+                      className="border-b border-white/5 last:border-0"
                     >
                       <td className="px-3 py-2.5 font-medium text-fg">{brand.brand}</td>
                       <td className="px-3 py-2.5 text-muted">{model.model}</td>
@@ -189,7 +189,7 @@ export default function ServicesPage() {
                               system: { ...system },
                             })
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-fg"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-fg"
                           title="Modifier"
                         >
                           <Pencil className="h-4 w-4" aria-hidden="true" />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, ChevronRight, RotateCcw } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, RotateCcw } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
@@ -11,14 +11,14 @@ const FITMENT_TONES = {
   ok: 'border-signal-ok/40 bg-signal-ok/10 text-signal-ok',
   accent: 'border-accent/40 bg-accent/10 text-accent',
   warn: 'border-signal-warn/40 bg-signal-warn/10 text-signal-warn',
-  neutral: 'border-ink-600 bg-ink-800 text-faint',
+  neutral: 'border-white/20 bg-ink-800 text-faint',
 };
 
 /** Colonne du sélecteur : liste d'options, façon catalogue de pièces. */
 function PickerColumn({ label, step, items, selectedId, onSelect, empty }) {
   return (
-    <div className="flex min-h-[15rem] flex-col border-ink-700 lg:border-r lg:last:border-r-0">
-      <div className="flex items-center gap-2 border-b border-ink-700 bg-ink-850 px-4 py-2.5">
+    <div className="flex min-h-[15rem] flex-col border-white/10 lg:border-r lg:last:border-r-0">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-ink-850 px-4 py-2.5">
         <span className="num text-[11px] text-accent">{step}</span>
         <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
           {label}
@@ -35,7 +35,7 @@ function PickerColumn({ label, step, items, selectedId, onSelect, empty }) {
                 type="button"
                 onClick={() => onSelect(item.id)}
                 aria-pressed={selectedId === item.id}
-                className={`flex min-h-[46px] w-full items-center justify-between gap-3 border-b border-ink-800 px-4 py-2.5 text-left text-sm transition-colors ${
+                className={`flex min-h-[46px] w-full items-center justify-between gap-3 border-b border-white/5 px-4 py-2.5 text-left text-sm transition-colors ${
                   selectedId === item.id
                     ? 'bg-accent/10 text-accent'
                     : 'text-muted hover:bg-ink-850 hover:text-fg'
@@ -70,8 +70,8 @@ function Finder() {
   const fitment = system ? FITMENT[system.fitment] : null;
 
   return (
-    <div className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-700 px-5 py-3">
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
         <h3 className="text-sm font-semibold text-fg">Recherche de compatibilité</h3>
         <button
           type="button"
@@ -87,7 +87,7 @@ function Finder() {
         </button>
       </div>
 
-      <div className="grid divide-y divide-ink-700 lg:grid-cols-3 lg:divide-y-0">
+      <div className="grid divide-y divide-white/10 lg:grid-cols-3 lg:divide-y-0">
         <PickerColumn
           step="01"
           label="Marque"
@@ -130,8 +130,8 @@ function Finder() {
       </div>
 
       {system && fitment ? (
-        <div className="border-t border-ink-700 bg-ink-850">
-          <div className="grid gap-px bg-ink-700 sm:grid-cols-4">
+        <div className="border-t border-white/10 bg-ink-850">
+          <div className="grid gap-px bg-white/10 sm:grid-cols-4">
             {[
               { label: 'Réf. interface', value: system.ref, mono: true },
               { label: 'Tarif indicatif', value: `${system.price} €`, mono: true },
@@ -149,9 +149,9 @@ function Finder() {
             ))}
           </div>
 
-          <div className="border-t border-ink-700 px-5 py-4">
+          <div className="border-t border-white/10 px-5 py-4">
             <span
-              className={`inline-flex items-center gap-1.5 rounded border px-2 py-1 text-[11px] font-semibold ${
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-2 py-1 text-[11px] font-semibold ${
                 FITMENT_TONES[fitment.tone]
               }`}
             >
@@ -198,7 +198,7 @@ function Finder() {
           </div>
         </div>
       ) : (
-        <p className="border-t border-ink-700 px-5 py-5 text-xs text-faint">
+        <p className="border-t border-white/10 px-5 py-5 text-xs text-faint">
           Sélectionnez marque, modèle puis système d’origine pour afficher la compatibilité, la
           référence d’interface et le tarif.
         </p>
@@ -209,76 +209,63 @@ function Finder() {
 
 export default function Retrofit({ hideHeading = false }) {
   return (
-    <section className={`pb-16 lg:pb-20 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
-      <div className="container-x">
+    <section className={`relative overflow-hidden pb-20 lg:pb-28 ${hideHeading ? 'pt-6' : 'pt-20 lg:pt-28'}`}>
+      <div className="pointer-events-none absolute -right-32 top-20 h-[420px] w-[420px] rounded-full bg-ice/5 blur-3xl" />
+
+      <div className="container-x relative">
         {hideHeading ? null : (
           <SectionHeading
-            index="03 — Rétrofit"
-            title="CarPlay et Android Auto sur l’écran d’origine"
-            description="L’interface se branche entre l’écran et le faisceau d’usine. Rien n’est coupé, tout est réversible."
+            eyebrow="Pôle rétrofit & multimédia"
+            title="CarPlay et Android Auto,"
+            highlight="sans toucher à l’origine"
+            description="L’interface se branche entre l’écran et le faisceau d’usine. Molette, boutons au volant, caméras et enceintes restent d’origine — et tout est réversible en trente minutes."
           />
         )}
 
-        <Reveal className="mt-10 grid gap-px overflow-hidden rounded-lg border border-ink-700 bg-ink-700 sm:grid-cols-4">
+        <Reveal className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 lg:grid-cols-4">
           {RETROFIT_FACTS.map((fact) => (
-            <div key={fact.label} className="bg-ink-900 px-4 py-4">
-              <p className="num text-lg font-semibold text-fg">{fact.value}</p>
-              <p className="mt-1 text-[11px] leading-snug text-faint">{fact.label}</p>
+            <div key={fact.label} className="bg-ink-950/90 px-6 py-6 text-center">
+              <p className="num font-display text-2xl font-bold text-fg">{fact.value}</p>
+              <p className="mt-2 text-[11px] leading-snug text-faint">{fact.label}</p>
             </div>
           ))}
         </Reveal>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-12">
-          <Reveal className="lg:col-span-7">
-            <div className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
-              <div className="border-b border-ink-700 px-5 py-3">
-                <h3 className="text-sm font-semibold text-fg">Déroulé de l’intervention</h3>
-              </div>
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-ink-800 text-left">
-                    <th className="px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-faint">
-                      Étape
-                    </th>
-                    <th className="hidden px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-faint sm:table-cell">
-                      Détail
-                    </th>
-                    <th className="px-5 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wider text-faint">
-                      Durée
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {RETROFIT_PROCESS.map((item) => (
-                    <tr key={item.step} className="border-b border-ink-800 align-top last:border-0">
-                      <td className="px-5 py-3">
-                        <span className="num mr-2 text-xs text-accent">{item.step}</span>
-                        <span className="font-medium text-fg">{item.label}</span>
-                        <span className="mt-1 block text-xs text-muted sm:hidden">{item.detail}</span>
-                      </td>
-                      <td className="hidden px-3 py-3 text-xs leading-relaxed text-muted sm:table-cell">
-                        {item.detail}
-                      </td>
-                      <td className="num px-5 py-3 text-right text-xs text-muted">{item.duration}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="mt-8 grid gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <h3 className="text-lg font-bold">Déroulé de l’intervention</h3>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {RETROFIT_PROCESS.map((item, index) => (
+                <Reveal
+                  key={item.step}
+                  delay={index * 60}
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-ink-850/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-ice/40"
+                >
+                  <span className="pointer-events-none absolute -right-3 -top-5 font-display text-6xl font-extrabold text-white/[0.04] transition-colors duration-500 group-hover:text-ice/10">
+                    {item.step}
+                  </span>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h4 className="text-sm font-bold text-fg">{item.label}</h4>
+                    <span className="num text-[11px] text-faint">{item.duration}</span>
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">{item.detail}</p>
+                </Reveal>
+              ))}
             </div>
-          </Reveal>
+          </div>
 
-          <Reveal delay={80} className="lg:col-span-5">
-            <div className="rounded-lg border border-ink-700 bg-ink-900 p-5">
-              <h3 className="text-sm font-semibold text-fg">Ce qui reste d’origine</h3>
-              <ul className="mt-4 space-y-2.5">
+          <Reveal delay={80} className="lg:col-span-4">
+            <div className="rounded-3xl border border-ice/20 bg-ice/[0.04] p-6">
+              <h3 className="text-base font-bold text-fg">Ce qui reste d’origine</h3>
+              <ul className="mt-4 space-y-3">
                 {RETROFIT_KEEPS.map((item) => (
                   <li key={item} className="flex gap-2.5 text-sm text-muted">
-                    <span className="mt-2 h-1 w-1 shrink-0 bg-accent" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-ice" strokeWidth={2.6} aria-hidden="true" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 border-t border-ink-800 pt-4 text-xs leading-relaxed text-faint">
+              <p className="mt-5 border-t border-white/10 pt-4 text-xs leading-relaxed text-faint">
                 Dépose de l’interface et retour à la configuration d’usine en 30 minutes, sans trace :
                 utile avant une reprise en concession.
               </p>

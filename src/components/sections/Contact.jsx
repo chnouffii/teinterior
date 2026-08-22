@@ -31,7 +31,7 @@ const formatSize = (bytes) => {
 
 function WorkshopMap({ contact }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-ink-900">
       <svg viewBox="0 0 600 280" className="h-48 w-full sm:h-56" role="img" aria-label="Plan d’accès">
         <rect width="600" height="280" fill="#11141A" />
         <g stroke="#1E232B" strokeWidth="14">
@@ -58,7 +58,7 @@ function WorkshopMap({ contact }) {
         />
       </svg>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-ink-700 px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3">
         <div className="text-sm">
           <p className="font-medium text-fg">{contact.address.street}</p>
           <p className="text-xs text-muted">
@@ -170,8 +170,8 @@ function QuoteForm() {
 
   if (sent) {
     return (
-      <div className="rounded-lg border border-ink-700 bg-ink-900 p-6">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded border border-signal-ok/40 bg-signal-ok/10">
+      <div className="rounded-3xl border border-white/10 bg-ink-900 p-6">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-signal-ok/40 bg-signal-ok/10">
           <Check className="h-4 w-4 text-signal-ok" aria-hidden="true" />
         </span>
         <h3 className="mt-4 text-base font-bold">Demande envoyée — {sent.reference}</h3>
@@ -197,7 +197,7 @@ function QuoteForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={submit} noValidate className="rounded-lg border border-ink-700 bg-ink-900 p-6">
+    <form ref={formRef} onSubmit={submit} noValidate className="rounded-3xl border border-white/10 bg-ink-900 p-6">
       <h3 className="text-base font-bold">Demander un devis</h3>
       <p className="mt-1 text-xs text-faint">
         Plus la description est précise, plus le devis l’est. Réponse sous 24 h ouvrées.
@@ -282,7 +282,7 @@ function QuoteForm() {
           <span className="field-label">Pièces jointes</span>
           <label
             htmlFor="contact-files"
-            className="flex cursor-pointer flex-col items-center gap-1.5 rounded-md border border-dashed border-ink-700 bg-ink-950 px-5 py-6 text-center transition-colors hover:border-accent/50"
+            className="flex cursor-pointer flex-col items-center gap-1.5 rounded-2xl border border-dashed border-white/10 bg-ink-950 px-5 py-6 text-center transition-colors hover:border-accent/50"
           >
             <Paperclip className="h-4 w-4 text-accent" aria-hidden="true" />
             <span className="text-sm text-fg">Ajouter des photos ou un document</span>
@@ -303,7 +303,7 @@ function QuoteForm() {
               {files.map((file) => (
                 <li
                   key={file.id}
-                  className="flex items-center justify-between gap-3 rounded-md border border-ink-700 bg-ink-850 px-3 py-2"
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2"
                 >
                   <span className="truncate text-xs text-muted">{file.name}</span>
                   <span className="flex shrink-0 items-center gap-3">
@@ -332,7 +332,7 @@ function QuoteForm() {
             type="checkbox"
             checked={form.consent}
             onChange={update('consent')}
-            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-ink-600 bg-ink-950 accent-accent"
+            className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-lg border-white/20 bg-ink-950 accent-accent"
           />
           <span>
             J’accepte que ces informations soient utilisées pour traiter ma demande. Aucune cession à
@@ -359,8 +359,9 @@ export default function Contact({ hideHeading = false }) {
       <div className="container-x">
         {hideHeading ? null : (
           <SectionHeading
-            index="07 — Contact"
-            title="Parlons de votre véhicule"
+            eyebrow="Devis & contact"
+            title="Parlons de"
+            highlight="votre véhicule"
             description="Un projet de rénovation, une envie de CarPlay ou une voiture à vendre : décrivez le besoin, vous recevez un devis détaillé."
           />
         )}
@@ -371,7 +372,7 @@ export default function Contact({ hideHeading = false }) {
           </Reveal>
 
           <div className="space-y-4 lg:col-span-5">
-            <Reveal delay={60} className="rounded-lg border border-ink-700 bg-ink-900 p-5">
+            <Reveal delay={60} className="rounded-3xl border border-white/10 bg-ink-900 p-5">
               <h3 className="text-sm font-semibold text-fg">L’atelier</h3>
 
               <ul className="mt-4 space-y-4 text-sm">

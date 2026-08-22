@@ -41,7 +41,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-ink-950 px-5 py-16">
       <div className="w-full max-w-sm">
         <Link to="/" className="mb-8 flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded bg-accent text-xs font-bold text-accent-on">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-xs font-bold text-accent-on">
             T
           </span>
           <span className="text-sm font-semibold text-fg">Teintérior — administration</span>
@@ -76,7 +76,7 @@ export default function LoginPage() {
           </div>
 
           {error ? (
-            <p className="mt-4 flex items-start gap-2 rounded-md border border-signal-danger/40 bg-signal-danger/10 px-3 py-2 text-xs text-signal-danger">
+            <p className="mt-4 flex items-start gap-2 rounded-2xl border border-signal-danger/40 bg-signal-danger/10 px-3 py-2 text-xs text-signal-danger">
               <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               {error}
             </p>
@@ -91,7 +91,7 @@ export default function LoginPage() {
             Se connecter
           </AdminButton>
 
-          <p className="mt-5 rounded-md border border-ink-700 bg-ink-850 px-3 py-2.5 text-[11px] leading-relaxed text-faint">
+          <p className="mt-5 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2.5 text-[11px] leading-relaxed text-faint">
             Démonstration — identifiants par défaut :{' '}
             <span className="num text-muted">{DEFAULT_ADMIN_EMAIL}</span> /{' '}
             <span className="num text-muted">teinterior2026</span>. Le contrôle d’accès est côté

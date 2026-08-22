@@ -65,7 +65,7 @@ export default function DashboardPage() {
             {leads.slice(0, 5).map((lead) => (
               <li
                 key={lead.id}
-                className="flex min-w-0 items-center justify-between gap-3 rounded-md border border-ink-800 bg-ink-850 px-3 py-2.5"
+                className="flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/5 bg-ink-850 px-3 py-2.5"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm text-fg">{lead.name}</p>
@@ -96,7 +96,7 @@ export default function DashboardPage() {
             {vehicles.slice(0, 5).map((vehicle) => (
               <li
                 key={vehicle.id}
-                className="flex min-w-0 items-center justify-between gap-3 rounded-md border border-ink-800 bg-ink-850 px-3 py-2.5"
+                className="flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/5 bg-ink-850 px-3 py-2.5"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm text-fg">
@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
         <div className="mt-4 grid min-w-0 gap-3 sm:grid-cols-3">
           {packs.map((pack) => (
-            <div key={pack.id} className="rounded-md border border-ink-800 bg-ink-850 p-4">
+            <div key={pack.id} className="rounded-2xl border border-white/5 bg-ink-850 p-4">
               <span className="num text-[11px] text-faint">{pack.ref}</span>
               <p className="mt-1 text-sm text-fg">{pack.name}</p>
               <p className="num mt-2 text-lg font-semibold text-accent">{pack.price} €</p>

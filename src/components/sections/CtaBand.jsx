@@ -15,9 +15,9 @@ export default function CtaBand({
   const contact = useSiteStore((state) => state.contact);
 
   return (
-    <section className="border-t border-ink-800 py-14">
+    <section className="border-t border-white/5 py-14">
       <div className="container-x">
-        <Reveal className="flex flex-col items-start gap-6 rounded-lg border border-ink-700 bg-ink-900 p-6 lg:flex-row lg:items-center lg:justify-between lg:p-8">
+        <Reveal className="flex flex-col items-start gap-6 rounded-3xl border border-white/10 bg-ink-900 p-6 lg:flex-row lg:items-center lg:justify-between lg:p-8">
           <div className="max-w-xl">
             <h2 className="text-xl font-bold sm:text-2xl">{title}</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">{text}</p>

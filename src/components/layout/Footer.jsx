@@ -8,7 +8,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-ink-800 bg-ink-950">
+    <footer className="border-t border-white/5 bg-ink-950">
       <div className="container-x grid gap-10 py-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo />
@@ -27,7 +27,7 @@ export default function Footer() {
                 href={social.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="tap inline-flex items-center rounded-md border border-ink-700 px-3 text-xs text-muted transition-colors hover:border-ink-600 hover:text-fg"
+                className="tap inline-flex items-center rounded-2xl border border-white/10 px-3 text-xs text-muted transition-colors hover:border-white/20 hover:text-fg"
               >
                 {social.label}
               </a>

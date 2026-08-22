@@ -119,10 +119,10 @@ export default function VehiclesPage() {
               key={item.id}
               type="button"
               onClick={() => setFilter(item.id)}
-              className={`inline-flex min-h-[34px] items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors ${
+              className={`inline-flex min-h-[34px] items-center gap-2 rounded-full border px-4 text-xs font-semibold transition-colors ${
                 filter === item.id
                   ? 'border-accent/50 bg-accent/10 text-accent'
-                  : 'border-ink-700 text-muted hover:border-ink-600 hover:text-fg'
+                  : 'border-white/10 text-muted hover:border-white/20 hover:text-fg'
               }`}
             >
               {item.label}
@@ -132,10 +132,10 @@ export default function VehiclesPage() {
         })}
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-lg border border-ink-700">
+      <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10">
         <table className="w-full min-w-[900px] border-collapse text-sm">
           <thead>
-            <tr className="border-b border-ink-700 bg-ink-850 text-left">
+            <tr className="border-b border-white/10 bg-ink-850 text-left">
               {['Réf.', 'Véhicule', 'Année', 'Km', 'Boîte', 'Prix', 'Net vendeur', 'Marge', 'Statut', ''].map(
                 (head, index) => (
                   <th
@@ -155,7 +155,7 @@ export default function VehiclesPage() {
               return (
                 <tr
                   key={vehicle.id}
-                  className="border-b border-ink-800 last:border-0 hover:bg-ink-850/60"
+                  className="border-b border-white/5 last:border-0 hover:bg-ink-850/60"
                 >
                   <td className="num px-3 py-2.5 text-xs text-faint">{vehicle.ref}</td>
                   <td className="px-3 py-2.5">
@@ -191,7 +191,7 @@ export default function VehiclesPage() {
                             toast(`${vehicle.brand} ${vehicle.model} marquée vendue.`);
                           }}
                           title="Marquer comme vendu"
-                          className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-signal-ok"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-signal-ok"
                         >
                           <BadgeCheck className="h-4 w-4" aria-hidden="true" />
                         </button>
@@ -203,7 +203,7 @@ export default function VehiclesPage() {
                           setIsNew(false);
                         }}
                         title="Modifier"
-                        className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-fg"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-fg"
                       >
                         <Pencil className="h-4 w-4" aria-hidden="true" />
                       </button>
@@ -211,7 +211,7 @@ export default function VehiclesPage() {
                         type="button"
                         onClick={() => setToDelete(vehicle)}
                         title="Supprimer"
-                        className="flex h-8 w-8 items-center justify-center rounded text-faint transition-colors hover:bg-ink-800 hover:text-signal-danger"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-signal-danger"
                       >
                         <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </button>

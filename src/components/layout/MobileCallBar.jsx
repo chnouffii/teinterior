@@ -11,7 +11,7 @@ export default function MobileCallBar() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-ink-700 bg-ink-950 px-4 py-3
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink-950 px-4 py-3
         transition-transform duration-300 sm:hidden ${
           visible ? 'translate-y-0' : 'translate-y-full'
         }`}
@@ -19,14 +19,14 @@ export default function MobileCallBar() {
       <div className="flex gap-3">
         <a
           href={contact.phoneHref}
-          className="flex flex-1 items-center justify-center gap-2 rounded-md border border-ink-700 bg-ink-850 py-3 text-sm font-semibold text-fg"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-ink-850 py-3 text-sm font-semibold text-fg"
         >
           <Phone className="h-4 w-4" aria-hidden="true" />
           Appeler
         </a>
         <Link
           to={ROUTES.contact}
-          className="flex flex-1 items-center justify-center gap-2 rounded-md bg-accent py-3 text-sm font-semibold text-accent-on"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-accent-on"
         >
           <CalendarCheck className="h-4 w-4" aria-hidden="true" />
           Devis

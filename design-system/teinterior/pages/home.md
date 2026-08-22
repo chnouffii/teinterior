@@ -10,27 +10,33 @@
 
 | Point | MASTER.md | Appliqué ici | Raison |
 |---|---|---|---|
-| Fond | `#F8FAFC` (clair) | `#0F1115` → `#22262E` (ardoise / graphite mat) | Brief client : thème sombre, sans noir pur. |
-| Accent CTA | `#DC2626` (action red) | `#5B8DEF` (azur, repris du logo) | Le logo de la marque utilise un bleu ; l'accent en est extrait puis désaturé. Un seul accent sur tout le site, aucun dégradé, aucune lueur. |
-| Typographie | Bodoni Moda / Jost | Inter (titres et corps) + JetBrains Mono (chiffres, références, durées) | Registre atelier technique plutôt que maison de couture. Le mono distingue les données mesurables du discours. |
-| Rayons | — | `rounded` à `rounded-lg` (2 à 8 px) | Les grands rayons et les pilules lisaient « landing page générée ». |
-| Ombres | — | aucune ombre portée diffuse, séparation par bordures `border-ink-700` | Suppression des effets de lueur. |
+| Fond | `#F8FAFC` (clair) | `#06080B` → `#12171F` (carbone), voile radial laiton | Brief client : thème sombre. |
+| Accent CTA | `#DC2626` (action red) | `#D9A441` (laiton) | Choix du client, tenu après essai d'une variante bleue. Dégradés laiton et halos assumés sur les éléments actionnables. |
+| Accent secondaire | — | `#7FD8FF` (ice) | Réservé au pôle rétrofit, cohérent avec le bleu du logo. Jamais utilisé comme CTA principal. |
+| Typographie | Bodoni Moda / Jost | Sora (titres) + Inter (corps) | Sora garde le registre premium avec un dessin géométrique plus automobile que le didone. |
+| Rayons | — | `rounded-3xl` sur les cartes, pilules sur les boutons | Rendu voulu haut de gamme plutôt qu'administratif. |
+| Profondeur | — | `shadow-card`, `shadow-glow`, `backdrop-blur` | Le rendu totalement plat a été refusé en revue. |
+
+> **Historique** — une variante sobre (ardoise mate, accent bleu unique, angles nets,
+> tableaux denses, sans halo) a été implémentée puis abandonnée à la demande du client :
+> jugée trop froide et pas assez premium. Ne pas y revenir sans validation explicite.
+> Elle reste consultable dans l'historique git entre `cd0d645` et le retour arrière.
 
 ## Palette
 
-| Rôle | Token | Hex | Contraste sur `#0F1115` |
+| Rôle | Token | Hex | Contraste sur `#06080B` |
 |---|---|---|---|
-| Fond | `ink-950` | `#0F1115` | — |
-| Surfaces | `ink-900` / `ink-850` / `ink-800` | `#14171C` / `#191D23` / `#22262E` | — |
-| Bordures | `ink-700` / `ink-600` | `#2C313A` / `#3A404B` | — |
-| Texte principal | `fg` | `#F2F4F7` | 17,2:1 |
-| Texte courant | `muted` | `#B4BAC4` | 9,7:1 |
-| Texte secondaire | `faint` | `#8A919E` | 6,0:1 |
-| Accent unique | `accent` | `#5B8DEF` | 5,9:1 |
-| États | `signal.ok` / `warn` / `danger` | `#6FA980` / `#C9973F` / `#D2726B` | ≥ 5,7:1 |
+| Fond | `ink-950` | `#06080B` | — |
+| Surfaces | `ink-900` / `ink-850` / `ink-800` | `#0A0D12` / `#0E1219` / `#12171F` | — |
+| Texte principal | `fg` | `#FFFFFF` | 20,1:1 |
+| Texte courant | `muted` | `#CBD5E1` | 13,5:1 |
+| Texte secondaire | `faint` | `#94A3B8` | 7,8:1 |
+| Accent | `accent` / `accent-soft` | `#D9A441` / `#F2CE85` | 8,9:1 / 13,3:1 |
+| Accent technique | `ice` | `#7FD8FF` | 12,6:1 |
+| États | `signal.ok` / `warn` / `danger` | `#34D399` / `#FCD34D` / `#FB7185` | ≥ 7,4:1 |
 
-Aucun texte ne descend sous 4,5:1. Interdits : dégradés multicolores, `box-shadow` de lueur,
-noir pur `#000`, rayons supérieurs à 8 px sur les blocs de contenu.
+Bordures en `border-white/10`, séparateurs `.hairline` en dégradé. Interdits maintenus :
+noir pur `#000`, texte sous 4,5:1, tableaux denses sur les pages publiques.
 
 ### Typographie
 

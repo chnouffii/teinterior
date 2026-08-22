@@ -276,7 +276,7 @@ export default function ContentPage() {
 
         <div className="mt-4 space-y-4">
           {beforeAfter.map((item) => (
-            <div key={item.id} className="rounded-md border border-ink-700 bg-ink-850 p-4">
+            <div key={item.id} className="rounded-2xl border border-white/10 bg-ink-850 p-4">
               <h3 className="text-xs font-semibold text-fg">
                 {item.label} — {item.vehicle}
               </h3>
@@ -384,7 +384,7 @@ export default function ContentPage() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-signal-danger/30 bg-signal-danger/5 p-5">
+      <section className="rounded-3xl border border-signal-danger/30 bg-signal-danger/5 p-5">
         <h2 className="text-sm font-semibold text-fg">Réinitialisation</h2>
         <p className="mt-1 text-xs text-faint">
           Restaure le jeu de données de démonstration : véhicules, prestations, contenus et

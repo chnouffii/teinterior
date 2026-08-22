@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check, Clock, Plus } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
@@ -7,91 +7,83 @@ import BeforeAfterSlider from '../ui/BeforeAfterSlider.jsx';
 import { useSiteStore } from '../../store/siteStore';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
-/** Une prestation présentée comme un devis : lignes d'opérations, détails, durées. */
-function PackSheet({ pack, onSelect, index }) {
+/** Carte de formule : le détail du devis reste lisible, sans mise en tableau. */
+function PackCard({ pack, onSelect, index }) {
+  const popular = Boolean(pack.featured);
+
   return (
-    <Reveal delay={index * 60} className="overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
-      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-ink-700 px-5 py-4">
-        <div>
-          <span className="num text-[11px] text-faint">{pack.ref}</span>
-          <h3 className="mt-1 text-lg font-bold">{pack.name}</h3>
-          <p className="mt-0.5 text-xs text-muted">{pack.subtitle}</p>
-        </div>
-        <div className="text-right">
-          <p className="num text-2xl font-bold text-fg">{pack.price} €</p>
-          <p className="mt-0.5 text-[11px] text-faint">{pack.priceNote}</p>
-        </div>
-      </header>
+    <Reveal
+      delay={index * 90}
+      className={`group relative flex h-full flex-col rounded-3xl border p-7 shadow-card backdrop-blur
+        transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50
+        ${popular ? 'border-accent/50 bg-ink-850/80' : 'border-white/10 bg-ink-850/60'}`}
+    >
+      {popular ? (
+        <span className="absolute -top-3 left-7 rounded-full bg-gradient-to-r from-accent-soft to-accent-deep px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent-on">
+          Le plus demandé
+        </span>
+      ) : null}
 
-      <div className="grid gap-px bg-ink-800 lg:grid-cols-12">
-        <div className="bg-ink-900 p-5 lg:col-span-4">
-          <p className="text-sm leading-relaxed text-muted">{pack.summary}</p>
-
-          <dl className="mt-5 space-y-3 border-t border-ink-800 pt-5 text-xs">
-            <div className="flex justify-between gap-3">
-              <dt className="text-faint">Temps d’intervention</dt>
-              <dd className="num text-fg">{pack.duration}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-faint">Immobilisation</dt>
-              <dd className="text-right text-muted">{pack.immobilisation}</dd>
-            </div>
-            <div>
-              <dt className="text-faint">Produits et outillage</dt>
-              <dd className="mt-1.5 flex flex-wrap gap-1.5">
-                {pack.products.map((product) => (
-                  <span key={product} className="chip">
-                    {product}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          </dl>
-        </div>
-
-        <div className="bg-ink-900 lg:col-span-8">
-          <table className="w-full border-collapse text-sm">
-            <caption className="sr-only">Opérations incluses dans {pack.name}</caption>
-            <thead>
-              <tr className="border-b border-ink-800 text-left">
-                <th className="px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-faint">
-                  Opération
-                </th>
-                <th className="hidden px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-faint sm:table-cell">
-                  Détail
-                </th>
-                <th className="px-5 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wider text-faint">
-                  Durée
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {pack.steps.map((step, position) => (
-                <tr key={step.label} className="border-b border-ink-800 align-top last:border-0">
-                  <td className="px-5 py-3">
-                    <span className="num mr-2 text-xs text-faint">
-                      {String(position + 1).padStart(2, '0')}
-                    </span>
-                    <span className="font-medium text-fg">{step.label}</span>
-                    <span className="mt-1 block text-xs text-muted sm:hidden">{step.detail}</span>
-                  </td>
-                  <td className="hidden px-3 py-3 text-xs leading-relaxed text-muted sm:table-cell">
-                    {step.detail}
-                  </td>
-                  <td className="num px-5 py-3 text-right text-xs text-muted">{step.duration}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="flex items-start justify-between gap-4">
+        <span className="num text-[11px] uppercase tracking-[0.16em] text-faint">{pack.ref}</span>
+        <span className="chip">
+          <Clock className="h-3 w-3" aria-hidden="true" />
+          {pack.duration}
+        </span>
       </div>
 
-      <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-ink-700 px-5 py-4">
-        <p className="max-w-xl text-xs leading-relaxed text-faint">{pack.note}</p>
-        <Button onClick={() => onSelect(pack)} size="sm" iconRight={ArrowRight}>
-          Demander ce devis
-        </Button>
-      </footer>
+      <h3 className="mt-5 text-xl font-bold">{pack.name}</h3>
+      <p className="mt-1 text-sm font-medium text-accent-soft">{pack.subtitle}</p>
+      <p className="mt-4 text-sm leading-relaxed text-muted">{pack.summary}</p>
+
+      <div className="mt-6 flex items-baseline gap-2">
+        <span className="text-[11px] uppercase tracking-[0.16em] text-faint">à partir de</span>
+        <span className="num font-display text-3xl font-bold text-fg">{pack.price} €</span>
+      </div>
+      <p className="mt-1 text-[11px] text-faint">{pack.priceNote}</p>
+
+      <div className="my-6 hairline" />
+
+      <ul className="flex-1 space-y-4">
+        {pack.steps.map((step) => (
+          <li key={step.label} className="flex gap-3">
+            <Check
+              className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+              strokeWidth={2.6}
+              aria-hidden="true"
+            />
+            <span className="min-w-0">
+              <span className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <span className="text-sm font-medium leading-snug text-fg">{step.label}</span>
+                <span className="num text-[11px] text-faint">{step.duration}</span>
+              </span>
+              <span className="mt-1 block text-xs leading-relaxed text-muted">{step.detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-6 flex flex-wrap gap-1.5">
+        {pack.products.map((product) => (
+          <span key={product} className="chip">
+            {product}
+          </span>
+        ))}
+      </div>
+
+      <p className="mt-5 rounded-3xl border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-faint">
+        {pack.note}
+      </p>
+
+      <Button
+        onClick={() => onSelect(pack)}
+        variant={popular ? 'primary' : 'secondary'}
+        size="md"
+        iconRight={ArrowRight}
+        className="mt-6 w-full"
+      >
+        Demander ce devis
+      </Button>
     </Reveal>
   );
 }
@@ -114,92 +106,108 @@ export default function Detailing({ hideHeading = false }) {
   };
 
   return (
-    <section className={`pb-16 lg:pb-20 ${hideHeading ? 'pt-8' : 'pt-16 lg:pt-20'}`}>
+    <section className={`pb-20 lg:pb-28 ${hideHeading ? 'pt-6' : 'pt-20 lg:pt-28'}`}>
       <div className="container-x">
         {hideHeading ? null : (
           <SectionHeading
-            index="02 — Esthétique"
-            title="Detailing, correction de peinture, céramique et teintage"
-            description="Trois prestations, détaillées ligne par ligne comme sur le devis que vous recevrez."
+            eyebrow="Pôle esthétique auto"
+            title="Detailing, correction de peinture,"
+            highlight="céramique & teintage"
+            description="Trois formules, détaillées opération par opération comme sur le devis que vous recevrez : produits utilisés, temps passé, résultat attendu."
           />
         )}
 
-        <div className="mt-10 space-y-5">
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {packs.map((pack, index) => (
-            <PackSheet key={pack.id} pack={pack} index={index} onSelect={handleSelect} />
+            <PackCard key={pack.id} pack={pack} index={index} onSelect={handleSelect} />
           ))}
         </div>
 
-        <Reveal className="mt-5 overflow-hidden rounded-lg border border-ink-700">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-700 bg-ink-850 px-5 py-3">
-            <h3 className="text-sm font-semibold text-fg">Options à la carte</h3>
-            <p className="text-[11px] text-faint">Cumulables avec toutes les prestations · TTC</p>
+        <Reveal className="mt-8 rounded-3xl border border-white/10 bg-ink-850/50 p-7 backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h3 className="flex items-center gap-2 text-lg font-bold">
+              <Plus className="h-5 w-5 text-accent" aria-hidden="true" />
+              Options à la carte
+            </h3>
+            <p className="text-xs text-faint">
+              Cumulables avec toutes les formules — tarifs TTC, véhicule de courtoisie sur demande.
+            </p>
           </div>
-          <table className="w-full border-collapse bg-ink-900 text-sm">
-            <tbody>
-              {options.map((option) => (
-                <tr key={option.id} className="border-b border-ink-800 align-top last:border-0">
-                  <td className="px-5 py-3">
-                    <span className="font-medium text-fg">{option.label}</span>
-                    <span className="mt-1 block text-xs text-muted">{option.detail}</span>
-                  </td>
-                  <td className="num whitespace-nowrap px-3 py-3 text-right text-xs text-faint">
-                    {option.duration}
-                  </td>
-                  <td className="num whitespace-nowrap px-5 py-3 text-right font-semibold text-fg">
+
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {options.map((option) => (
+              <li
+                key={option.id}
+                className="rounded-3xl border border-white/5 bg-ink-900/60 px-5 py-4 transition-colors hover:border-accent/30"
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-sm font-medium text-fg">{option.label}</span>
+                  <span className="num shrink-0 text-sm font-semibold text-accent-soft">
                     {option.price}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </span>
+                </div>
+                <p className="mt-1.5 text-xs leading-relaxed text-muted">{option.detail}</p>
+                <p className="num mt-2 text-[11px] text-faint">{option.duration}</p>
+              </li>
+            ))}
+          </ul>
         </Reveal>
 
         {current ? (
-          <div className="mt-16 grid gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <Reveal>
-                <h3 className="text-lg font-bold">Avant / après</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Prises de vue au même emplacement, sous le même éclairage d’atelier. Aucune
-                  retouche.
-                </p>
+          <div className="mt-20 grid items-center gap-10 lg:grid-cols-12">
+            <Reveal className="lg:col-span-5">
+              <span className="chip">Module interactif</span>
+              <h3 className="mt-5 text-2xl font-bold sm:text-3xl">
+                Faites glisser le curseur, jugez le résultat
+              </h3>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                Prises de vue au même emplacement, sous le même éclairage d’atelier, avant et après
+                intervention. Aucune retouche.
+              </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {beforeAfter.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveCase(item.id)}
-                      className={`inline-flex min-h-[38px] items-center rounded-md border px-3 text-xs font-semibold transition-colors ${
-                        activeCase === item.id
-                          ? 'border-accent/50 bg-accent/10 text-accent'
-                          : 'border-ink-700 text-muted hover:border-ink-600 hover:text-fg'
-                      }`}
+              <div className="mt-7 flex flex-wrap gap-2">
+                {beforeAfter.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setActiveCase(item.id)}
+                    className={`tap inline-flex items-center rounded-full border px-4 text-xs font-semibold transition-all duration-300 ${
+                      activeCase === item.id
+                        ? 'border-accent bg-accent/15 text-accent-soft'
+                        : 'border-white/10 bg-white/[0.03] text-muted hover:border-white/25 hover:text-fg'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-8 rounded-3xl border border-white/10 bg-ink-900/60 p-6">
+                <p className="text-xs uppercase tracking-[0.18em] text-faint">Véhicule</p>
+                <p className="mt-1.5 font-display text-lg font-semibold text-fg">
+                  {current.vehicle}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{current.summary}</p>
+
+                <div className="mt-5 grid grid-cols-3 gap-3">
+                  {current.specs.map((spec) => (
+                    <div
+                      key={spec.label}
+                      className="rounded-3xl border border-white/5 bg-ink-950/70 px-4 py-3"
                     >
-                      {item.label}
-                    </button>
+                      <p className="num font-display text-xl font-bold text-gradient-brass">
+                        {spec.value}
+                      </p>
+                      <p className="mt-1 text-[11px] uppercase tracking-wider text-faint">
+                        {spec.label}
+                      </p>
+                    </div>
                   ))}
                 </div>
+              </div>
+            </Reveal>
 
-                <div className="mt-6 rounded-lg border border-ink-700 bg-ink-900 p-5">
-                  <p className="text-sm font-semibold text-fg">{current.vehicle}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">{current.summary}</p>
-                  <dl className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded border border-ink-800 bg-ink-800">
-                    {current.specs.map((spec) => (
-                      <div key={spec.label} className="bg-ink-900 px-3 py-2.5">
-                        <dt className="text-[10px] uppercase tracking-wider text-faint">
-                          {spec.label}
-                        </dt>
-                        <dd className="num mt-1 text-sm font-semibold text-fg">{spec.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </Reveal>
-            </div>
-
-            <Reveal delay={80} className="lg:col-span-8">
+            <Reveal delay={120} className="lg:col-span-7">
               <BeforeAfterSlider
                 key={current.id}
                 scene={current.scene}

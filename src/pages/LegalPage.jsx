@@ -137,7 +137,8 @@ export default function LegalPage() {
     <>
       <PageHeader
         eyebrow="Informations légales"
-        title="Mentions légales et conditions"
+        title="Mentions légales"
+        highlight="& conditions"
         description="Éditeur du site, conditions générales de vente par pôle d’activité, traitement de vos données personnelles et politique de cookies."
       />
 
@@ -149,7 +150,7 @@ export default function LegalPage() {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="flex min-h-[44px] items-center rounded-xl border border-ink-800 bg-ink-900/50 px-4 text-sm text-muted transition-colors hover:border-accent/40 hover:text-accent-soft"
+                    className="flex min-h-[44px] items-center rounded-3xl border border-white/5 bg-ink-900/50 px-4 text-sm text-muted transition-colors hover:border-accent/40 hover:text-accent-soft"
                   >
                     {section.title}
                   </a>

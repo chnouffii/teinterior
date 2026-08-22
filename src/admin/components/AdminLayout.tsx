@@ -39,13 +39,13 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-ink-950 text-muted">
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-ink-700 bg-ink-900 transition-[width,transform] duration-200 ${
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/10 bg-ink-900 transition-[width,transform] duration-200 ${
           sidebarCollapsed ? 'lg:w-[68px]' : 'lg:w-60'
         } ${mobileNavOpen ? 'w-64 translate-x-0' : '-translate-x-full w-64'} lg:translate-x-0`}
       >
-        <div className="flex h-14 items-center justify-between gap-2 border-b border-ink-700 px-4">
+        <div className="flex h-14 items-center justify-between gap-2 border-b border-white/10 px-4">
           <Link to="/admin" className="flex items-center gap-2 overflow-hidden">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-accent text-[11px] font-bold text-accent-on">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent text-[11px] font-bold text-accent-on">
               T
             </span>
             {!sidebarCollapsed ? (
@@ -72,7 +72,7 @@ export default function AdminLayout() {
                 end={'end' in item ? item.end : false}
                 onClick={() => setMobileNav(false)}
                 className={({ isActive }) =>
-                  `flex min-h-[40px] items-center gap-3 rounded-md px-3 text-sm transition-colors ${
+                  `flex min-h-[40px] items-center gap-3 rounded-2xl px-3 text-sm transition-colors ${
                     isActive
                       ? 'bg-ink-800 text-fg'
                       : 'text-muted hover:bg-ink-850 hover:text-fg'
@@ -83,7 +83,7 @@ export default function AdminLayout() {
                 <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {!sidebarCollapsed ? <span className="truncate">{item.label}</span> : null}
                 {item.to === '/admin/leads' && newLeads > 0 && !sidebarCollapsed ? (
-                  <span className="ml-auto rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-accent-on">
+                  <span className="ml-auto rounded-lg bg-accent px-1.5 py-0.5 text-[10px] font-bold text-accent-on">
                     {newLeads}
                   </span>
                 ) : null}
@@ -92,10 +92,10 @@ export default function AdminLayout() {
           })}
         </nav>
 
-        <div className="space-y-1 border-t border-ink-700 p-3">
+        <div className="space-y-1 border-t border-white/10 p-3">
           <Link
             to="/"
-            className="flex min-h-[40px] items-center gap-3 rounded-md px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
+            className="flex min-h-[40px] items-center gap-3 rounded-2xl px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
             title="Voir le site public"
           >
             <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -104,7 +104,7 @@ export default function AdminLayout() {
           <button
             type="button"
             onClick={handleLogout}
-            className="flex min-h-[40px] w-full items-center gap-3 rounded-md px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
+            className="flex min-h-[40px] w-full items-center gap-3 rounded-2xl px-3 text-sm text-muted transition-colors hover:bg-ink-850 hover:text-fg"
           >
             <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
             {!sidebarCollapsed ? <span>Déconnexion</span> : null}
@@ -121,12 +121,12 @@ export default function AdminLayout() {
       ) : null}
 
       <div className={`transition-[padding] duration-200 ${sidebarCollapsed ? 'lg:pl-[68px]' : 'lg:pl-60'}`}>
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-ink-700 bg-ink-900/95 px-4 backdrop-blur">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-white/10 bg-ink-900/95 px-4 backdrop-blur">
           <button
             type="button"
             onClick={() => setMobileNav(true)}
             aria-label="Ouvrir le menu"
-            className="flex h-9 w-9 items-center justify-center rounded border border-ink-700 text-muted lg:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-muted lg:hidden"
           >
             <Menu className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -135,7 +135,7 @@ export default function AdminLayout() {
             type="button"
             onClick={toggleSidebar}
             aria-label={sidebarCollapsed ? 'Déplier la barre latérale' : 'Replier la barre latérale'}
-            className="hidden h-9 w-9 items-center justify-center rounded border border-ink-700 text-muted transition-colors hover:text-fg lg:flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-muted transition-colors hover:text-fg lg:flex"
           >
             <ChevronLeft
               className={`h-4 w-4 transition-transform duration-200 ${sidebarCollapsed ? 'rotate-180' : ''}`}

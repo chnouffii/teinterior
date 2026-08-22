@@ -164,9 +164,9 @@ export function VehicleForm({
           <div>
             <span className="field-label">Marge nette</span>
             <div
-              className={`flex h-[42px] items-center justify-between rounded-md border px-3 text-sm ${
+              className={`flex h-[42px] items-center justify-between rounded-2xl border px-3 text-sm ${
                 margin >= 0
-                  ? 'border-ink-700 bg-ink-850 text-signal-ok'
+                  ? 'border-white/10 bg-ink-850 text-signal-ok'
                   : 'border-signal-danger/40 bg-signal-danger/10 text-signal-danger'
               }`}
             >
@@ -224,7 +224,7 @@ export function VehicleForm({
           <button
             type="button"
             onClick={addPhoto}
-            className="inline-flex min-h-[42px] shrink-0 items-center gap-2 rounded-md border border-ink-700 px-3 text-sm text-muted transition-colors hover:border-ink-600 hover:text-fg"
+            className="inline-flex min-h-[42px] shrink-0 items-center gap-2 rounded-2xl border border-white/10 px-3 text-sm text-muted transition-colors hover:border-white/20 hover:text-fg"
           >
             <ImagePlus className="h-4 w-4" aria-hidden="true" />
             Ajouter
@@ -236,7 +236,7 @@ export function VehicleForm({
             {draft.photos.map((url, index) => (
               <li
                 key={`${url}-${index}`}
-                className="flex items-center gap-3 rounded-md border border-ink-700 bg-ink-850 px-3 py-2"
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-ink-850 px-3 py-2"
               >
                 <button
                   type="button"
@@ -271,7 +271,7 @@ export function VehicleForm({
             ))}
           </ul>
         ) : (
-          <p className="mt-3 rounded-md border border-dashed border-ink-700 px-3 py-4 text-center text-xs text-faint">
+          <p className="mt-3 rounded-2xl border border-dashed border-white/10 px-3 py-4 text-center text-xs text-faint">
             Aucune photo — illustration de repli utilisée sur le site.
           </p>
         )}

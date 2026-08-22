@@ -105,18 +105,18 @@ le comparateur. Seules les polices Google (Sora, Inter) sont chargées à distan
 
 ## Direction artistique
 
-Thème sombre **ardoise / graphite mat**, sans noir pur, sans dégradé, sans lueur diffuse.
-Un accent unique, l'azur `#5B8DEF` extrait du logo, réservé aux éléments actionnables.
-Bordures nettes (`border-ink-700`), rayons courts (2 à 8 px), Inter pour le texte et
-JetBrains Mono pour tout ce qui se mesure : tarifs, durées, kilométrages, références
-d'interface.
+Thème sombre **carbone** (`#06080B` → `#12171F`) avec un voile radial laiton, accent
+principal **laiton `#D9A441`** en dégradé sur les boutons et les titres, accent secondaire
+**ice `#7FD8FF`** réservé au pôle rétrofit. Cartes très arrondies (`rounded-3xl`), boutons
+en pilule, halos `shadow-glow` et `backdrop-blur` sur les surfaces vitrées. Sora pour les
+titres, Inter pour le texte.
 
-Les fiches prestations sont structurées comme des devis (opération, détail, durée), le
-rétrofit expose son déroulé d'intervention en tableau, et le sourcing un pipeline numéroté.
+Les pages publiques n'utilisent aucun tableau : formules, déroulé d'intervention et
+pipeline sont présentés en cartes. Les tableaux denses sont réservés au panel admin.
 
 - `design-system/teinterior/MASTER.md` — recommandations générées par la base de design
-- `design-system/teinterior/pages/home.md` — **règles réellement appliquées** : palette
-  complète avec ratios de contraste, écarts assumés, motion, cibles tactiles, formulaires
+- `design-system/teinterior/pages/home.md` — **règles réellement appliquées** : palette avec
+  ratios de contraste, écarts assumés, motion, cibles tactiles, formulaires
 
 ### Logo
 
