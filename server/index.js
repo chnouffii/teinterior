@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomBytes } from 'node:crypto';
 import { ContentStore } from './store.js';
+import { MediaStore, TAILLE_MAX } from './media.js';
 import { creerJeton, jetonValide, verifierMotDePasse, LimiteurConnexion } from './auth.js';
 
 const ici = path.dirname(fileURLToPath(import.meta.url));
@@ -33,6 +34,10 @@ if (!process.env.TEINTERIOR_SESSION_SECRET) {
 }
 
 const store = new ContentStore(FICHIER);
+// Les images vivent à côté du fichier de contenus : une sauvegarde du dossier
+// suffit à tout conserver.
+const MEDIA = process.env.TEINTERIOR_MEDIA || path.join(path.dirname(FICHIER), 'media');
+const medias = new MediaStore(MEDIA);
 const limiteur = new LimiteurConnexion();
 
 /** Contenus initiaux : le jeu de données livré avec le site. */
@@ -73,6 +78,19 @@ async function lireCorps(requete, limiteOctets = 2 * 1024 * 1024) {
     erreur.code = 400;
     throw erreur;
   }
+}
+
+async function lireOctets(requete, limiteOctets) {
+  const morceaux = [];
+  let taille = 0;
+  for await (const morceau of requete) {
+    taille += morceau.length;
+    if (taille > limiteOctets) {
+      throw Object.assign(new Error('Image trop lourde.'), { code: 413 });
+    }
+    morceaux.push(morceau);
+  }
+  return Buffer.concat(morceaux);
 }
 
 function lireCookie(requete, nom) {
@@ -180,6 +198,23 @@ const serveur = http.createServer(async (requete, reponse) => {
         : json(reponse, 401, { error: 'Session expirée.' });
     }
 
+    // --- Images (lecture publique) ----------------------------------------
+    // En production nginx sert ce dossier directement ; cette route couvre le
+    // développement et sert de repli si le bloc nginx venait à manquer.
+    const imageDemandee = chemin.match(/^\/media\/([^/]+)$/);
+    if (imageDemandee && methode === 'GET') {
+      const image = await medias.lire(decodeURIComponent(imageDemandee[1]));
+      if (!image) return json(reponse, 404, { error: 'Image introuvable.' });
+      reponse.writeHead(200, {
+        'Content-Type': image.type,
+        'Content-Length': image.octets.length,
+        // Le nom de fichier est aléatoire et ne change jamais de contenu.
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Last-Modified': image.modifie.toUTCString(),
+      });
+      return reponse.end(image.octets);
+    }
+
     // --- Demandes entrantes (public en écriture) --------------------------
     if (chemin === '/api/leads' && methode === 'POST') {
       const brut = await lireCorps(requete);
@@ -218,6 +253,26 @@ const serveur = http.createServer(async (requete, reponse) => {
       const { leads: _ignore, ...contenus } = corps;
       const suivant = await store.modifier((donnees) => ({ ...donnees, ...contenus }));
       return json(reponse, 200, suivant);
+    }
+
+    if (chemin === '/api/media' && methode === 'POST') {
+      const octets = await lireOctets(requete, TAILLE_MAX + 1024);
+      const nom = await medias.enregistrer(octets);
+      return json(reponse, 201, { url: `/media/${nom}`, nom, taille: octets.length });
+    }
+
+    const imageCiblee = chemin.match(/^\/api\/media\/([^/]+)$/);
+    if (imageCiblee && methode === 'DELETE') {
+      await medias.supprimer(decodeURIComponent(imageCiblee[1]));
+      // Idempotent : supprimer une image déjà absente n'est pas une erreur.
+      return json(reponse, 204, {});
+    }
+
+    // Retire du disque les images qu'aucun véhicule ne référence plus.
+    if (chemin === '/api/media/nettoyer' && methode === 'POST') {
+      const contenus = JSON.stringify(store.lire());
+      const resultat = await medias.nettoyer(contenus);
+      return json(reponse, 200, resultat);
     }
 
     if (chemin === '/api/leads' && methode === 'GET') {
@@ -263,6 +318,7 @@ const serveur = http.createServer(async (requete, reponse) => {
 const defauts = await valeursParDefaut();
 try {
   await store.init(defauts);
+  await medias.init();
 } catch (erreur) {
   console.error(erreur.message);
 }
@@ -270,4 +326,5 @@ try {
 serveur.listen(PORT, '127.0.0.1', () => {
   console.log(`API Teintérior sur http://127.0.0.1:${PORT}`);
   console.log(`Contenus : ${FICHIER}`);
+  console.log(`Images   : ${MEDIA}`);
 });

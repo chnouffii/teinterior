@@ -203,8 +203,12 @@ Le mot de passe lui-même n'est stocké nulle part, seulement son condensé scry
 Tout tient dans un fichier :
 
 ```bash
-sudo cp /var/lib/teinterior/contenus.json ~/sauvegarde-$(date +%F).json
+sudo tar czf ~/sauvegarde-$(date +%F).tar.gz -C /var/lib teinterior
 ```
+
+L'archive contient le fichier de contenus **et** le dossier `media/` avec les
+photos des véhicules. Sauvegarder l'un sans l'autre laisserait des fiches
+pointant vers des images disparues.
 
 Une sauvegarde quotidienne automatique :
 
@@ -212,12 +216,41 @@ Une sauvegarde quotidienne automatique :
 sudo tee /etc/cron.daily/teinterior-backup >/dev/null <<'SH'
 #!/bin/sh
 mkdir -p /var/backups/teinterior
-cp /var/lib/teinterior/contenus.json \
-   /var/backups/teinterior/contenus-$(date +%F).json
-find /var/backups/teinterior -name 'contenus-*.json' -mtime +30 -delete
+tar czf /var/backups/teinterior/teinterior-$(date +%F).tar.gz -C /var/lib teinterior
+find /var/backups/teinterior -name 'teinterior-*.tar.gz' -mtime +30 -delete
 SH
 sudo chmod +x /etc/cron.daily/teinterior-backup
 ```
+
+### Les photos des véhicules
+
+Dans **Showroom → un véhicule → Galerie photos**, les photos se glissent
+directement depuis le bureau, ou se choisissent avec le sélecteur de fichiers.
+Plusieurs à la fois. L'étoile désigne celle affichée dans le showroom, les
+flèches réordonnent, la corbeille supprime.
+
+Les fichiers sont stockés **sur votre serveur**, dans
+`/var/lib/teinterior/media/`, à côté du fichier de contenus. Aucun service tiers
+n'intervient et rien n'est envoyé ailleurs.
+
+Chaque photo est réduite par le navigateur avant l'envoi — 1920 px sur le grand
+côté, JPEG — parce qu'une photo de téléphone pèse 5 à 8 Mo pour une image que le
+site n'affichera jamais au-delà de 1600 px. L'envoi est donc rapide même en 4G
+depuis l'atelier, et les pages se chargent vite pour les visiteurs.
+
+nginx sert ce dossier directement via le bloc `location /media/`. Vérifiez qu'il
+est bien présent dans votre configuration, sinon les photos ne s'afficheront pas :
+
+```bash
+grep -A2 'location /media/' /etc/nginx/sites-available/teinterior
+```
+
+Si le dossier de données n'est pas `/var/lib/teinterior`, ajustez la ligne
+`alias` du bloc, ainsi que `TEINTERIOR_MEDIA` dans `/etc/teinterior.env`.
+
+Une photo retirée d'une fiche est effacée du disque dans la foulée. En cas de
+fichiers restés orphelins (suppression interrompue, import raté), le bouton
+**Nettoyer les images inutilisées** du tableau de bord repasse derrière.
 
 ### Ce que le panel permet de modifier
 
@@ -228,7 +261,7 @@ sudo chmod +x /etc/cron.daily/teinterior-backup
 | Avant / après | Cas du comparateur, légendes, chiffres, adresses de vraies photos |
 | Rétrofit CarPlay | Chiffres, déroulé de l'intervention, fonctions d'origine conservées |
 | Vendre sa voiture | Étapes du dépôt-vente, chiffres du sourcing |
-| Showroom | Véhicules : caractéristiques, prix, marge, statut, carrosserie |
+| Showroom | Véhicules : caractéristiques, prix, marge, statut, carrosserie, photos |
 | Réalisations et avis | Galerie, filtres, témoignages, note affichée |
 | Atelier et coordonnées | Présentation, adresse, deux téléphones, horaires, réseaux |
 | Informations légales | SIRET, TVA, RCS, assurance, marque, menu de navigation |

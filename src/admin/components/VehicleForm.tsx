@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { ImagePlus, Star, Trash2 } from 'lucide-react';
 import { Field, Select, TextArea, TextInput } from './Field';
+import PhotoUploader from './PhotoUploader';
 import { FUELS, GEARBOXES, VEHICLE_STATUS } from '../../data/vehicles.js';
 import type { Vehicle } from '../../store/types';
 
@@ -42,16 +41,8 @@ export function VehicleForm({
   draft: Vehicle;
   onChange: (patch: Partial<Vehicle>) => void;
 }) {
-  const [photoUrl, setPhotoUrl] = useState('');
   const margin = draft.price - draft.netSeller;
   const marginRate = draft.price > 0 ? (margin / draft.price) * 100 : 0;
-
-  const addPhoto = () => {
-    const url = photoUrl.trim();
-    if (!url) return;
-    onChange({ photos: [...draft.photos, url] });
-    setPhotoUrl('');
-  };
 
   return (
     <div className="space-y-7">
@@ -205,76 +196,17 @@ export function VehicleForm({
       <section>
         <h3 className="label-xs">Galerie photos</h3>
         <p className="mt-1 text-[11px] text-faint">
-          Collez l’URL d’une photo hébergée. Sans photo, la fiche publique affiche l’illustration
-          vectorielle de repli. L’étoile désigne la photo de couverture.
+          Les photos sont enregistrées sur votre serveur, à côté des contenus. L’étoile désigne
+          celle affichée dans le showroom.
         </p>
 
-        <div className="mt-3 flex gap-2">
-          <TextInput
-            value={photoUrl}
-            onChange={(event) => setPhotoUrl(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                addPhoto();
-              }
-            }}
-            placeholder="https://…/photo-01.jpg"
+        <div className="mt-3">
+          <PhotoUploader
+            photos={draft.photos}
+            coverIndex={draft.coverIndex}
+            onChange={onChange}
           />
-          <button
-            type="button"
-            onClick={addPhoto}
-            className="inline-flex min-h-[42px] shrink-0 items-center gap-2 rounded-md border border-white/10 px-3 text-sm text-muted transition-colors hover:border-white/20 hover:text-fg"
-          >
-            <ImagePlus className="h-4 w-4" aria-hidden="true" />
-            Ajouter
-          </button>
         </div>
-
-        {draft.photos.length > 0 ? (
-          <ul className="mt-3 space-y-2">
-            {draft.photos.map((url, index) => (
-              <li
-                key={`${url}-${index}`}
-                className="flex items-center gap-3 rounded-md border border-white/10 bg-ink-850 px-3 py-2"
-              >
-                <button
-                  type="button"
-                  onClick={() => onChange({ coverIndex: index })}
-                  aria-label="Définir comme photo de couverture"
-                  className={`shrink-0 transition-colors ${
-                    draft.coverIndex === index ? 'text-accent' : 'text-faint hover:text-fg'
-                  }`}
-                >
-                  <Star
-                    className="h-4 w-4"
-                    fill={draft.coverIndex === index ? 'currentColor' : 'none'}
-                    aria-hidden="true"
-                  />
-                </button>
-                <span className="flex-1 truncate text-xs text-muted">{url}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const photos = draft.photos.filter((_, position) => position !== index);
-                    onChange({
-                      photos,
-                      coverIndex: Math.min(draft.coverIndex, Math.max(photos.length - 1, 0)),
-                    });
-                  }}
-                  aria-label="Retirer la photo"
-                  className="shrink-0 text-faint transition-colors hover:text-signal-danger"
-                >
-                  <Trash2 className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 rounded-md border border-dashed border-white/10 px-3 py-4 text-center text-xs text-faint">
-            Aucune photo — illustration de repli utilisée sur le site.
-          </p>
-        )}
       </section>
 
       <section>

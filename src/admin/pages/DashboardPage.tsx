@@ -1,5 +1,9 @@
-import { ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { AdminButton } from '../components/Field';
+import { toast } from '../components/toast';
+import { api } from '../../lib/api.js';
 import StatusPill from '../components/StatusPill';
 import { useSiteStore } from '../../store/siteStore';
 import { LEAD_STATUSES } from '../../data/leads.js';
@@ -8,6 +12,49 @@ import { VEHICLE_STATUS } from '../../data/vehicles.js';
 const euro = (value: number) => `${value.toLocaleString('fr-FR')} €`;
 const statusMeta = LEAD_STATUSES as Record<string, { label: string; tone: string }>;
 const vehicleMeta = VEHICLE_STATUS as Record<string, { label: string; tone: string }>;
+
+function MenageImages() {
+  const [enCours, setEnCours] = useState(false);
+
+  return (
+    <section className="panel min-w-0 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-fg">Images stockées</h2>
+          <p className="mt-1 text-xs text-faint">
+            Les photos des véhicules sont sur votre serveur. Une photo retirée d’une fiche est
+            effacée aussitôt ; ce bouton rattrape celles qu’une suppression interrompue aurait
+            laissées derrière.
+          </p>
+        </div>
+        <AdminButton
+          variant="ghost"
+          disabled={enCours}
+          onClick={async () => {
+            setEnCours(true);
+            try {
+              const { supprimes } = await api.nettoyerImages();
+              toast(
+                supprimes > 0
+                  ? `${supprimes} image${supprimes > 1 ? 's' : ''} inutilisée${
+                      supprimes > 1 ? 's' : ''
+                    } supprimée${supprimes > 1 ? 's' : ''}.`
+                  : 'Aucune image inutilisée.',
+                'info'
+              );
+            } catch (erreur) {
+              toast((erreur as Error).message, 'danger');
+            }
+            setEnCours(false);
+          }}
+        >
+          <Trash2 className="h-4 w-4" aria-hidden="true" />
+          {enCours ? 'Nettoyage…' : 'Nettoyer les images inutilisées'}
+        </AdminButton>
+      </div>
+    </section>
+  );
+}
 
 export default function DashboardPage() {
   const vehicles = useSiteStore((state) => state.vehicles);
@@ -139,6 +186,8 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
+
+      <MenageImages />
     </div>
   );
 }

@@ -13,12 +13,24 @@ export default defineConfig({
         target: 'http://127.0.0.1:8787',
         changeOrigin: false,
       },
+      // Les photos déposées depuis le panel sont servies par l'API en
+      // développement ; en production, nginx sert le dossier directement.
+      '/media': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: false,
+      },
     },
   },
   preview: {
     port: 4173,
     proxy: {
       '/api': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: false,
+      },
+      // Les photos déposées depuis le panel sont servies par l'API en
+      // développement ; en production, nginx sert le dossier directement.
+      '/media': {
         target: 'http://127.0.0.1:8787',
         changeOrigin: false,
       },

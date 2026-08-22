@@ -55,6 +55,34 @@ export const api = {
 
   session: () => appeler('/session'),
 
+  /**
+   * Dépose une image et renvoie son URL. Le corps est le binaire brut : pas de
+   * multipart, donc rien à analyser côté serveur.
+   */
+  deposerImage: async (blob) => {
+    let reponse;
+    try {
+      reponse = await fetch(`${BASE}/media`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': blob.type || 'application/octet-stream' },
+        body: blob,
+      });
+    } catch {
+      throw new ApiError('Serveur injoignable.', 0);
+    }
+    const corps = await reponse.json().catch(() => ({}));
+    if (!reponse.ok) {
+      throw new ApiError(corps.error || `Erreur ${reponse.status}.`, reponse.status);
+    }
+    return corps;
+  },
+
+  supprimerImage: (nom) => appeler(`/media/${encodeURIComponent(nom)}`, { method: 'DELETE' }),
+
+  /** Retire du disque les images qu'aucun contenu ne référence plus. */
+  nettoyerImages: () => appeler('/media/nettoyer', { method: 'POST' }),
+
   /** Dépôt d'une demande entrante — accessible sans être connecté. */
   creerDemande: (demande) =>
     appeler('/leads', { method: 'POST', body: JSON.stringify(demande) }),
