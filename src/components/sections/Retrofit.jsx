@@ -216,7 +216,12 @@ export default function Retrofit({ hideHeading = false }) {
       <div className="pointer-events-none absolute -right-32 top-20 h-[420px] w-[420px] rounded-full bg-ice/5 blur-3xl" />
 
       <div className="container-x relative">
-        {hideHeading ? null : (
+        {hideHeading ? (
+          // Le titre de section porte le h2 de la page. Masqué, il laissait les
+          // titres de cartes en h3 juste après le h1 : un lecteur d’écran y voit
+          // un niveau manquant. On garde le h2, sans l’afficher.
+          <h2 className="sr-only">Forfaits de rétrofit CarPlay</h2>
+        ) : (
           <SectionHeading
             eyebrow="Pôle rétrofit & multimédia"
             title="CarPlay et Android Auto,"

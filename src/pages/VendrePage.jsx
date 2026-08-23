@@ -11,7 +11,7 @@ export default function VendrePage() {
   usePageMeta({
     title: 'Vendre sa voiture — Dépôt-vente & sourcing | Teintérior',
     description:
-      'Confiez-nous la vente de votre véhicule : estimation gratuite, préparation esthétique offerte, shooting photo professionnel, gestion des visites et transaction sécurisée.',
+      'Confiez-nous la vente de votre véhicule : estimation gratuite, préparation esthétique offerte, photos professionnelles et gestion des visites.',
   });
 
   return (

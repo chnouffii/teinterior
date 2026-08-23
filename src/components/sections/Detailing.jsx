@@ -111,7 +111,12 @@ export default function Detailing({ hideHeading = false }) {
   return (
     <section className={`pb-20 lg:pb-28 ${hideHeading ? 'pt-6' : 'pt-20 lg:pt-28'}`}>
       <div className="container-x">
-        {hideHeading ? null : (
+        {hideHeading ? (
+          // Le titre de section porte le h2 de la page. Masqué, il laissait les
+          // titres de cartes en h3 juste après le h1 : un lecteur d’écran y voit
+          // un niveau manquant. On garde le h2, sans l’afficher.
+          <h2 className="sr-only">Nos formules de detailing</h2>
+        ) : (
           <SectionHeading
             eyebrow="Pôle esthétique auto"
             title="Detailing, correction de peinture,"

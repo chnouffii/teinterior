@@ -14,7 +14,11 @@ export const VILLES = [
     prefixe: 'à',
     distance: '20 minutes',
     axe: 'par l’A4',
-    titre: 'Detailing, rétrofit CarPlay et dépôt-vente pour Strasbourg',
+    titre: 'Detailing et rétrofit CarPlay à Strasbourg',
+    // Description de référencement, distincte de l'accroche : Google tronque
+    // au-delà d'environ 160 caractères, et l'accroche en fait le double.
+    meta:
+      'Atelier de detailing et rétrofit CarPlay à 20 minutes de Strasbourg par l’A4. Correction de peinture, céramique, dépôt-vente. Devis sous 24 h.',
     accroche:
       'Notre atelier est à Brumath, vingt minutes du centre de Strasbourg par l’A4. La plupart de nos clients strasbourgeois déposent leur voiture le matin et la récupèrent en fin de journée.',
     contexte:
@@ -44,7 +48,9 @@ export const VILLES = [
     prefixe: 'à',
     distance: '15 minutes',
     axe: 'par la D1063',
-    titre: 'Detailing, rétrofit CarPlay et dépôt-vente pour Haguenau',
+    titre: 'Detailing et rétrofit CarPlay à Haguenau',
+    meta:
+      'Atelier de detailing et rétrofit CarPlay à 15 minutes de Haguenau par la D1063. Céramique, habitacle, recherche de véhicule. Devis sous 24 h.',
     accroche:
       'Quinze minutes séparent Haguenau de notre atelier de Brumath par la D1063. C’est le trajet le plus court de tout le nord du Bas-Rhin pour une prestation de ce niveau.',
     contexte:

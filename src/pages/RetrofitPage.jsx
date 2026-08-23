@@ -7,7 +7,7 @@ export default function RetrofitPage() {
   usePageMeta({
     title: 'Rétrofit CarPlay & Android Auto sans fil | Teintérior',
     description:
-      'Intégration Apple CarPlay et Android Auto dans votre écran d’origine, sans altérer le système du véhicule. Configurateur de compatibilité, tarif indicatif et réservation en ligne.',
+      'Intégration Apple CarPlay et Android Auto dans votre écran d’origine, sans altérer le système du véhicule. Configurateur de compatibilité et tarif en ligne.',
   });
 
   return (

@@ -5,9 +5,9 @@ import usePageMeta from '../hooks/usePageMeta.js';
 
 export default function PrestationsPage() {
   usePageMeta({
-    title: 'Prestations esthétiques — Detailing, céramique & teintage | Teintérior',
+    title: 'Detailing, céramique et teintage — Tarifs | Teintérior',
     description:
-      'Formules de detailing intérieur et extérieur, correction de peinture, protection céramique 9H et teintage de vitres 3M. Tarifs indicatifs et comparatif avant / après.',
+      'Formules de detailing intérieur et extérieur, correction de peinture, protection céramique 9H et teintage 3M. Tarifs indicatifs et comparatif avant / après.',
   });
 
   return (

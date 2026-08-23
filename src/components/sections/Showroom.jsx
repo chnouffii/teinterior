@@ -169,7 +169,12 @@ export default function Showroom({ hideHeading = false, limit = null, showFilter
     <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
       <div className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          {hideHeading ? null : (
+          {hideHeading ? (
+            // Le titre de section porte le h2 de la page. Masqué, il laissait les
+            // titres de cartes en h3 juste après le h1 : un lecteur d’écran y voit
+            // un niveau manquant. On garde le h2, sans l’afficher.
+            <h2 className="sr-only">Véhicules disponibles</h2>
+          ) : (
             <SectionHeading
               eyebrow="Mini showroom"
               title="Nos véhicules"

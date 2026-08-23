@@ -24,9 +24,7 @@ export default function VillePage() {
     title: ville
       ? `${ville.titre} | Teintérior`
       : 'Page introuvable | Teintérior',
-    description: ville
-      ? `${ville.accroche} Devis détaillé sous 24 h ouvrées.`
-      : undefined,
+    description: ville ? ville.meta : undefined,
   });
 
   if (!ville) return <NotFoundPage />;

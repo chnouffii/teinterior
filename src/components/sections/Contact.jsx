@@ -232,7 +232,7 @@ function QuoteForm() {
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-signal-ok/40 bg-signal-ok/10">
           <Check className="h-4 w-4 text-signal-ok" aria-hidden="true" />
         </span>
-        <h3 className="mt-4 text-base font-bold">Demande envoyée — {sent.reference}</h3>
+        <h2 className="mt-4 text-base font-bold">Demande envoyée — {sent.reference}</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted">
           Merci {sent.name}. Votre demande « {sent.service} » est enregistrée. Réponse sous 24 h
           ouvrées au <span className="num">{sent.phone}</span>.
@@ -256,7 +256,7 @@ function QuoteForm() {
 
   return (
     <form ref={formRef} onSubmit={submit} noValidate className="rounded-lg border border-white/10 bg-ink-900 p-6">
-      <h3 className="text-base font-bold">Demander un devis</h3>
+      <h2 className="text-base font-bold">Demander un devis</h2>
       <p className="mt-1 text-xs text-faint">
         Plus la description est précise, plus le devis l’est. Réponse sous 24 h ouvrées.
       </p>
@@ -454,7 +454,7 @@ export default function Contact({ hideHeading = false }) {
 
           <div className="space-y-4 lg:col-span-5">
             <Reveal delay={60} className="rounded-lg border border-white/10 bg-ink-900 p-5">
-              <h3 className="text-sm font-semibold text-fg">L’atelier</h3>
+              <h2 className="text-sm font-semibold text-fg">L’atelier</h2>
 
               <ul className="mt-4 space-y-4 text-sm">
                 <li className="flex gap-3">
