@@ -120,16 +120,52 @@ export const CONTACT = {
 /** Ligne principale — raccourci utilisé par le header et la barre d'appel. */
 export const primaryPhone = (contact) => contact.phones?.[0] ?? { number: '', href: '' };
 
-export const SERVICE_OPTIONS = [
-  { value: 'interieur', label: 'Remise en état intérieur' },
-  { value: 'correction-1', label: 'Correction peinture — 1 passe' },
-  { value: 'integrale', label: 'Rénovation intégrale + céramique' },
-  { value: 'teintage', label: 'Teintage de vitres' },
+/**
+ * Demandes qui ne correspondent à aucune prestation du catalogue.
+ *
+ * Le reste de la liste du formulaire de contact est construit à partir des
+ * prestations et des options réellement publiées — voir `choixDePrestation`.
+ * Cette liste-ci était autrefois complète et recopiait les noms des formules :
+ * une prestation renommée, ajoutée ou supprimée depuis le panel ne changeait
+ * rien au formulaire, et un visiteur pouvait demander un devis pour une
+ * prestation qui n'existait plus.
+ */
+export const AUTRES_DEMANDES = [
   { value: 'retrofit', label: 'Rétrofit CarPlay / Android Auto' },
   { value: 'depot-vente', label: 'Dépôt-vente / estimation' },
   { value: 'sourcing', label: 'Recherche de véhicule' },
   { value: 'autre', label: 'Autre demande' },
 ];
+
+/**
+ * Le contenu du menu « Prestation souhaitée », groupé.
+ *
+ * La valeur de chaque entrée est l'identifiant de la prestation : c'est lui
+ * que les boutons « Demander ce devis » transmettent, la sélection se fait donc
+ * toute seule depuis la page Prestations.
+ */
+export function choixDePrestation(packs = [], options = []) {
+  return [
+    {
+      groupe: 'Formules',
+      items: packs.map((pack) => ({ value: pack.id, label: pack.name })),
+    },
+    {
+      groupe: 'Options à la carte',
+      items: options.map((option) => ({ value: option.id, label: option.label })),
+    },
+    { groupe: 'Autres demandes', items: AUTRES_DEMANDES },
+  ].filter((groupe) => groupe.items.length > 0);
+}
+
+/** Libellé d'un identifiant de prestation, pour la demande enregistrée. */
+export function libelleDePrestation(groupes, valeur) {
+  for (const groupe of groupes) {
+    const trouve = groupe.items.find((item) => item.value === valeur);
+    if (trouve) return trouve.label;
+  }
+  return null;
+}
 
 export const LEGAL_LINKS = [
   { id: 'mentions', path: `${LEGAL_ROUTE}#mentions`, label: 'Mentions légales' },

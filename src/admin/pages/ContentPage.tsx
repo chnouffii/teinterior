@@ -237,29 +237,80 @@ export default function ContentPage() {
           </div>
 
           <div>
-            <span className="field-label">Horaires d’ouverture</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="field-label mb-0">Horaires d’ouverture</span>
+              <AdminButton
+                variant="ghost"
+                onClick={() =>
+                  setContactDraft({
+                    ...contactDraft,
+                    hours: [...contactDraft.hours, { day: '', value: '' }],
+                  })
+                }
+              >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+                Ajouter un créneau
+              </AdminButton>
+            </div>
+            <p className="mb-3 mt-1 text-[11px] text-faint">
+              Le jour à gauche, les heures à droite. Les horaires alimentent aussi la fiche que
+              Google lit sur le site : gardez la forme « 08h30 — 19h00 » pour qu’ils y soient
+              compris. Une mention libre comme « Sur rendez-vous » reste possible, elle est
+              simplement ignorée par Google.
+            </p>
             <div className="space-y-2">
+              {/*
+                Repéré par la position et non par le libellé : une clé tirée du
+                jour changeait à chaque caractère tapé, React remontait le champ
+                et le focus était perdu dès la première frappe — renommer un
+                jour devenait impossible.
+              */}
               {contactDraft.hours.map((slot, index) => (
-                <div key={slot.day} className="grid gap-2 sm:grid-cols-2">
-                  <TextInput
-                    value={slot.day}
-                    onChange={(event) => {
-                      const hours = [...contactDraft.hours];
-                      hours[index] = { ...slot, day: event.target.value };
-                      setContactDraft({ ...contactDraft, hours });
-                    }}
-                  />
-                  <TextInput
-                    value={slot.value}
-                    onChange={(event) => {
-                      const hours = [...contactDraft.hours];
-                      hours[index] = { ...slot, value: event.target.value };
-                      setContactDraft({ ...contactDraft, hours });
-                    }}
-                  />
+                <div key={index} className="flex items-start gap-2">
+                  <div className="grid flex-1 gap-2 sm:grid-cols-2">
+                    <TextInput
+                      value={slot.day}
+                      placeholder="Lundi — Vendredi"
+                      aria-label={`Jour du créneau ${index + 1}`}
+                      onChange={(event) => {
+                        const hours = [...contactDraft.hours];
+                        hours[index] = { ...slot, day: event.target.value };
+                        setContactDraft({ ...contactDraft, hours });
+                      }}
+                    />
+                    <TextInput
+                      value={slot.value}
+                      placeholder="08h30 — 19h00"
+                      aria-label={`Horaires du créneau ${index + 1}`}
+                      onChange={(event) => {
+                        const hours = [...contactDraft.hours];
+                        hours[index] = { ...slot, value: event.target.value };
+                        setContactDraft({ ...contactDraft, hours });
+                      }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    title="Retirer ce créneau"
+                    aria-label={`Retirer le créneau ${index + 1}`}
+                    onClick={() =>
+                      setContactDraft({
+                        ...contactDraft,
+                        hours: contactDraft.hours.filter((_, i) => i !== index),
+                      })
+                    }
+                    className="flex h-[38px] w-9 shrink-0 items-center justify-center rounded-lg text-faint transition-colors hover:bg-ink-800 hover:text-signal-danger"
+                  >
+                    <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  </button>
                 </div>
               ))}
             </div>
+            {contactDraft.hours.length === 0 ? (
+              <p className="mt-2 text-[11px] text-signal-warn">
+                Aucun horaire : la section disparaîtra du pied de page et de la page Contact.
+              </p>
+            ) : null}
           </div>
 
           <AdminButton

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, Clock, ExternalLink, Mail, MapPin, MessageCircle, Paperclip, Phone, RotateCcw, Send, Trash2 } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
-import { SERVICE_OPTIONS, primaryPhone } from '../../data/site.js';
+import { choixDePrestation, libelleDePrestation, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import { sendLead } from '../../lib/sendLead.js';
 import { formaterPlaque, formaterTelephone } from '../../lib/format.js';
@@ -93,22 +93,35 @@ function QuoteForm() {
   const [sent, setSent] = useState(null);
   const [envoiEnCours, setEnvoiEnCours] = useState(false);
   const [envoiErreur, setEnvoiErreur] = useState(null);
+
+  // La liste suit le catalogue publié : une prestation renommée, ajoutée ou
+  // supprimée depuis le panel se répercute ici sans rien recopier.
+  const packs = useSiteStore((state) => state.packs);
+  const optionsCarte = useSiteStore((state) => state.options);
+  const groupes = useMemo(() => choixDePrestation(packs, optionsCarte), [packs, optionsCarte]);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
   useEffect(() => {
     if (!prefill) return;
     setSent(null);
-    setForm((previous) => ({
-      ...previous,
-      service: prefill.service ?? previous.service,
-      message: prefill.message ?? previous.message,
-    }));
+    setForm((previous) => {
+      // Un lien de devis peut viser une prestation entre-temps supprimée : on
+      // bascule sur « Autre demande » plutôt que de laisser le menu vide, le
+      // message pré-rempli disant déjà ce que le visiteur veut.
+      const demande = prefill.service ?? previous.service;
+      const connue = demande && libelleDePrestation(groupes, demande) !== null;
+      return {
+        ...previous,
+        service: demande ? (connue ? demande : 'autre') : previous.service,
+        message: prefill.message ?? previous.message,
+      };
+    });
     setErrors({});
     window.setTimeout(() => {
       formRef.current?.querySelector('#contact-name')?.focus({ preventScroll: true });
     }, 300);
-  }, [prefill]);
+  }, [prefill, groupes]);
 
   // Mise en forme à la frappe : le visiteur voit tout de suite si sa saisie
   // prend la bonne forme, au lieu de l'apprendre en validant.
@@ -162,8 +175,7 @@ function QuoteForm() {
       return;
     }
 
-    const serviceLabel =
-      SERVICE_OPTIONS.find((option) => option.value === form.service)?.label ?? 'Demande';
+    const serviceLabel = libelleDePrestation(groupes, form.service) ?? 'Demande';
     const message = `${form.message}${
       files.length > 0 ? ` — ${files.length} pièce(s) jointe(s), à demander au client` : ''
     }`;
@@ -263,10 +275,14 @@ function QuoteForm() {
             className={`field appearance-none ${errors.service ? 'border-signal-danger/60' : ''}`}
           >
             <option value="">Sélectionner…</option>
-            {SERVICE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
+            {groupes.map((groupe) => (
+              <optgroup key={groupe.groupe} label={groupe.groupe}>
+                {groupe.items.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
           {errors.service ? (
