@@ -14,9 +14,11 @@ import VehiculeDetailPage from './pages/VehiculeDetailPage.jsx';
 import RealisationsPage from './pages/RealisationsPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import LegalPage from './pages/LegalPage.jsx';
+import VillePage from './pages/VillePage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import { QuoteProvider } from './context/QuoteContext.jsx';
 import { LEGAL_ROUTE, ROUTES } from './data/site.js';
+import { VILLE_BASE } from './data/villes.js';
 
 /**
  * Le panel d'administration est inclus par défaut.
@@ -67,6 +69,8 @@ function PublicRoutes() {
         <Route path={ROUTES.vehicules} element={<VehiculesPage />} />
         <Route path={`${ROUTES.vehicules}/:vehicleId`} element={<VehiculeDetailPage />} />
         <Route path="/showroom" element={<Navigate to={ROUTES.vehicules} replace />} />
+        <Route path={`${VILLE_BASE}/:villeSlug`} element={<VillePage />} />
+        <Route path={VILLE_BASE} element={<Navigate to={ROUTES.prestations} replace />} />
         <Route path={ROUTES.realisations} element={<RealisationsPage />} />
         <Route path={ROUTES.contact} element={<ContactPage />} />
         <Route path={LEGAL_ROUTE} element={<LegalPage />} />

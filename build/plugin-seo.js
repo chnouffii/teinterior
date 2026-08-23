@@ -2,6 +2,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { BRAND, CONTACT, LEGAL_ROUTE, ROUTES, SITE_URL } from '../src/data/site.js';
 import { VEHICLES } from '../src/data/vehicles.js';
+import { VILLES, cheminVille } from '../src/data/villes.js';
 
 /**
  * Métadonnées et données structurées, injectées au moment du build.
@@ -133,6 +134,13 @@ function urls() {
     { chemin: LEGAL_ROUTE, priorite: '0.3', frequence: 'yearly' },
   ];
 
+  // Pages locales : une par ville desservie, avec son contenu propre.
+  const locales = VILLES.map((ville) => ({
+    chemin: cheminVille(ville.slug),
+    priorite: '0.7',
+    frequence: 'monthly',
+  }));
+
   // Les véhicules vendus sortent du sitemap : inutile d'envoyer Google sur une
   // annonce qui n'a plus d'objet.
   const vehicules = VEHICLES.filter((v) => v.status !== 'vendu').map((v) => ({
@@ -141,7 +149,7 @@ function urls() {
     frequence: 'weekly',
   }));
 
-  return [...pages, ...vehicules];
+  return [...pages, ...locales, ...vehicules];
 }
 
 function sitemap() {

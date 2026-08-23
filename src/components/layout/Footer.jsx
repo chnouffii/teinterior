@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
 import { LEGAL_LINKS } from '../../data/site.js';
+import { VILLES, cheminVille } from '../../data/villes.js';
 import { useSiteStore } from '../../store/siteStore';
 
 export default function Footer() {
@@ -101,6 +102,33 @@ export default function Footer() {
           </ul>
         </div>
       </div>
+
+      <div className="rule" />
+
+      {/*
+        Les pages locales n'existent pour un moteur de recherche que si un lien
+        y mène. Le sitemap les déclare, ce bandeau les rend atteignables depuis
+        n'importe quelle page du site.
+      */}
+      <nav aria-label="Zones d’intervention" className="container-x py-5">
+        <h2 className="label-xs">Zones d’intervention</h2>
+        <ul className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
+          <li>{contact.address.city.replace(/^\d+\s*/, '')}</li>
+          {VILLES.map((ville) => (
+            <li key={ville.slug} className="flex items-center gap-2">
+              <span aria-hidden="true" className="text-faint">
+                ·
+              </span>
+              <Link
+                to={cheminVille(ville.slug)}
+                className="inline-flex min-h-[36px] items-center transition-colors hover:text-accent"
+              >
+                {ville.nom}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <div className="rule" />
 
