@@ -1,6 +1,20 @@
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SITE_URL } from '../data/site.js';
+
+/**
+ * Collecteur utilisé au pré-rendu.
+ *
+ * Les effets ne s'exécutent pas côté serveur : sans ce relais, les pages
+ * pré-rendues porteraient toutes le titre et la canonique génériques
+ * d'`index.html`. Le fournisseur n'existe qu'au build ; dans le navigateur le
+ * contexte vaut `null` et seul le chemin par effet s'applique.
+ */
+export const MetaContext = createContext(null);
+
+/** URL canonique d'un chemin, sans barre finale sauf pour l'accueil. */
+export const urlCanonique = (pathname) =>
+  `${SITE_URL}${pathname === '/' ? '/' : pathname.replace(/\/$/, '')}`;
 
 /** Crée la balise si elle manque, puis lui donne sa valeur. */
 function poser(selecteur, attributs, valeur) {
@@ -24,6 +38,15 @@ function poser(selecteur, attributs, valeur) {
  */
 export default function usePageMeta({ title, description }) {
   const { pathname } = useLocation();
+  const collecteur = useContext(MetaContext);
+
+  // Au pré-rendu, on note ce que la page déclare pendant son rendu : c'est le
+  // seul moment où le serveur voit passer l'information.
+  if (collecteur) {
+    if (title) collecteur.title = title;
+    if (description) collecteur.description = description;
+    collecteur.pathname = pathname;
+  }
 
   useEffect(() => {
     if (title) document.title = title;
@@ -39,9 +62,7 @@ export default function usePageMeta({ title, description }) {
       poser('meta[name="twitter:title"]', { tag: 'meta', name: 'twitter:title' }, title);
     }
 
-    // Sans barre finale, sauf pour l'accueil : deux URL qui ne diffèrent que par
-    // elle seraient traitées comme deux pages distinctes.
-    const url = `${SITE_URL}${pathname === '/' ? '/' : pathname.replace(/\/$/, '')}`;
+    const url = urlCanonique(pathname);
     poser('link[rel="canonical"]', { tag: 'link', rel: 'canonical' }, url);
     poser('meta[property="og:url"]', { tag: 'meta', property: 'og:url' }, url);
   }, [title, description, pathname]);

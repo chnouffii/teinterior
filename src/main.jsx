@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App.jsx';
 // Polices auto-hébergées. Chargées depuis le domaine du site plutôt que depuis
 // Google : la feuille de style tierce bloquait le premier rendu (168 ms mesurés
@@ -19,8 +19,17 @@ import { useSiteStore } from './store/siteStore';
 // Si l'API est injoignable, il reste sur les données du build plutôt que de rester vide.
 useSiteStore.getState().hydrater();
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const racine = document.getElementById('root');
+const arbre = (
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+
+// Les pages publiques arrivent pré-rendues : on reprend le balisage existant
+// au lieu de le reconstruire. Avec `createRoot`, React jetait tout le DOM figé
+// pour le refaire à l'identique — le pré-rendu coûtait alors un rendu complet
+// de plus au lieu d'en économiser un, et retardait le premier affichage.
+// Le panel d'administration, lui, n'est pas pré-rendu : sa racine est vide.
+if (racine.hasChildNodes()) hydrateRoot(racine, arbre);
+else createRoot(racine).render(arbre);

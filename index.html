@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06080B" />
+    <!--
+      Marque la présence de JavaScript avant le premier rendu : les animations
+      d'apparition ne s'activent que dans ce cas. Sans cela, une page pré-rendue
+      s'afficherait vide jusqu'à l'exécution du script.
+    -->
+    <script>
+      document.documentElement.classList.add('js');
+    </script>
     <title>Teintérior — Detailing, rétrofit CarPlay et vente de véhicules · Brumath</title>
     <meta
       name="description"

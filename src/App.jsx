@@ -80,27 +80,41 @@ function PublicRoutes() {
   );
 }
 
+/**
+ * L'arbre de l'application, sans routeur.
+ *
+ * Le routeur est fourni par l'appelant : `BrowserRouter` dans le navigateur,
+ * `StaticRouter` au pré-rendu. Les deux ne peuvent pas cohabiter dans le même
+ * composant, d'où cette séparation.
+ */
+export function AppTree({ prerendu = false }) {
+  return (
+    <QuoteProvider>
+      {/* Au pré-rendu il n'y a pas de fenêtre à faire défiler. */}
+      {prerendu ? null : <ScrollToTop />}
+
+      <Routes>
+        {ADMIN_ENABLED && !prerendu ? (
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={null}>
+                <AdminRoutes />
+              </Suspense>
+            }
+          />
+        ) : null}
+
+        <Route path="*" element={<PublicRoutes />} />
+      </Routes>
+    </QuoteProvider>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <QuoteProvider>
-        <ScrollToTop />
-
-        <Routes>
-          {ADMIN_ENABLED ? (
-            <Route
-              path="/admin/*"
-              element={
-                <Suspense fallback={null}>
-                  <AdminRoutes />
-                </Suspense>
-              }
-            />
-          ) : null}
-
-          <Route path="*" element={<PublicRoutes />} />
-        </Routes>
-      </QuoteProvider>
+      <AppTree />
     </BrowserRouter>
   );
 }

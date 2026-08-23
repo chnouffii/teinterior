@@ -134,14 +134,30 @@
 }
 
 @layer utilities {
+  /*
+    Le contenu est visible par défaut, et masqué seulement si JavaScript est là
+    pour le révéler.
+
+    L'inverse — masqué par défaut — rendait les pages pré-rendues inutiles : le
+    HTML arrivait complet mais entièrement transparent, et le visiteur voyait
+    une page blanche jusqu'à l'exécution du JavaScript. C'est exactement ce que
+    le pré-rendu doit éviter. La classe `js` est posée par un script en ligne
+    dans le `<head>`, avant le premier rendu, pour qu'il n'y ait pas de
+    scintillement.
+  */
   .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .reveal {
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     will-change: opacity, transform;
   }
 
-  .reveal.is-visible {
+  .js .reveal.is-visible {
     opacity: 1;
     transform: none;
   }
@@ -161,7 +177,8 @@
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .js .reveal,
+  .js .reveal.is-visible {
     opacity: 1;
     transform: none;
     transition: none;

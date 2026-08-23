@@ -174,12 +174,16 @@ ${entrees}
 
 export default function seo() {
   let dossierSortie = 'dist';
+  // Le pré-rendu ouvre un second serveur Vite après le build ; sans ce garde,
+  // le plugin réécrirait le sitemap une deuxième fois à sa fermeture.
+  let enBuild = false;
 
   return {
     name: 'teinterior-seo',
 
     configResolved(config) {
       dossierSortie = config.build.outDir;
+      enBuild = config.command === 'build';
     },
 
     transformIndexHtml(html) {
@@ -187,6 +191,7 @@ export default function seo() {
     },
 
     async closeBundle() {
+      if (!enBuild) return;
       const cible = path.resolve(process.cwd(), dossierSortie, 'sitemap.xml');
       await writeFile(cible, sitemap(), 'utf8');
       console.log(`  sitemap.xml  ${urls().length} URL`);
