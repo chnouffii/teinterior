@@ -127,7 +127,9 @@ pipeline sont présentés en cartes. Les tableaux denses sont réservés au pane
 Déposez le logo dans **`public/logo.png`** : le composant `ui/Logo.jsx` l'utilise
 automatiquement dans le header et le pied de page. Sans ce fichier, un repli vectoriel
 s'affiche : silhouette de coupé dans le dégradé bleu → violet de la marque. Voir
-`docs/logo.md`. Le `favicon.svg` reprend le même dessin.
+`docs/logo.md`. Les icônes d'onglet et d'écran d'accueil en sont dérivées :
+régénérez-les avec `npm i --no-save sharp && node build/icones.mjs` après tout
+changement de logo.
 
 ### Illustrations de véhicules
 

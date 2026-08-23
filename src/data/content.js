@@ -15,6 +15,24 @@ export const HERO = {
   ],
 };
 
+/**
+ * Le chantier mis en avant en page d'accueil, modifiable depuis
+ * Admin → Page d'accueil.
+ *
+ * Sans photo, l'illustration générée par `CarVisual` reste affichée : le bloc
+ * fonctionne dès l'installation, et gagne en crédibilité dès qu'une vraie photo
+ * est déposée.
+ */
+export const LAST_JOB = {
+  enabled: true,
+  eyebrow: 'Dernier passage atelier',
+  title: 'Correction 2 passes + céramique 9H',
+  vehicle: '',
+  badge: 'Livrée en 48 h',
+  photos: [],
+  coverIndex: 0,
+};
+
 export const WORKSHOP = {
   title: 'L’atelier',
   intro:

@@ -112,6 +112,23 @@ export interface HeroContent {
   facts: { label: string; value: string }[];
 }
 
+/**
+ * Le chantier mis en avant sur la page d'accueil.
+ *
+ * `enabled` à faux masque entièrement l'encart : entre deux prestations
+ * intéressantes à montrer, mieux vaut ne rien afficher qu'un chantier vieux de
+ * trois mois présenté comme le dernier.
+ */
+export interface LastJob {
+  enabled: boolean;
+  eyebrow: string;
+  title: string;
+  vehicle: string;
+  badge: string;
+  photos: string[];
+  coverIndex: number;
+}
+
 export interface WorkshopContent {
   title: string;
   intro: string;

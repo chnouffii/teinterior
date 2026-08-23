@@ -1,4 +1,5 @@
-import { Field, TextArea, TextInput } from '../components/Field';
+import { Bascule, Field, TextArea, TextInput } from '../components/Field';
+import PhotoUploader from '../components/PhotoUploader';
 import { Bloc, ChiffresCles, ListeDeTextes, ListeEditable } from '../components/Editors';
 import { useSiteStore } from '../../store/siteStore';
 
@@ -8,6 +9,7 @@ import { useSiteStore } from '../../store/siteStore';
  */
 export default function AccueilPage() {
   const hero = useSiteStore((state) => state.hero);
+  const lastJob = useSiteStore((state) => state.lastJob);
   const poles = useSiteStore((state) => state.poles);
   const patchSection = useSiteStore((state) => state.patchSection);
   const setSection = useSiteStore((state) => state.setSection);
@@ -59,6 +61,65 @@ export default function AccueilPage() {
               onChange={(e) => patchSection('hero', { secondaryCta: e.target.value })}
             />
           </Field>
+        </div>
+      </Bloc>
+
+      <Bloc
+        titre="Dernier chantier"
+        aide="L’encart posé sur la photo, en haut à droite de la page d’accueil. Sans photo déposée, l’illustration générée reste affichée. Masquez-le entre deux chantiers dignes d’être montrés : mieux vaut rien qu’un chantier d’il y a trois mois présenté comme le dernier."
+        actions={
+          <Bascule
+            checked={lastJob.enabled}
+            onChange={(enabled) => patchSection('lastJob', { enabled })}
+            labelActif="Affiché sur le site"
+            labelInactif="Masqué"
+          />
+        }
+      >
+        <div className={lastJob.enabled ? '' : 'pointer-events-none opacity-40'}>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Sur-titre" hint="En petites capitales au-dessus du libellé.">
+              <TextInput
+                value={lastJob.eyebrow}
+                onChange={(e) => patchSection('lastJob', { eyebrow: e.target.value })}
+              />
+            </Field>
+            <Field label="Prestation réalisée">
+              <TextInput
+                value={lastJob.title}
+                placeholder="Correction 2 passes + céramique 9H"
+                onChange={(e) => patchSection('lastJob', { title: e.target.value })}
+              />
+            </Field>
+            <Field label="Véhicule" hint="Facultatif. Laissé vide, la ligne n’apparaît pas.">
+              <TextInput
+                value={lastJob.vehicle}
+                placeholder="BMW Série 1 118d"
+                onChange={(e) => patchSection('lastJob', { vehicle: e.target.value })}
+              />
+            </Field>
+            <Field label="Pastille verte" hint="Facultatif. Un délai, une garantie, un résultat.">
+              <TextInput
+                value={lastJob.badge}
+                placeholder="Livrée en 48 h"
+                onChange={(e) => patchSection('lastJob', { badge: e.target.value })}
+              />
+            </Field>
+          </div>
+
+          <div className="mt-5">
+            <span className="field-label">Photos</span>
+            <p className="mb-3 text-[11px] text-faint">
+              Glissez vos photos ici. La photo de couverture est celle affichée en grand ; les
+              autres apparaissent en miniatures sous l’encart. Les fichiers sont réduits par votre
+              navigateur puis stockés sur votre serveur.
+            </p>
+            <PhotoUploader
+              photos={lastJob.photos}
+              coverIndex={lastJob.coverIndex}
+              onChange={(patch) => patchSection('lastJob', patch)}
+            />
+          </div>
         </div>
       </Bloc>
 

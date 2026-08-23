@@ -1,15 +1,11 @@
 /**
- * Génère le jeu d'icônes du site à partir de `public/favicon.svg` et
- * `public/logo.png`.
+ * Génère le jeu d'icônes du site à partir de `public/logo.png`.
  *
  * Script ponctuel : les icônes changent une fois tous les cinq ans, alors que
  * `sharp` pèse une quarantaine de mégaoctets de binaire natif. Les fichiers
  * produits sont versionnés ; ce script ne sert qu'à les régénérer.
  *
  *     npm i --no-save sharp && node build/icones.mjs
- *
- * Le favicon d'onglet est un monogramme et non le logo complet : voir le
- * commentaire de `public/favicon.svg`.
  */
 import { writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
@@ -17,7 +13,12 @@ import sharp from 'sharp';
 const PUBLIC = new URL('../public/', import.meta.url);
 const chemin = (nom) => new URL(nom, PUBLIC).pathname;
 
-/** Zone utile du logo : le reste est du fond noir. Mesuré, pas deviné. */
+/**
+ * Zone utile du logo, mesurée et non devinée : le contenu occupe x 47→258 et
+ * y 109→198 dans une image de 300 px, le reste est du fond noir. On prend le
+ * carré centré le plus serré qui contienne toute la largeur du logo, pour que
+ * la voiture et le mot remplissent la tuile au maximum.
+ */
 const CADRE = { left: 41, top: 42, width: 224, height: 224 };
 
 /** Assemble un .ico à partir de PNG déjà encodés (format accepté partout). */
@@ -45,22 +46,35 @@ function ico(images) {
   return Buffer.concat([entete, ...entrees, ...images.map((i) => i.png)]);
 }
 
-const monogramme = (taille) =>
-  sharp(chemin('favicon.svg'), { density: 600 }).resize(taille, taille).png().toBuffer();
-
-const logoCarre = (taille) =>
-  sharp(chemin('logo.png'))
+/**
+ * Le logo réduit à la taille demandée.
+ *
+ * En dessous de 48 px, une légère accentuation est appliquée : la réduction
+ * de Lanczos adoucit les contours, et sur un logo qui contient du texte fin
+ * cela fait la différence entre un mot qu'on devine et une tache grise.
+ */
+async function logoCarre(taille) {
+  let image = sharp(chemin('logo.png'))
     .extract(CADRE)
     .resize(taille, taille, { kernel: 'lanczos3' })
-    .flatten({ background: '#0A0D12' })
-    .png()
-    .toBuffer();
+    .flatten({ background: '#0A0D12' });
 
+  if (taille <= 48) image = image.sharpen({ sigma: 0.6, m1: 1.4, m2: 0.6 });
+
+  return image.png({ compressionLevel: 9 }).toBuffer();
+}
+
+// Onglet du navigateur : le .ico couvre tous les navigateurs, les PNG
+// permettent aux écrans à forte densité de piocher la bonne définition.
 const images = [];
-for (const taille of [16, 32, 48]) images.push({ taille, png: await monogramme(taille) });
+for (const taille of [16, 32, 48]) images.push({ taille, png: await logoCarre(taille) });
 await writeFile(chemin('favicon.ico'), ico(images));
 
-// Icônes de grande taille : le logo s'y lit, wordmark compris.
+for (const taille of [32, 96]) {
+  await writeFile(chemin(`favicon-${taille}.png`), await logoCarre(taille));
+}
+
+// Écran d'accueil iOS et manifeste : le logo s'y lit entièrement.
 await writeFile(chemin('apple-touch-icon.png'), await logoCarre(180));
 await writeFile(chemin('icon-192.png'), await logoCarre(192));
 await writeFile(chemin('icon-512.png'), await logoCarre(512));

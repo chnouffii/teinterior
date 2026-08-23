@@ -14,10 +14,12 @@ import '@fontsource/inter/latin-600.css';
 import './index.css';
 import { useSiteStore } from './store/siteStore';
 
-// Les contenus viennent du serveur. On lance la requête avant le premier rendu :
-// le site s'affiche avec les données du build, puis se met à jour dès la réponse.
-// Si l'API est injoignable, il reste sur les données du build plutôt que de rester vide.
-useSiteStore.getState().hydrater();
+// Les contenus viennent du serveur. La requête part maintenant, mais n'est
+// appliquée qu'une fois l'hydratation terminée (voir `AppTree`) : changer
+// l'état pendant que React reprend le balisage pré-rendu ferait diverger les
+// deux rendus, et React jetterait tout le DOM figé.
+// Si l'API est injoignable, le site reste sur les contenus du build.
+useSiteStore.getState().precharger().catch(() => {});
 
 const racine = document.getElementById('root');
 const arbre = (

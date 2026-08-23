@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/layout/Header.jsx';
 import Footer from './components/layout/Footer.jsx';
@@ -17,6 +17,7 @@ import LegalPage from './pages/LegalPage.jsx';
 import VillePage from './pages/VillePage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import { QuoteProvider } from './context/QuoteContext.jsx';
+import { useSiteStore } from './store/siteStore';
 import { LEGAL_ROUTE, ROUTES } from './data/site.js';
 import { VILLE_BASE } from './data/villes.js';
 
@@ -88,6 +89,12 @@ function PublicRoutes() {
  * composant, d'où cette séparation.
  */
 export function AppTree({ prerendu = false }) {
+  // Les contenus du serveur ne sont appliqués qu'ici : un effet ne s'exécute
+  // qu'après la validation du rendu, donc après l'hydratation.
+  useEffect(() => {
+    useSiteStore.getState().hydrater();
+  }, []);
+
   return (
     <QuoteProvider>
       {/* Au pré-rendu il n'y a pas de fenêtre à faire défiler. */}

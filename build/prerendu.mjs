@@ -7,6 +7,12 @@
  * n'exécutent pas de script — la plupart des aperçus de liens, et Google lui
  * même lors de sa première passe — n'y voient qu'une page blanche.
  *
+ * À vérifier avec nginx, pas avec `vite preview` : le serveur de
+ * prévisualisation renvoie `index.html` — donc la page d'accueil pré-rendue —
+ * pour toute URL inconnue, `/admin` compris, ce qui provoque une divergence
+ * d'hydratation que la production n'a pas. La configuration de `deploy/` sert
+ * `app.html` pour ces routes.
+ *
  * Ce script écrit un vrai fichier HTML par page, contenu et métadonnées
  * compris. Le JavaScript reprend ensuite la main normalement : `main.jsx`
  * utilise `createRoot`, pas `hydrateRoot`, donc le balisage figé est remplacé

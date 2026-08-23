@@ -24,9 +24,15 @@
       property="og:description"
       content="Atelier automobile à Brumath (67), près de Strasbourg. Detailing, rétrofit CarPlay, dépôt-vente. Devis détaillé sous 24 h ouvrées."
     />
-    <!-- Le SVG l'emporte partout où il est compris ; le .ico couvre le reste. -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <!--
+      Le logo lui-même sert d'icône d'onglet. Le .ico couvre tous les
+      navigateurs, les PNG permettent aux écrans à forte densité de piocher la
+      bonne définition, et le 96 px est celui que Google reprend dans ses
+      résultats de recherche.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
   </head>

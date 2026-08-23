@@ -13,6 +13,7 @@ import {
   GALLERY_FILTERS,
   GALLERY_ITEMS,
   HERO,
+  LAST_JOB,
   REVIEW_SUMMARY,
   SOURCING_FACTS,
   SOURCING_PIPELINE,
@@ -27,6 +28,7 @@ import type {
   BeforeAfterCase,
   ContactInfo,
   HeroContent,
+  LastJob,
   Lead,
   LeadStatus,
   RetrofitBrand,
@@ -45,6 +47,7 @@ interface SiteState {
   options: ServiceOption[];
   catalogue: RetrofitBrand[];
   hero: HeroContent;
+  lastJob: LastJob;
   workshop: WorkshopContent;
   beforeAfter: BeforeAfterCase[];
   gallery: typeof GALLERY_ITEMS;
@@ -113,7 +116,9 @@ interface SiteState {
   /** Fusionne un correctif dans une section objet et enregistre. */
   patchSection: <K extends keyof SiteContent>(cle: K, patch: Partial<SiteContent[K]>) => void;
 
-  /** Charge les contenus depuis le serveur au démarrage du site. */
+  /** Lance la requête de contenus sans encore l'appliquer à l'état. */
+  precharger: () => Promise<Record<string, unknown>>;
+  /** Applique les contenus du serveur. À appeler après l'hydratation. */
   hydrater: () => Promise<void>;
 
   /** État de la synchronisation, affiché dans le panel. */
@@ -145,6 +150,7 @@ const seed = () => ({
   options: PACK_OPTIONS as ServiceOption[],
   catalogue: RETROFIT_CATALOGUE as RetrofitBrand[],
   hero: HERO as HeroContent,
+  lastJob: LAST_JOB as LastJob,
   workshop: WORKSHOP as WorkshopContent,
   beforeAfter: BEFORE_AFTER as BeforeAfterCase[],
   gallery: GALLERY_ITEMS,
@@ -172,11 +178,22 @@ const seed = () => ({
  * pouvoir les écraser.
  */
 const CLES_CONTENU = [
-  'vehicles', 'packs', 'options', 'catalogue', 'hero', 'workshop', 'beforeAfter',
+  'vehicles', 'packs', 'options', 'catalogue', 'hero', 'lastJob', 'workshop', 'beforeAfter',
   'gallery', 'galleryFilters', 'poles', 'navLinks', 'brand', 'company',
   'retrofitProcess', 'retrofitFacts', 'retrofitKeeps', 'testimonials',
   'reviewSummary', 'pipeline', 'sourcingFacts', 'contact',
 ] as const;
+
+/**
+ * Garde-fou : une section ajoutée à l'état mais oubliée dans `CLES_CONTENU`
+ * s'édite normalement dans le panel et n'est jamais enregistrée — la
+ * modification semble prise puis disparaît au rechargement. Le compilateur
+ * signale l'oubli plutôt que de laisser découvrir le problème en production.
+ */
+type SectionsEnvoyees = (typeof CLES_CONTENU)[number];
+type SectionsOubliees = Exclude<keyof SiteContent, SectionsEnvoyees>;
+const _aucuneSectionOubliee: SectionsOubliees extends never ? true : never = true;
+void _aucuneSectionOubliee;
 
 export const useSiteStore = create<SiteState>()((set, get) => {
   /**
@@ -184,6 +201,16 @@ export const useSiteStore = create<SiteState>()((set, get) => {
    * par caractère. On regroupe les modifications sur un court délai plutôt que
    * d'envoyer une requête à chaque touche.
    */
+  /**
+   * La requête de contenus, lancée une seule fois.
+   *
+   * Elle démarre au chargement du script mais n'est appliquée qu'après
+   * l'hydratation : modifier l'état pendant que React reprend le balisage
+   * pré-rendu provoque une divergence d'hydratation, React jette alors tout le
+   * DOM figé et le pré-rendu ne sert plus à rien.
+   */
+  let requeteContenus: Promise<Record<string, unknown>> | undefined;
+
   let minuteur: ReturnType<typeof setTimeout> | undefined;
   const enregistrerBientot = () => {
     clearTimeout(minuteur);
@@ -220,9 +247,17 @@ export const useSiteStore = create<SiteState>()((set, get) => {
       erreurSync: null,
       horsLigne: false,
 
+      precharger: () => {
+        // Lance la requête sans rien appliquer : le réseau démarre dès le
+        // chargement du script, l'état ne bouge qu'après l'hydratation.
+        requeteContenus ??= api.lireContenus() as Promise<Record<string, unknown>>;
+        return requeteContenus;
+      },
+
       hydrater: async () => {
         try {
-          const contenus = (await api.lireContenus()) as Record<string, unknown>;
+          requeteContenus ??= api.lireContenus() as Promise<Record<string, unknown>>;
+          const contenus = await requeteContenus;
           const defauts = seed() as Record<string, unknown>;
 
           // Le serveur fait foi, mais on fusionne section par section avec les

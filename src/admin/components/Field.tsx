@@ -50,3 +50,50 @@ export function AdminButton({
     />
   );
 }
+
+/**
+ * Interrupteur d'affichage.
+ *
+ * Une case à cocher native aurait suffi fonctionnellement, mais l'état « ce
+ * bloc est-il visible sur le site » doit se lire d'un coup d'œil depuis le
+ * titre de la section, sans avoir à déplier quoi que ce soit.
+ */
+export function Bascule({
+  checked,
+  onChange,
+  labelActif = 'Affiché',
+  labelInactif = 'Masqué',
+}: {
+  checked: boolean;
+  onChange: (valeur: boolean) => void;
+  labelActif?: string;
+  labelInactif?: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className={`inline-flex items-center gap-2.5 rounded-md border px-3 py-2 text-xs font-semibold transition-colors ${
+        checked
+          ? 'border-signal-ok/40 bg-signal-ok/10 text-signal-ok'
+          : 'border-white/10 text-faint hover:border-white/20 hover:text-muted'
+      }`}
+    >
+      <span
+        aria-hidden="true"
+        className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
+          checked ? 'bg-signal-ok/60' : 'bg-white/15'
+        }`}
+      >
+        <span
+          className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition-all ${
+            checked ? 'left-3.5' : 'left-0.5'
+          }`}
+        />
+      </span>
+      {checked ? labelActif : labelInactif}
+    </button>
+  );
+}
