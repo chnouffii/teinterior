@@ -6,6 +6,7 @@ import Button from '../ui/Button.jsx';
 import { SERVICE_OPTIONS, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import { sendLead } from '../../lib/sendLead.js';
+import { formaterPlaque, formaterTelephone } from '../../lib/format.js';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
 const EMPTY = { service: '', name: '', phone: '', email: '', plate: '', message: '', consent: false };
@@ -109,8 +110,13 @@ function QuoteForm() {
     }, 300);
   }, [prefill]);
 
+  // Mise en forme à la frappe : le visiteur voit tout de suite si sa saisie
+  // prend la bonne forme, au lieu de l'apprendre en validant.
+  const FORMATEURS = { phone: formaterTelephone, plate: formaterPlaque };
+
   const update = (field) => (event) => {
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    const brut = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    const value = FORMATEURS[field] ? FORMATEURS[field](brut) : brut;
     setForm((previous) => ({ ...previous, [field]: value }));
     setErrors((previous) => {
       if (!previous[field]) return previous;

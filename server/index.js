@@ -2,7 +2,7 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { ContentStore } from './store.js';
 import { MediaStore, TAILLE_MAX } from './media.js';
 import { creerJeton, jetonValide, verifierMotDePasse, LimiteurConnexion } from './auth.js';
@@ -396,16 +396,66 @@ const serveur = http.createServer(async (requete, reponse) => {
       }
 
       let creee;
+      // Le formulaire d'estimation se remplit en deux temps. Les identifiants de
+      // demande étant séquentiels, une route de complétion publique serait
+      // devinable : on remet donc un jeton à usage unique, connu du seul
+      // navigateur qui vient de déposer la demande.
+      const jetonCompletion = randomBytes(24).toString('hex');
       await store.modifier((donnees) => {
         creee = {
           ...demande,
           id: nouvelIdDemande(donnees.leads ?? []),
           status: 'nouveau',
           createdAt: new Date().toISOString(),
+          completion: jetonCompletion,
         };
         return { ...donnees, leads: [creee, ...(donnees.leads ?? [])] };
       });
-      return json(reponse, 201, creee);
+      return json(reponse, 201, { ...creee, completionToken: jetonCompletion });
+    }
+
+    // Complète une demande déjà déposée (seconde étape du formulaire
+    // d'estimation). Publique, mais adossée au jeton remis à la création.
+    const aCompleter = chemin.match(/^\/api\/leads\/([A-Za-z0-9_-]+)\/complete$/);
+    if (aCompleter && methode === 'POST') {
+      const id = aCompleter[1];
+      const corps = await lireCorps(requete);
+      const jeton = texte(corps?.token, 80);
+
+      let mise = null;
+      let refusee = false;
+      await store.modifier((donnees) => ({
+        ...donnees,
+        leads: (donnees.leads ?? []).map((d) => {
+          if (d.id !== id) return d;
+          // Comparaison en longueur constante : le jeton ne doit pas se
+          // deviner à la milliseconde près.
+          const attendu = String(d.completion ?? '');
+          const fourni = jeton;
+          if (!attendu || attendu.length !== fourni.length || !timingSafeEqual(
+            Buffer.from(attendu), Buffer.from(fourni)
+          )) {
+            refusee = true;
+            return d;
+          }
+          const prix = Number(corps?.expectedPrice);
+          mise = {
+            ...d,
+            email: texte(corps?.email, 160) || d.email,
+            vehicle: texte(corps?.vehicle, 300) || d.vehicle,
+            message: texte(corps?.message, 4000) || d.message,
+            ...(Number.isFinite(prix) && prix > 0 ? { expectedPrice: prix } : {}),
+            // Jeton consommé : la complétion ne joue qu'une fois.
+            completion: undefined,
+          };
+          return mise;
+        }),
+      }));
+
+      if (refusee) return json(reponse, 403, { error: 'Jeton invalide ou déjà utilisé.' });
+      if (!mise) return json(reponse, 404, { error: 'Demande introuvable.' });
+      const { completion: _jeton, ...publique } = mise;
+      return json(reponse, 200, publique);
     }
 
     // --- À partir d'ici, authentification obligatoire ----------------------
@@ -547,7 +597,8 @@ const serveur = http.createServer(async (requete, reponse) => {
     }
 
     if (chemin === '/api/leads' && methode === 'GET') {
-      return json(reponse, 200, store.lire().leads ?? []);
+      const demandes = (store.lire().leads ?? []).map(({ completion: _jeton, ...reste }) => reste);
+      return json(reponse, 200, demandes);
     }
 
     const correspondance = chemin.match(/^\/api\/leads\/([A-Za-z0-9_-]+)$/);

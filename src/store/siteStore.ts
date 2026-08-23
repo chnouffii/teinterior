@@ -91,6 +91,11 @@ interface SiteState {
   setLeadStatus: (id: string, status: LeadStatus) => Promise<void>;
   removeLead: (id: string) => Promise<void>;
   /** Recharge les demandes depuis le serveur (panel d'administration). */
+  completerDemande: (
+    id: string,
+    jeton: string,
+    champs: Partial<Lead>
+  ) => Promise<Lead>;
   chargerDemandes: () => Promise<void>;
 
   clients: Client[];
@@ -348,6 +353,14 @@ export const useSiteStore = create<SiteState>()((set, get) => {
         set((state) => ({
           leads: state.leads.map((item) => (item.id === id ? { ...item, status } : item)),
         }));
+      },
+
+      completerDemande: async (id, jeton, champs) => {
+        const suivante = (await api.completerDemande(id, jeton, champs)) as Lead;
+        set((state) => ({
+          leads: state.leads.map((d) => (d.id === id ? suivante : d)),
+        }));
+        return suivante;
       },
 
       removeLead: async (id) => {

@@ -7,57 +7,49 @@ import { FUELS, GEARBOXES } from '../../data/vehicles.js';
 import { useSiteStore } from '../../store/siteStore';
 import { primaryPhone } from '../../data/site.js';
 import { sendLead } from '../../lib/sendLead.js';
+import { chiffresSeuls, formaterMontant, formaterTelephone } from '../../lib/format.js';
 
-const EMPTY = {
-  brand: '',
-  model: '',
-  year: '',
-  km: '',
-  gearbox: '',
-  fuel: '',
-  expectedPrice: '',
-  name: '',
-  phone: '',
-  email: '',
-  message: '',
-};
+/**
+ * Le formulaire d'estimation se remplit en deux temps.
+ *
+ * Étape 1 : cinq champs, le strict nécessaire pour rappeler la personne. La
+ * demande est enregistrée dès cette étape. Étape 2 : les précisions qui
+ * affinent l'estimation, facultatives. Quelqu'un qui abandonne l'étape 2 a déjà
+ * été enregistré comme demande — ce qui est tout l'objet du formulaire.
+ */
+const ETAPE_1 = { vehicle: '', year: '', km: '', name: '', phone: '' };
+const ETAPE_2 = { gearbox: '', fuel: '', expectedPrice: '', email: '', message: '' };
+const EMPTY = { ...ETAPE_1, ...ETAPE_2 };
 
 const CURRENT_YEAR = new Date().getFullYear();
 
+/** Ne valide que l'étape 1 : le reste est facultatif par construction. */
 function validate(form) {
   const errors = {};
-  if (!form.brand.trim()) errors.brand = 'Marque requise.';
-  if (!form.model.trim()) errors.model = 'Modèle requis.';
+  if (form.vehicle.trim().length < 3) errors.vehicle = 'Marque et modèle, au moins.';
 
   const year = Number(form.year);
   if (!form.year) errors.year = 'Année requise.';
   else if (!Number.isInteger(year) || year < 1980 || year > CURRENT_YEAR + 1)
     errors.year = `Entre 1980 et ${CURRENT_YEAR + 1}.`;
 
-  const km = Number(form.km);
-  if (!form.km) errors.km = 'Kilométrage requis.';
-  else if (Number.isNaN(km) || km < 0 || km > 900000) errors.km = 'Valeur invalide.';
-
-  if (!form.gearbox) errors.gearbox = 'Boîte requise.';
-  if (!form.fuel) errors.fuel = 'Énergie requise.';
-
-  const price = Number(form.expectedPrice);
-  if (!form.expectedPrice) errors.expectedPrice = 'Prix espéré requis.';
-  else if (Number.isNaN(price) || price < 500) errors.expectedPrice = 'Montant trop faible.';
+  const km = Number(chiffresSeuls(form.km));
+  if (!chiffresSeuls(form.km)) errors.km = 'Kilométrage requis.';
+  else if (Number.isNaN(km) || km > 900000) errors.km = 'Valeur invalide.';
 
   if (!form.name.trim()) errors.name = 'Nom requis.';
-  if (form.phone.replace(/[^0-9+]/g, '').length < 10) errors.phone = 'Numéro incomplet.';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) errors.email = 'Email invalide.';
+  if (chiffresSeuls(form.phone).length < 10) errors.phone = 'Numéro incomplet.';
 
   return errors;
 }
 
-const euro = (value) =>
-  new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(value);
+/** L'étape 2 n'a qu'une contrainte : un email saisi doit être valide. */
+function validerEtape2(form) {
+  const errors = {};
+  if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email))
+    errors.email = 'Email invalide.';
+  return errors;
+}
 
 function TextField({ id, label, error, suffix, className = '', ...rest }) {
   return (
@@ -114,15 +106,27 @@ function SelectField({ id, label, error, options, className = '', ...rest }) {
 
 function EstimationForm() {
   const addLead = useSiteStore((state) => state.addLead);
+  const completerDemande = useSiteStore((state) => state.completerDemande);
+  const contact = useSiteStore((state) => state.contact);
+
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(null);
   const [envoiEnCours, setEnvoiEnCours] = useState(false);
   const [envoiErreur, setEnvoiErreur] = useState(null);
-  const contact = useSiteStore((state) => state.contact);
+
+  // Mise en forme à la frappe : la saisie prend visiblement la bonne forme au
+  // lieu d'être corrigée au moment de valider.
+  const FORMATEURS = {
+    phone: formaterTelephone,
+    km: formaterMontant,
+    expectedPrice: formaterMontant,
+  };
 
   const update = (field) => (event) => {
-    setForm((previous) => ({ ...previous, [field]: event.target.value }));
+    const brut = event.target.value;
+    const valeur = FORMATEURS[field] ? FORMATEURS[field](brut) : brut;
+    setForm((previous) => ({ ...previous, [field]: valeur }));
     setErrors((previous) => {
       if (!previous[field]) return previous;
       const next = { ...previous };
@@ -141,6 +145,40 @@ function EstimationForm() {
     });
   };
 
+  /** Description du véhicule à partir de ce qui a été renseigné. */
+  const decrireVehicule = (d) =>
+    [
+      d.vehicle,
+      d.year,
+      chiffresSeuls(d.km) && `${Number(chiffresSeuls(d.km)).toLocaleString('fr-FR')} km`,
+      d.gearbox,
+      d.fuel,
+    ]
+      .filter(Boolean)
+      .join(' · ');
+
+  /** Notification email. Son échec ne doit jamais faire perdre la demande. */
+  const notifier = async (d, reference) => {
+    try {
+      await sendLead({
+        sujet: `Estimation — ${d.vehicle} — ${d.name}`,
+        replyTo: d.email || undefined,
+        champs: {
+          Référence: reference,
+          Véhicule: decrireVehicule(d),
+          'Prix espéré': d.expectedPrice ? `${d.expectedPrice} €` : 'non précisé',
+          Nom: d.name,
+          Téléphone: d.phone,
+          Email: d.email || 'non précisé',
+          Précisions: d.message || 'Aucune',
+        },
+      });
+    } catch (error) {
+      console.warn('Notification email non envoyée :', error.message);
+    }
+  };
+
+  // --- Étape 1 : la demande part ici ---
   const submit = async (event) => {
     event.preventDefault();
     const nextErrors = validate(form);
@@ -151,9 +189,6 @@ function EstimationForm() {
       return;
     }
 
-    const price = Number(form.expectedPrice);
-    const vehicule = `${form.brand} ${form.model} — ${form.year} · ${Number(form.km).toLocaleString('fr-FR')} km · ${form.gearbox} · ${form.fuel}`;
-
     setEnvoiErreur(null);
     setEnvoiEnCours(true);
 
@@ -163,10 +198,9 @@ function EstimationForm() {
         type: 'estimation',
         name: form.name,
         phone: form.phone,
-        email: form.email,
-        vehicle: vehicule,
-        expectedPrice: price,
-        message: form.message || 'Aucun commentaire.',
+        email: '',
+        vehicle: decrireVehicule(form),
+        message: 'Demande initiale — précisions non encore fournies.',
       });
     } catch (error) {
       setEnvoiErreur(error.message || "L'enregistrement de votre demande a échoué.");
@@ -174,31 +208,48 @@ function EstimationForm() {
       return;
     }
 
-    try {
-      await sendLead({
-        sujet: `Estimation — ${form.brand} ${form.model} — ${form.name}`,
-        replyTo: form.email,
-        champs: {
-          Véhicule: vehicule,
-          'Prix espéré': `${price} €`,
-          Nom: form.name,
-          Téléphone: form.phone,
-          Email: form.email,
-          Précisions: form.message || 'Aucun commentaire.',
-        },
-      });
-    } catch (error) {
-      console.warn('Notification email non envoyée :', error.message);
-    }
+    await notifier(form, lead.id);
     setEnvoiEnCours(false);
-
     setSent({
       reference: lead.id,
+      jeton: lead.completionToken,
       name: form.name,
       phone: form.phone,
-      low: Math.round((price * 0.94) / 50) * 50,
-      high: Math.round((price * 1.09) / 50) * 50,
     });
+  };
+
+  // --- Étape 2 : complète une demande déjà enregistrée ---
+  const completer = async (event) => {
+    event.preventDefault();
+    const nextErrors = validerEtape2(form);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      document.getElementById(`est-${Object.keys(nextErrors)[0]}`)?.focus();
+      return;
+    }
+
+    setEnvoiErreur(null);
+    setEnvoiEnCours(true);
+    try {
+      await completerDemande(sent.reference, sent.jeton, {
+        email: form.email,
+        vehicle: decrireVehicule(form),
+        expectedPrice: Number(chiffresSeuls(form.expectedPrice)) || undefined,
+        message: form.message || 'Aucune précision.',
+      });
+      await notifier(form, sent.reference);
+      setSent((etat) => ({ ...etat, complete: true }));
+    } catch (error) {
+      setEnvoiErreur(error.message || "L'envoi des précisions a échoué.");
+    }
+    setEnvoiEnCours(false);
+  };
+
+  const recommencer = () => {
+    setSent(null);
+    setForm(EMPTY);
+    setErrors({});
+    setEnvoiErreur(null);
   };
 
   if (sent) {
@@ -215,27 +266,85 @@ function EstimationForm() {
           sur les ventes réelles des 90 derniers jours.
         </p>
 
-        <div className="mt-5 rounded-md border border-white/10 bg-ink-850 p-4">
-          <p className="label-xs">Fourchette indicative immédiate</p>
-          <p className="num mt-2 text-xl font-bold text-fg">
-            {euro(sent.low)} — {euro(sent.high)}
+        {sent.complete ? (
+          <p className="mt-5 rounded-md border border-signal-ok/30 bg-signal-ok/5 px-4 py-3 text-sm leading-relaxed text-muted">
+            Vos précisions sont bien arrivées. Elles nous permettent d’affiner l’estimation avant
+            même de vous appeler.
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-faint">
-            Calculée à partir de votre prix espéré, avant préparation. La préparation esthétique
-            offerte fait généralement gagner 8 à 12 % sur le prix final.
-          </p>
-        </div>
+        ) : (
+          <form onSubmit={completer} noValidate className="mt-6">
+            <div className="rule" />
+            <h4 className="mt-5 text-sm font-bold text-fg">Quelques détails de plus ?</h4>
+            <p className="mt-1 text-xs leading-relaxed text-faint">
+              C’est facultatif : votre demande est déjà enregistrée, vous pouvez fermer cette page.
+              Mais plus nous en savons, plus l’estimation sera juste.
+            </p>
 
-        <Button
-          variant="secondary"
-          size="sm"
-          icon={RotateCcw}
-          className="mt-5"
-          onClick={() => {
-            setSent(null);
-            setForm(EMPTY);
-          }}
-        >
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <SelectField
+                id="est-gearbox"
+                label="Boîte"
+                value={form.gearbox}
+                onChange={update('gearbox')}
+                options={GEARBOXES}
+              />
+              <SelectField
+                id="est-fuel"
+                label="Énergie"
+                value={form.fuel}
+                onChange={update('fuel')}
+                options={FUELS}
+              />
+              <TextField
+                id="est-expectedPrice"
+                label="Prix espéré"
+                inputMode="numeric"
+                suffix="€"
+                value={form.expectedPrice}
+                onChange={update('expectedPrice')}
+                placeholder="18 500"
+              />
+              <TextField
+                id="est-email"
+                label="Email"
+                type="email"
+                value={form.email}
+                onChange={update('email')}
+                onBlur={() => setErrors(validerEtape2(form))}
+                error={errors.email}
+                autoComplete="email"
+              />
+              <div className="sm:col-span-2">
+                <label htmlFor="est-message" className="field-label">
+                  Précisions
+                </label>
+                <textarea
+                  id="est-message"
+                  rows={3}
+                  value={form.message}
+                  onChange={update('message')}
+                  className="field resize-y"
+                  placeholder="Entretien à jour, deux jeux de roues, petit impact sur le pare-chocs arrière…"
+                />
+              </div>
+            </div>
+
+            {envoiErreur ? (
+              <p
+                role="alert"
+                className="mt-4 rounded border border-signal-danger/40 bg-signal-danger/10 px-4 py-3 text-sm text-signal-danger"
+              >
+                {envoiErreur}
+              </p>
+            ) : null}
+
+            <Button type="submit" size="md" icon={Send} disabled={envoiEnCours} className="mt-5">
+              {envoiEnCours ? 'Envoi…' : 'Compléter ma demande'}
+            </Button>
+          </form>
+        )}
+
+        <Button variant="secondary" size="sm" icon={RotateCcw} className="mt-6" onClick={recommencer}>
           Estimer un autre véhicule
         </Button>
       </div>
@@ -246,71 +355,87 @@ function EstimationForm() {
     <form onSubmit={submit} noValidate className="rounded-lg border border-white/10 bg-ink-900 p-6">
       <h3 className="text-base font-bold">Faire estimer mon véhicule</h3>
       <p className="mt-1 text-xs text-faint">
-        2 minutes, sans engagement. Réponse sous 24 h ouvrées.
+        Cinq champs, une minute. Réponse sous 24 h ouvrées, sans engagement.
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <TextField id="est-brand" label="Marque" value={form.brand} onChange={update('brand')} onBlur={blur('brand')} error={errors.brand} placeholder="BMW" />
-        <TextField id="est-model" label="Modèle" value={form.model} onChange={update('model')} onBlur={blur('model')} error={errors.model} placeholder="Série 1 118d" />
-        <TextField id="est-year" label="Année" type="number" value={form.year} onChange={update('year')} onBlur={blur('year')} error={errors.year} placeholder="2019" />
-        <TextField id="est-km" label="Kilométrage" type="number" suffix="km" value={form.km} onChange={update('km')} onBlur={blur('km')} error={errors.km} placeholder="82000" />
-        <SelectField id="est-gearbox" label="Boîte" value={form.gearbox} onChange={update('gearbox')} onBlur={blur('gearbox')} error={errors.gearbox} options={GEARBOXES} />
-        <SelectField id="est-fuel" label="Énergie" value={form.fuel} onChange={update('fuel')} onBlur={blur('fuel')} error={errors.fuel} options={FUELS} />
-        <TextField id="est-expectedPrice" label="Prix espéré" type="number" suffix="€" value={form.expectedPrice} onChange={update('expectedPrice')} onBlur={blur('expectedPrice')} error={errors.expectedPrice} placeholder="18500" className="sm:col-span-2" />
-      </div>
-
-      <div className="my-6 rule" />
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <TextField id="est-name" label="Nom et prénom" value={form.name} onChange={update('name')} onBlur={blur('name')} error={errors.name} autoComplete="name" />
-        <TextField id="est-phone" label="Téléphone" type="tel" value={form.phone} onChange={update('phone')} onBlur={blur('phone')} error={errors.phone} autoComplete="tel" placeholder="06 12 34 56 78" />
-        <TextField id="est-email" label="Email" type="email" value={form.email} onChange={update('email')} onBlur={blur('email')} error={errors.email} autoComplete="email" className="sm:col-span-2" />
-        <div className="sm:col-span-2">
-          <label htmlFor="est-message" className="field-label">
-            Précisions (facultatif)
-          </label>
-          <textarea
-            id="est-message"
-            rows={3}
-            value={form.message}
-            onChange={update('message')}
-            className="field resize-y"
-            placeholder="Entretien à jour, deux jeux de roues, petit impact sur le pare-chocs arrière…"
-          />
-        </div>
+        <TextField
+          id="est-vehicle"
+          label="Véhicule"
+          value={form.vehicle}
+          onChange={update('vehicle')}
+          onBlur={blur('vehicle')}
+          error={errors.vehicle}
+          placeholder="BMW Série 1 118d"
+          className="sm:col-span-2"
+        />
+        <TextField
+          id="est-year"
+          label="Année"
+          inputMode="numeric"
+          value={form.year}
+          onChange={update('year')}
+          onBlur={blur('year')}
+          error={errors.year}
+          placeholder="2019"
+        />
+        <TextField
+          id="est-km"
+          label="Kilométrage"
+          inputMode="numeric"
+          suffix="km"
+          value={form.km}
+          onChange={update('km')}
+          onBlur={blur('km')}
+          error={errors.km}
+          placeholder="82 000"
+        />
+        <TextField
+          id="est-name"
+          label="Nom et prénom"
+          value={form.name}
+          onChange={update('name')}
+          onBlur={blur('name')}
+          error={errors.name}
+          autoComplete="name"
+        />
+        <TextField
+          id="est-phone"
+          label="Téléphone"
+          type="tel"
+          value={form.phone}
+          onChange={update('phone')}
+          onBlur={blur('phone')}
+          error={errors.phone}
+          autoComplete="tel"
+          placeholder="06 12 34 56 78"
+        />
       </div>
 
       {envoiErreur ? (
-
         <p
-
           role="alert"
-
           className="mt-6 rounded border border-signal-danger/40 bg-signal-danger/10 px-4 py-3 text-sm text-signal-danger"
-
         >
-
           {envoiErreur} Vous pouvez nous joindre au{' '}
-
           <a href={primaryPhone(contact).href} className="num font-semibold underline">
-
             {primaryPhone(contact).number}
-
           </a>
-
           .
-
         </p>
-
       ) : null}
 
-
-      <Button type="submit" size="lg" icon={Send} className="mt-6 w-full" disabled={envoiEnCours}>
-
+      <Button
+        type="submit"
+        size="lg"
+        icon={Send}
+        disabled={envoiEnCours}
+        className={`w-full ${envoiErreur ? 'mt-3' : 'mt-6'}`}
+      >
         {envoiEnCours ? 'Envoi en cours…' : 'Obtenir mon estimation'}
-
       </Button>
-      <p className="mt-3 text-center text-[11px] text-faint">
+
+      <p className="mt-3 text-center text-[11px] leading-relaxed text-faint">
         Données utilisées uniquement pour traiter votre demande. Aucune revente à des tiers.
       </p>
     </form>

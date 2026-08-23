@@ -102,6 +102,16 @@ export const api = {
 
   supprimerDemande: (id) => appeler(`/leads/${id}`, { method: 'DELETE' }),
 
+  /**
+   * Complète une demande déjà déposée (seconde étape du formulaire
+   * d'estimation). Le jeton est celui remis lors de la création.
+   */
+  completerDemande: (id, jeton, champs) =>
+    appeler(`/leads/${id}/complete`, {
+      method: 'POST',
+      body: JSON.stringify({ token: jeton, ...champs }),
+    }),
+
   /** Rattache une demande à une fiche client, ou l'en détache avec `null`. */
   rattacherDemande: (id, clientId) =>
     appeler(`/leads/${id}`, { method: 'PATCH', body: JSON.stringify({ clientId }) }),
