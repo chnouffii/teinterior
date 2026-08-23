@@ -19,16 +19,18 @@ import { QuoteProvider } from './context/QuoteContext.jsx';
 import { LEGAL_ROUTE, ROUTES } from './data/site.js';
 
 /**
- * Le panel d'administration n'est inclus dans le bundle que si
- * `VITE_ENABLE_ADMIN=true` au moment du build (voir `.env.example`).
+ * Le panel d'administration est inclus par défaut.
  *
- * Il n'y a pas de back-end : l'authentification est côté client et ses
- * identifiants finiraient lisibles dans le JavaScript servi aux visiteurs. Sur
- * un site public, `/admin` doit donc rester absent du build. La constante étant
- * remplacée littéralement par Vite, la branche morte — et tout le code du panel
- * qu'elle importe — disparaît du bundle de production.
+ * Il l'était autrefois sur demande seulement : l'authentification était côté
+ * client et son mot de passe se lisait dans le JavaScript servi aux visiteurs.
+ * Ce n'est plus le cas — le serveur vérifie un condensé scrypt et le panel ne
+ * contient aucun secret. L'exclure ne protégeait donc plus rien, et faisait
+ * disparaître `/admin` en silence dès qu'un déploiement oubliait la variable.
+ *
+ * `VITE_ENABLE_ADMIN=false` reste possible pour produire un build strictement
+ * public, sans le code du panel.
  */
-const ADMIN_ENABLED = import.meta.env.VITE_ENABLE_ADMIN === 'true';
+const ADMIN_ENABLED = import.meta.env.VITE_ENABLE_ADMIN !== 'false';
 
 const AdminRoutes = ADMIN_ENABLED ? lazy(() => import('./admin/AdminRoutes.jsx')) : null;
 

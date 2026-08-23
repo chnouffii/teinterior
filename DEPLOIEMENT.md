@@ -73,7 +73,7 @@ C'est **la commande à retenir**. En SSH sur le VPS :
 cd /opt/teinterior
 git pull origin claude/site-current-overview-ivnv0r
 npm ci
-VITE_WEB3FORMS_KEY=votre_cle VITE_ENABLE_ADMIN=true npm run build
+VITE_WEB3FORMS_KEY=votre_cle npm run build
 sudo rsync -a --delete dist/ /var/www/teinterior/
 sudo systemctl restart teinterior-api
 ```
@@ -81,19 +81,16 @@ sudo systemctl restart teinterior-api
 Pas besoin de recharger nginx : il sert les fichiers du dossier, qui vient
 d'être remplacé.
 
-> `VITE_ENABLE_ADMIN=true` inclut le panel d'administration dans le build.
-> C'est désormais sans danger : l'authentification est côté serveur. Voir la
-> section 5.
+> Le panel d'administration est inclus par défaut : l'authentification est côté
+> serveur et le build ne contient aucun secret. Pour produire un site
+> strictement public, sans le code du panel, ajouter `VITE_ENABLE_ADMIN=false`.
 
 ### Pour éviter de retaper la clé
 
 Créer `/opt/teinterior/.env` (ignoré par git) :
 
 ```bash
-sudo tee /opt/teinterior/.env >/dev/null <<'ENV'
-VITE_WEB3FORMS_KEY=votre_cle
-VITE_ENABLE_ADMIN=true
-ENV
+echo 'VITE_WEB3FORMS_KEY=votre_cle' | sudo tee /opt/teinterior/.env >/dev/null
 ```
 
 Le déploiement se réduit alors à :
