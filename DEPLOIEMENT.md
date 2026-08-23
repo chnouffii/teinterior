@@ -436,7 +436,7 @@ curl -s  https://teinterior.fr/api/content | head  # les contenus doivent sortir
 curl -I  https://teinterior.fr/admin/connexion     # 200
 
 # Le contenu doit être dans le HTML lui-même, sans exécuter de JavaScript :
-curl -s https://teinterior.fr/prestations | grep -c 'Correction de peinture'
+curl -s https://teinterior.fr/prestations | grep -c 'Remise en état intérieur'
 
 # Compression active (doit afficher « content-encoding: gzip ») :
 curl -sI -H 'Accept-Encoding: gzip' https://teinterior.fr/ | grep -i content-encoding
@@ -450,7 +450,7 @@ qui est encore en place (elle renvoyait `index.html` pour tout) : recopiez
 `deploy/nginx.conf`. Un 200 sur une URL inexistante laisse Google indexer
 autant de pages vides qu'il existe de vieux liens et de fautes de frappe.
 
-Si la troisième commande renvoie **0**, le pré-rendu n'a pas eu lieu : le
+Si cette dernière commande renvoie **0**, le pré-rendu n'a pas eu lieu : le
 build s'est arrêté avant `node build/generer-pages.mjs`. Relancez `npm run
 build` et vérifiez qu'il affiche bien la ligne « pré-rendu 16 pages ».
 
