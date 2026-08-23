@@ -1,3 +1,6 @@
+/** Domaine de production, utilisé pour les URL canoniques et le sitemap. */
+export const SITE_URL = 'https://teinterior.fr';
+
 export const BRAND = {
   name: 'Teintérior',
   baseline: 'Atelier automobile — Brumath',
@@ -92,6 +95,15 @@ export const CONTACT = {
     street: '4 rue des Carrières',
     zone: '',
     city: '67170 Brumath',
+    /**
+     * Coordonnées GPS exactes de l'atelier, pour le référencement local.
+     * ⚠ À RENSEIGNER : clic droit sur votre porte dans Google Maps →
+     * « Plus d'infos sur cet endroit » affiche latitude puis longitude.
+     * Laissées vides volontairement : des coordonnées approximatives placeraient
+     * votre point ailleurs dans Brumath sur la carte des résultats.
+     */
+    lat: null,
+    lon: null,
     mapsUrl:
       'https://www.google.com/maps/search/?api=1&query=4+rue+des+Carrieres+67170+Brumath',
   },

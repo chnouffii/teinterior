@@ -60,7 +60,16 @@ export default function BeforeAfterSlider({
 
   const renderLayer = (image, variant, caption) =>
     image ? (
-      <img src={image} alt={caption} className="h-full w-full object-cover" draggable={false} />
+      <img
+        src={image}
+        alt={caption}
+        width="1600"
+        height="1100"
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover"
+        draggable={false}
+      />
     ) : (
       <CarVisual
         scene={scene}

@@ -51,9 +51,12 @@ export function VehicleCover({ vehicle, className = '' }) {
     return (
       <img
         src={cover}
-        alt={`${vehicle.brand} ${vehicle.model}`}
-        className={`object-cover ${className}`}
+        alt={`${vehicle.brand} ${vehicle.model} — ${vehicle.trim}, à vendre à Brumath`}
+        width="1600"
+        height="1200"
         loading="lazy"
+        decoding="async"
+        className={`object-cover ${className}`}
       />
     );
   }

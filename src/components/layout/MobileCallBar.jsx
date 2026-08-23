@@ -1,4 +1,4 @@
-import { CalendarCheck, Phone } from 'lucide-react';
+import { CalendarCheck, MessageCircle, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
@@ -24,6 +24,19 @@ export default function MobileCallBar() {
           <Phone className="h-4 w-4" aria-hidden="true" />
           Appeler
         </a>
+        {contact.whatsapp ? (
+          <a
+            href={`${contact.whatsapp}?text=${encodeURIComponent(
+              'Bonjour, je souhaite un devis pour '
+            )}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex flex-1 items-center justify-center gap-2 rounded-md border border-white/10 bg-ink-850 py-3 text-sm font-semibold text-fg"
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            WhatsApp
+          </a>
+        ) : null}
         <Link
           to={ROUTES.contact}
           className="flex flex-1 items-center justify-center gap-2 rounded-md bg-accent py-3 text-sm font-semibold text-accent-on"

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Le panel d'administration n'a rien à faire dans un index de recherche.
+Disallow: /admin
+
+Sitemap: https://teinterior.fr/sitemap.xml

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Check, Clock, ExternalLink, Mail, MapPin, Paperclip, Phone, RotateCcw, Send, Trash2 } from 'lucide-react';
+import { Check, Clock, ExternalLink, Mail, MapPin, MessageCircle, Paperclip, Phone, RotateCcw, Send, Trash2 } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
@@ -473,6 +473,24 @@ export default function Contact({ hideHeading = false }) {
                     {contact.email}
                   </a>
                 </li>
+                {contact.whatsapp ? (
+                  <li className="flex gap-3">
+                    <MessageCircle
+                      className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                      aria-hidden="true"
+                    />
+                    <a
+                      href={`${contact.whatsapp}?text=${encodeURIComponent(
+                        'Bonjour, je souhaite un devis pour '
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex min-h-[36px] items-center text-muted transition-colors hover:text-accent"
+                    >
+                      WhatsApp — envoyez-nous vos photos
+                    </a>
+                  </li>
+                ) : null}
                 <li className="flex gap-3">
                   <Clock className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   <span className="w-full text-muted">
