@@ -71,10 +71,14 @@ nginx -v
 ```
 
 - **nginx 1.25 ou plus** : gardez `listen 443 ssl;` et ajoutez une ligne
-  `http2 on;` dans le même bloc.
-- **nginx 1.24 ou moins** (dont Ubuntu 24.04) : remplacez `listen 443 ssl;` par
+  `http2 on;` dans le même bloc. C'est la forme à utiliser : sur ces versions,
+  `listen ... http2` fonctionne encore mais `nginx -t` la signale comme
+  dépréciée.
+- **nginx 1.24 ou moins** : remplacez `listen 443 ssl;` par
   `listen 443 ssl http2;`. La directive `http2 on;` n'existe pas sur ces
   versions et fait échouer `nginx -t` avec « unknown directive "http2" ».
+
+Les deux formes ont été vérifiées, sur nginx 1.24 et 1.30.
 
 ```bash
 sudo nano /etc/nginx/sites-available/teinterior
