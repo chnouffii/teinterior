@@ -104,8 +104,33 @@ sudo rsync -a --delete dist/ /var/www/teinterior/
 sudo systemctl restart teinterior-api
 ```
 
-Pas besoin de recharger nginx : il sert les fichiers du dossier, qui vient
-d'être remplacé.
+Pas besoin de recharger nginx **tant que `deploy/nginx.conf` n'a pas changé** :
+il sert les fichiers du dossier, qui vient d'être remplacé. Quand ce fichier
+change, voir « Mettre à jour la configuration nginx » ci-dessous — le script de
+déploiement vous prévient dans ce cas.
+
+### Mettre à jour la configuration nginx
+
+À faire uniquement quand `deploy/nginx.conf` a changé dans le dépôt.
+
+```bash
+sudo cp /opt/teinterior/deploy/nginx.conf /etc/nginx/sites-available/teinterior
+sudo nano /etc/nginx/sites-available/teinterior   # remettre server_name, root, et http2
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+`nginx -t` **avant** le reload, toujours : une erreur de syntaxe empêche nginx
+de redémarrer et coupe le site. Tant que `nginx -t` n'est pas bon, ne rechargez
+pas — l'ancienne configuration reste en service et le site reste debout.
+
+Trois choses que certbot et vous avez ajoutées à la main ne sont pas dans le
+fichier du dépôt et sont à remettre après chaque copie : le bloc `listen 443`
+avec les chemins de certificat, `http2 on;`, et le `server_name` si votre
+domaine diffère. Le plus sûr est de comparer avant de copier :
+
+```bash
+diff /etc/nginx/sites-available/teinterior /opt/teinterior/deploy/nginx.conf
+```
 
 > Le panel d'administration est inclus par défaut : l'authentification est côté
 > serveur et le build ne contient aucun secret. Pour produire un site
@@ -139,6 +164,16 @@ npm ci
 npm run build
 rsync -a --delete dist/ /var/www/teinterior/
 systemctl restart teinterior-api
+
+# La config nginx n'est pas déployée automatiquement : une erreur de syntaxe
+# couperait le site. On se contente de signaler qu'elle a bougé.
+if ! diff -q /etc/nginx/sites-available/teinterior deploy/nginx.conf >/dev/null 2>&1; then
+  echo
+  echo "  ATTENTION : deploy/nginx.conf diffère de la configuration installée."
+  echo "  Voir « Mettre à jour la configuration nginx » dans DEPLOIEMENT.md."
+  echo
+fi
+
 echo "Déployé : $(date '+%d/%m/%Y %H:%M')"
 SH
 sudo chmod +x /usr/local/bin/deploy-teinterior
