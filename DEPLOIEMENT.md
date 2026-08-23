@@ -252,8 +252,14 @@ fichiers restés orphelins (suppression interrompue, import raté), le bouton
 ### Le suivi client
 
 L'écran **Clients** garde la mémoire de chaque personne passée à l'atelier :
-coordonnées, véhicules, interventions réalisées avec leur montant, et un journal
-de notes daté. La date de chaque note est posée par le serveur, pas par le
+coordonnées, véhicules avec leur immatriculation, interventions réalisées avec
+leur montant, et un journal de notes daté.
+
+Deux endroits pour écrire, qui ne servent pas à la même chose :
+
+- **À savoir sur ce client** — ce qui reste vrai d'une fois sur l'autre :
+  préférences, contraintes, code du portail. On le relit avant chaque échange.
+- **Journal de suivi** — ce qui s'est passé, daté automatiquement. On l'empile. La date de chaque note est posée par le serveur, pas par le
 navigateur : l'historique reste fiable.
 
 Deux types d'affaires se suivent dans le temps sur chaque fiche :

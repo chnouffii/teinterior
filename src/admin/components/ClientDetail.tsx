@@ -114,6 +114,24 @@ export default function ClientDetail({ client, onClose }: { client: Client; onCl
         </section>
 
         <section>
+          <h3 className="label-xs">À savoir sur ce client</h3>
+          <p className="mt-1 text-[11px] text-faint">
+            Ce qui reste vrai d’une fois sur l’autre : préférences, contraintes, code du portail.
+            L’historique des échanges, lui, se note dans le journal en bas de fiche.
+          </p>
+          <div className="mt-3">
+            <TextArea
+              rows={3}
+              defaultValue={client.about ?? ''}
+              onBlur={(e) =>
+                e.target.value !== (client.about ?? '') && enregistrer({ about: e.target.value })
+              }
+              placeholder="Préfère les SMS, travaille en horaires décalés. Portail au fond à droite, code 1974. Ne veut jamais de lavage automatique."
+            />
+          </div>
+        </section>
+
+        <section>
           <div className="flex items-center justify-between">
             <h3 className="label-xs">Relance à venir</h3>
             {client.nextAction ? (

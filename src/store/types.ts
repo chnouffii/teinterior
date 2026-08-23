@@ -242,6 +242,11 @@ export interface Client {
   status: ClientStatus;
   /** D'où vient le client : site, recommandation, passage… */
   source: string;
+  /**
+   * Informations permanentes, à relire avant chaque échange : préférences,
+   * contraintes, code du portail… Distinct du journal, qui raconte l'historique.
+   */
+  about: string;
   vehicles: ClientVehicle[];
   interventions: ClientIntervention[];
   /** Véhicules confiés à l'atelier pour la vente. */

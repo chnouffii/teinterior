@@ -165,6 +165,10 @@ function nettoyerClient(brut, { partiel = false } = {}) {
     }
   }
 
+  if (fourni('about')) {
+    resultat.about = texte(source.about, 4000);
+  }
+
   if (fourni('status')) {
     resultat.status = STATUTS_CLIENT.includes(source.status) ? source.status : 'prospect';
   }
@@ -463,6 +467,7 @@ const serveur = http.createServer(async (requete, reponse) => {
         email: '',
         city: '',
         source: '',
+        about: '',
         ...nettoyerClient(await lireCorps(requete)),
       };
       if (!champs.name) {
