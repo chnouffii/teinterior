@@ -63,6 +63,32 @@ sudo certbot --nginx -d teinterior.fr -d www.teinterior.fr
 
 Certbot modifie la config nginx pour ajouter le HTTPS et la redirection.
 
+**Activez HTTP/2 juste après**, dans le bloc `listen 443 ssl` que certbot vient
+d'écrire :
+
+```bash
+sudo nano /etc/nginx/sites-available/teinterior   # ajouter « http2 on; »
+sudo nginx -t && sudo systemctl reload nginx
+curl -sI --http2 https://teinterior.fr/ | head -1   # doit répondre « HTTP/2 200 »
+```
+
+Le site charge une douzaine de fichiers de polices : sans multiplexage, le
+navigateur les met en file d'attente six par six. Sur nginx antérieur à 1.25,
+la forme est `listen 443 ssl http2;` sur la ligne existante.
+
+### Brotli (facultatif)
+
+Brotli compresse le texte 15 à 20 % de mieux que gzip, déjà actif.
+
+```bash
+sudo apt-get install -y libnginx-mod-brotli
+sudo nano /etc/nginx/sites-available/teinterior   # décommenter le bloc brotli
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Si `nginx -t` échoue sur `brotli on`, le module n'est pas chargé : recommentez
+le bloc, gzip continue de faire l'essentiel du travail.
+
 ---
 
 ## 3. Déployer, et redéployer à chaque modification
@@ -324,14 +350,31 @@ Si le panel affiche « Serveur injoignable », le service est arrêté ou le blo
 ## 6. Vérifier après déploiement
 
 ```bash
-curl -I https://teinterior.fr/                    # 200
-curl -I https://teinterior.fr/prestations         # 200 — et non 404
-curl -s  https://teinterior.fr/api/content | head # les contenus doivent sortir
-curl -I  https://teinterior.fr/admin/connexion    # 200
+curl -I https://teinterior.fr/                     # 200
+curl -I https://teinterior.fr/prestations          # 200 — et non 404
+curl -I https://teinterior.fr/detailing/strasbourg # 200
+curl -I https://teinterior.fr/url-bidon            # 404 — et non 200
+curl -s  https://teinterior.fr/api/content | head  # les contenus doivent sortir
+curl -I  https://teinterior.fr/admin/connexion     # 200
+
+# Le contenu doit être dans le HTML lui-même, sans exécuter de JavaScript :
+curl -s https://teinterior.fr/prestations | grep -c 'Correction de peinture'
+
+# Compression active (doit afficher « content-encoding: gzip ») :
+curl -sI -H 'Accept-Encoding: gzip' https://teinterior.fr/ | grep -i content-encoding
 ```
 
 Si `/prestations` renvoie 404, c'est que le `try_files` de la config nginx
 n'est pas actif : vérifier que le bon fichier est bien dans `sites-enabled`.
+
+Si `/url-bidon` renvoie **200** au lieu de 404, c'est l'ancienne configuration
+qui est encore en place (elle renvoyait `index.html` pour tout) : recopiez
+`deploy/nginx.conf`. Un 200 sur une URL inexistante laisse Google indexer
+autant de pages vides qu'il existe de vieux liens et de fautes de frappe.
+
+Si la troisième commande renvoie **0**, le pré-rendu n'a pas eu lieu : le
+build s'est arrêté avant `node build/generer-pages.mjs`. Relancez `npm run
+build` et vérifiez qu'il affiche bien la ligne « pré-rendu 16 pages ».
 
 Puis, dans un navigateur :
 
