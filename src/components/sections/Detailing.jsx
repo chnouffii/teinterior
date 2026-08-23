@@ -97,6 +97,9 @@ export default function Detailing({ hideHeading = false }) {
 
   const current = beforeAfter.find((item) => item.id === activeCase) ?? beforeAfter[0];
 
+  const NOMBRES = ['Aucune formule', 'Une formule', 'Deux formules', 'Trois formules', 'Quatre formules', 'Cinq formules', 'Six formules'];
+  const nombreFormules = NOMBRES[packs.length] ?? `${packs.length} formules`;
+
   const handleSelect = (pack) => {
     requestQuote({
       service: pack.id,
@@ -113,7 +116,9 @@ export default function Detailing({ hideHeading = false }) {
             eyebrow="Pôle esthétique auto"
             title="Detailing, correction de peinture,"
             highlight="céramique & teintage"
-            description="Trois formules, détaillées opération par opération comme sur le devis que vous recevrez : produits utilisés, temps passé, résultat attendu."
+            // Le nombre suit les prestations réellement publiées : le texte
+            // annonçait « Trois formules » même après en avoir ajouté une.
+            description={`${nombreFormules}, détaillées opération par opération comme sur le devis que vous recevrez : produits utilisés, temps passé, résultat attendu.`}
           />
         )}
 

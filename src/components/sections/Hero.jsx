@@ -10,7 +10,10 @@ export default function Hero() {
   const hero = useSiteStore((state) => state.hero);
   const lastJob = useSiteStore((state) => state.lastJob);
   const packs = useSiteStore((state) => state.packs);
-  const entryPrice = Math.min(...packs.map((pack) => pack.price));
+  // `Math.min()` sans argument vaut Infinity : sans ce garde, supprimer la
+  // dernière prestation depuis le panel afficherait « à partir de Infinity € ».
+  const prix = packs.map((pack) => pack.price).filter((p) => Number.isFinite(p) && p > 0);
+  const entryPrice = prix.length > 0 ? Math.min(...prix) : null;
 
   return (
     <section id="accueil" className="pt-28 pb-12 lg:pt-30 lg:pb-14">
@@ -54,9 +57,14 @@ export default function Hero() {
 
           <Reveal delay={320}>
             <p className="mt-6 text-xs text-faint">
-              Devis gratuit sous 24 h ouvrées · prestations à partir de{' '}
-              <span className="num font-semibold text-accent-soft">{entryPrice} €</span> · atelier
-              sur rendez-vous
+              Devis gratuit sous 24 h ouvrées
+              {entryPrice === null ? null : (
+                <>
+                  {' '}· prestations à partir de{' '}
+                  <span className="num font-semibold text-accent-soft">{entryPrice} €</span>
+                </>
+              )}{' '}
+              · atelier sur rendez-vous
             </p>
           </Reveal>
         </div>

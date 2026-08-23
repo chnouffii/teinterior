@@ -32,6 +32,7 @@ import type {
   Lead,
   LeadStatus,
   RetrofitBrand,
+  RetrofitSystem,
   ReviewSummary,
   ServiceOption,
   ServicePack,
@@ -71,8 +72,28 @@ interface SiteState {
   removeVehicle: (id: string) => void;
   setVehicleStatus: (id: string, status: VehicleStatus) => void;
 
+  /** Crée une prestation vierge et la renvoie, pour ouvrir sa fiche aussitôt. */
+  addPack: () => ServicePack;
   updatePack: (id: string, patch: Partial<ServicePack>) => void;
+  removePack: (id: string) => void;
+
+  /** Crée une option à la carte vierge et la renvoie. */
+  addOption: () => ServiceOption;
   updateOption: (id: string, patch: Partial<ServiceOption>) => void;
+  removeOption: (id: string) => void;
+
+  /**
+   * Ajoute un forfait rétrofit. La marque et le modèle sont créés s'ils
+   * n'existent pas : on raisonne en « forfait pour telle voiture », pas en
+   * arborescence à construire nœud par nœud.
+   */
+  addSystem: (entree: {
+    brand: string;
+    model: string;
+    years: string;
+    system: Omit<RetrofitSystem, 'id'>;
+  }) => void;
+  removeSystem: (brandId: string, modelId: string, systemId: string) => void;
   updateSystem: (
     brandId: string,
     modelId: string,
@@ -195,6 +216,25 @@ type SectionsOubliees = Exclude<keyof SiteContent, SectionsEnvoyees>;
 const _aucuneSectionOubliee: SectionsOubliees extends never ? true : never = true;
 void _aucuneSectionOubliee;
 
+/**
+ * Identifiant stable et unique.
+ *
+ * `Date.now()` seul suffisait tant qu'on n'ajoutait qu'un élément à la fois ;
+ * deux créations dans la même milliseconde produiraient la même clé, et React
+ * afficherait deux fois la même ligne.
+ */
+let compteur = 0;
+const identifiant = (prefixe: string) => `${prefixe}-${Date.now().toString(36)}${(compteur++).toString(36)}`;
+
+/** Identifiant lisible dérivé d'un nom : « Peugeot 208 » → « peugeot-208 ». */
+const slug = (valeur: string) =>
+  valeur
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 export const useSiteStore = create<SiteState>()((set, get) => {
   /**
    * Enregistrement différé : les champs texte du panel déclenchent une frappe
@@ -302,6 +342,120 @@ export const useSiteStore = create<SiteState>()((set, get) => {
       setVehicleStatus: (id, status) =>
         modifier((state) => ({
           vehicles: state.vehicles.map((item) => (item.id === id ? { ...item, status } : item)),
+        })),
+
+      addPack: () => {
+        const pack: ServicePack = {
+          id: identifiant('pack'),
+          // La référence suit la numérotation existante plutôt que de repartir
+          // à INT-01 : les devis déjà envoyés citent ces références.
+          ref: `NEW-${String(get().packs.length + 1).padStart(2, '0')}`,
+          name: 'Nouvelle prestation',
+          subtitle: '',
+          price: 0,
+          priceNote: '',
+          duration: '',
+          immobilisation: '',
+          summary: '',
+          steps: [],
+          products: [],
+          note: '',
+        };
+        modifier((state) => ({ packs: [...state.packs, pack] }));
+        return pack;
+      },
+
+      removePack: (id) =>
+        modifier((state) => ({ packs: state.packs.filter((item) => item.id !== id) })),
+
+      addOption: () => {
+        const option: ServiceOption = {
+          id: identifiant('opt'),
+          label: 'Nouvelle option',
+          detail: '',
+          price: '',
+          duration: '',
+        };
+        modifier((state) => ({ options: [...state.options, option] }));
+        return option;
+      },
+
+      removeOption: (id) =>
+        modifier((state) => ({ options: state.options.filter((item) => item.id !== id) })),
+
+      addSystem: ({ brand, model, years, system }) =>
+        modifier((state) => {
+          const idMarque = slug(brand);
+          const idModele = slug(`${brand}-${model}`);
+          const nouveau: RetrofitSystem = { ...system, id: identifiant('sys') };
+
+          const marqueExistante = state.catalogue.find(
+            (m) => m.id === idMarque || m.brand.toLowerCase() === brand.trim().toLowerCase()
+          );
+
+          if (!marqueExistante) {
+            return {
+              catalogue: [
+                ...state.catalogue,
+                {
+                  id: idMarque,
+                  brand: brand.trim(),
+                  models: [{ id: idModele, model: model.trim(), years, systems: [nouveau] }],
+                },
+              ],
+            };
+          }
+
+          return {
+            catalogue: state.catalogue.map((m) => {
+              if (m.id !== marqueExistante.id) return m;
+
+              const modeleExistant = m.models.find(
+                (mo) => mo.model.trim().toLowerCase() === model.trim().toLowerCase()
+              );
+
+              if (!modeleExistant) {
+                return {
+                  ...m,
+                  models: [...m.models, { id: idModele, model: model.trim(), years, systems: [nouveau] }],
+                };
+              }
+
+              return {
+                ...m,
+                models: m.models.map((mo) =>
+                  mo.id !== modeleExistant.id
+                    ? mo
+                    : { ...mo, years: years || mo.years, systems: [...mo.systems, nouveau] }
+                ),
+              };
+            }),
+          };
+        }),
+
+      /**
+       * Retire un forfait, et avec lui le modèle puis la marque s'ils se
+       * retrouvent vides : un modèle sans forfait apparaîtrait dans le
+       * configurateur public comme un choix qui ne mène nulle part.
+       */
+      removeSystem: (brandId, modelId, systemId) =>
+        modifier((state) => ({
+          catalogue: state.catalogue
+            .map((brand) =>
+              brand.id !== brandId
+                ? brand
+                : {
+                    ...brand,
+                    models: brand.models
+                      .map((model) =>
+                        model.id !== modelId
+                          ? model
+                          : { ...model, systems: model.systems.filter((s) => s.id !== systemId) }
+                      )
+                      .filter((model) => model.systems.length > 0),
+                  }
+            )
+            .filter((brand) => brand.models.length > 0),
         })),
 
       updatePack: (id, patch) =>
