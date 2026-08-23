@@ -64,17 +64,26 @@ sudo certbot --nginx -d teinterior.fr -d www.teinterior.fr
 Certbot modifie la config nginx pour ajouter le HTTPS et la redirection.
 
 **Activez HTTP/2 juste après**, dans le bloc `listen 443 ssl` que certbot vient
-d'écrire :
+d'écrire. La forme dépend de la version de nginx — vérifiez-la d'abord :
 
 ```bash
-sudo nano /etc/nginx/sites-available/teinterior   # ajouter « http2 on; »
+nginx -v
+```
+
+- **nginx 1.25 ou plus** : gardez `listen 443 ssl;` et ajoutez une ligne
+  `http2 on;` dans le même bloc.
+- **nginx 1.24 ou moins** (dont Ubuntu 24.04) : remplacez `listen 443 ssl;` par
+  `listen 443 ssl http2;`. La directive `http2 on;` n'existe pas sur ces
+  versions et fait échouer `nginx -t` avec « unknown directive "http2" ».
+
+```bash
+sudo nano /etc/nginx/sites-available/teinterior
 sudo nginx -t && sudo systemctl reload nginx
 curl -sI --http2 https://teinterior.fr/ | head -1   # doit répondre « HTTP/2 200 »
 ```
 
 Le site charge une douzaine de fichiers de polices : sans multiplexage, le
-navigateur les met en file d'attente six par six. Sur nginx antérieur à 1.25,
-la forme est `listen 443 ssl http2;` sur la ligne existante.
+navigateur les met en file d'attente six par six.
 
 ### Brotli (facultatif)
 
@@ -109,13 +118,51 @@ il sert les fichiers du dossier, qui vient d'être remplacé. Quand ce fichier
 change, voir « Mettre à jour la configuration nginx » ci-dessous — le script de
 déploiement vous prévient dans ce cas.
 
-### Mettre à jour la configuration nginx
+### Passer au fichier de règles séparé (une seule fois)
 
-À faire uniquement quand `deploy/nginx.conf` a changé dans le dépôt.
+Si votre `/etc/nginx/sites-available/teinterior` contient encore les blocs
+`location` en dur — c'est le cas de toute installation antérieure à ce
+découpage — faites cette bascule une fois. Ensuite, les mises à jour se
+réduisent à la copie décrite juste après.
 
 ```bash
-sudo cp /opt/teinterior/deploy/nginx.conf /etc/nginx/sites-available/teinterior
-sudo nano /etc/nginx/sites-available/teinterior   # remettre server_name, root, et http2
+# 1. Sauvegarde, pour pouvoir revenir en arrière
+sudo cp /etc/nginx/sites-available/teinterior ~/teinterior-nginx-avant.conf
+
+# 2. Poser les règles du site
+sudo mkdir -p /etc/nginx/snippets
+sudo cp /opt/teinterior/deploy/teinterior-locations.conf /etc/nginx/snippets/teinterior.conf
+```
+
+Puis éditez `/etc/nginx/sites-available/teinterior` : **supprimez** tous les
+blocs `location`, les directives `gzip*`, les `add_header`, `error_page` et
+`client_max_body_size`, et **remplacez-les par une seule ligne** dans chaque
+bloc `server` qui sert le site :
+
+```nginx
+    include snippets/teinterior.conf;
+```
+
+Ne touchez à rien de ce que certbot a écrit : les lignes `listen`, `ssl_*`,
+`server_name`, les `include /etc/letsencrypt/...` et le bloc de redirection
+restent tels quels. Chaque bloc doit garder son `root /var/www/teinterior;` et
+son `index index.html;`.
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+En cas de problème : `sudo cp ~/teinterior-nginx-avant.conf
+/etc/nginx/sites-available/teinterior && sudo systemctl reload nginx`.
+
+### Mettre à jour la configuration nginx
+
+Les règles du site vivent dans **`deploy/teinterior-locations.conf`**, un
+fichier séparé que vos blocs `server` incluent. La mise à jour se réduit donc à
+une copie, sans toucher à ce que certbot a écrit :
+
+```bash
+sudo cp /opt/teinterior/deploy/teinterior-locations.conf /etc/nginx/snippets/teinterior.conf
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
@@ -123,14 +170,9 @@ sudo nginx -t && sudo systemctl reload nginx
 de redémarrer et coupe le site. Tant que `nginx -t` n'est pas bon, ne rechargez
 pas — l'ancienne configuration reste en service et le site reste debout.
 
-Trois choses que certbot et vous avez ajoutées à la main ne sont pas dans le
-fichier du dépôt et sont à remettre après chaque copie : le bloc `listen 443`
-avec les chemins de certificat, `http2 on;`, et le `server_name` si votre
-domaine diffère. Le plus sûr est de comparer avant de copier :
-
-```bash
-diff /etc/nginx/sites-available/teinterior /opt/teinterior/deploy/nginx.conf
-```
+`deploy/nginx.conf`, lui, ne sert qu'à la première installation : il ne contient
+que le bloc `server` d'exemple. Une fois certbot passé, le fichier de
+`sites-available` est le vôtre et ne se recopie plus.
 
 > Le panel d'administration est inclus par défaut : l'authentification est côté
 > serveur et le build ne contient aucun secret. Pour produire un site
@@ -167,10 +209,11 @@ systemctl restart teinterior-api
 
 # La config nginx n'est pas déployée automatiquement : une erreur de syntaxe
 # couperait le site. On se contente de signaler qu'elle a bougé.
-if ! diff -q /etc/nginx/sites-available/teinterior deploy/nginx.conf >/dev/null 2>&1; then
+if ! diff -q /etc/nginx/snippets/teinterior.conf deploy/teinterior-locations.conf >/dev/null 2>&1; then
   echo
-  echo "  ATTENTION : deploy/nginx.conf diffère de la configuration installée."
-  echo "  Voir « Mettre à jour la configuration nginx » dans DEPLOIEMENT.md."
+  echo "  ATTENTION : les regles nginx du depot different de celles installees."
+  echo "    sudo cp deploy/teinterior-locations.conf /etc/nginx/snippets/teinterior.conf"
+  echo "    sudo nginx -t && sudo systemctl reload nginx"
   echo
 fi
 
