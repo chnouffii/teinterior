@@ -84,7 +84,12 @@ export default function VehiculeDetailPage() {
 
       <section className="py-10">
         <div className="container-x grid gap-8 lg:grid-cols-12">
-          <Reveal className="lg:col-span-7">
+          {/* `min-w-0` : sans lui, la colonne de grille s'élargit pour contenir
+              la piste de photos au lieu de la laisser défiler, et la page
+              déborde horizontalement dès que l'annonce compte plusieurs
+              photos. Les enfants de grille valent `min-width: auto` par
+              défaut. */}
+          <Reveal className="min-w-0 lg:col-span-7">
             <figure>
               <div className="relative overflow-hidden rounded-lg border border-white/10 bg-ink-900">
                 <GalerieVehicule
