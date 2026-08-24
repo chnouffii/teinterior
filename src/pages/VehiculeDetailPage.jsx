@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarCheck, ChevronRight, ShieldCheck, Wrench } from 'lucide-react';
+import { ArrowLeft, CalendarCheck, Check, ChevronRight, ShieldCheck, Wrench } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Button from '../components/ui/Button.jsx';
 import Reveal from '../components/ui/Reveal.jsx';
@@ -11,6 +11,7 @@ import {
 } from '../components/sections/Showroom.jsx';
 import { VEHICLE_STATUS } from '../data/vehicles.js';
 import { ROUTES, primaryPhone } from '../data/site.js';
+import { equipementsDe } from '../data/equipements.js';
 import { useSiteStore } from '../store/siteStore';
 import { useQuote } from '../context/QuoteContext.jsx';
 import usePageMeta from '../hooks/usePageMeta.js';
@@ -39,6 +40,8 @@ export default function VehiculeDetailPage() {
 
   const status = VEHICLE_STATUS[vehicle.status];
   const isSold = vehicle.status === 'vendu';
+  const equipements = equipementsDe(vehicle);
+  const nombreEquipements = equipements.reduce((total, g) => total + g.items.length, 0);
   const others = vehicles
     .filter((item) => item.id !== vehicle.id && item.status !== 'vendu')
     .slice(0, 3);
@@ -128,9 +131,47 @@ export default function VehiculeDetailPage() {
                 ))}
               </ul>
             </div>
+
+            {/* Ce que le véhicule embarque, coché depuis le panel. Le bloc
+                disparaît entièrement si rien n'est renseigné : un titre
+                « Équipements » suivi du vide dessert l'annonce. */}
+            {equipements.length > 0 ? (
+              <div className="mt-4 rounded-lg border border-white/10 bg-ink-900 p-5">
+                <h2 className="flex flex-wrap items-baseline gap-x-2 text-sm font-semibold text-fg">
+                  Équipements
+                  <span className="num text-xs font-normal text-faint">
+                    {nombreEquipements} au total
+                  </span>
+                </h2>
+
+                <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                  {equipements.map((groupe) => (
+                    <section key={groupe.label}>
+                      <h3 className="label-xs">{groupe.label}</h3>
+                      <ul className="mt-2 space-y-1.5">
+                        {groupe.items.map((item) => (
+                          <li key={item} className="flex gap-2.5 text-sm text-muted">
+                            <Check
+                              className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                              strokeWidth={2.6}
+                              aria-hidden="true"
+                            />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </Reveal>
 
-          <div className="lg:col-span-5">
+          {/* Collée au défilement à partir de `lg` : la liste d'équipements
+              allonge beaucoup la colonne de gauche, et le prix comme le bouton
+              d'essai sortaient de l'écran avant qu'on ait fini de la lire.
+              Le décalage haut dégage l'en-tête fixe. */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
             <Reveal delay={60} className="rounded-lg border border-white/10 bg-ink-900 p-5">
               <h1 className="text-xl font-bold leading-snug sm:text-2xl">
                 {vehicle.brand} {vehicle.model}

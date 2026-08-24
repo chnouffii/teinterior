@@ -26,9 +26,9 @@ const contenus = {
   poles: site.POLES,
   contact: site.CONTACT,
   company: site.COMPANY,
-  serviceOptions: site.SERVICE_OPTIONS,
 
   hero: content.HERO,
+  lastJob: content.LAST_JOB,
   workshop: content.WORKSHOP,
   beforeAfter: content.BEFORE_AFTER,
   pipeline: content.SOURCING_PIPELINE,
@@ -50,6 +50,36 @@ const contenus = {
 
   leads: leads.LEADS,
 };
+
+/**
+ * Garde-fou : la graine doit couvrir exactement les sections que le site
+ * enregistre.
+ *
+ * Ce fichier a dérivé deux fois en silence — une section ajoutée au site mais
+ * pas ici, et une autre pointant vers un export supprimé, donc écrite à `null`.
+ * Dans les deux cas une installation neuve démarrait avec des contenus
+ * incomplets, sans le moindre message. On lit la liste depuis le store lui-même
+ * plutôt que d'en tenir une copie, qui dériverait à son tour.
+ */
+const { createServer } = await import('vite');
+const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
+let CLES_CONTENU;
+try {
+  ({ CLES_CONTENU } = await vite.ssrLoadModule('/src/store/siteStore.ts'));
+} finally {
+  await vite.close();
+}
+
+const manquantes = CLES_CONTENU.filter((cle) => contenus[cle] === undefined || contenus[cle] === null);
+const superflues = Object.keys(contenus).filter(
+  (cle) => cle !== 'leads' && !CLES_CONTENU.includes(cle)
+);
+
+if (manquantes.length > 0 || superflues.length > 0) {
+  if (manquantes.length > 0) console.error(`Sections absentes de la graine : ${manquantes.join(', ')}`);
+  if (superflues.length > 0) console.error(`Sections inconnues du site : ${superflues.join(', ')}`);
+  process.exit(1);
+}
 
 const destination = path.join(racine, 'server/contenus-par-defaut.json');
 await writeFile(destination, `${JSON.stringify(contenus, null, 2)}\n`, 'utf8');

@@ -32,6 +32,14 @@ export interface Vehicle {
   history: string;
   /** Travaux réalisés par l'atelier sur ce véhicule. */
   workshopWork: string[];
+  /**
+   * Équipements cochés, par identifiant du catalogue `data/equipements.js`.
+   * L'identifiant plutôt que le libellé : renommer un équipement au catalogue
+   * ne perd pas les annonces déjà renseignées.
+   */
+  equipment?: string[];
+  /** Équipements propres à ce véhicule, saisis librement. */
+  equipmentExtra?: string[];
 }
 
 export interface PackStep {

@@ -105,6 +105,8 @@
       "street": "4 rue des Carrières",
       "zone": "",
       "city": "67170 Brumath",
+      "lat": null,
+      "lon": null,
       "mapsUrl": "https://www.google.com/maps/search/?api=1&query=4+rue+des+Carrieres+67170+Brumath"
     },
     "hours": [
@@ -139,40 +141,6 @@
     "host": "Hébergeur : OVHcloud, 2 rue Kellermann, 59100 Roubaix, France",
     "insurance": ""
   },
-  "serviceOptions": [
-    {
-      "value": "interieur",
-      "label": "Remise en état intérieur"
-    },
-    {
-      "value": "correction-1",
-      "label": "Correction peinture — 1 passe"
-    },
-    {
-      "value": "integrale",
-      "label": "Rénovation intégrale + céramique"
-    },
-    {
-      "value": "teintage",
-      "label": "Teintage de vitres"
-    },
-    {
-      "value": "retrofit",
-      "label": "Rétrofit CarPlay / Android Auto"
-    },
-    {
-      "value": "depot-vente",
-      "label": "Dépôt-vente / estimation"
-    },
-    {
-      "value": "sourcing",
-      "label": "Recherche de véhicule"
-    },
-    {
-      "value": "autre",
-      "label": "Autre demande"
-    }
-  ],
   "hero": {
     "kicker": "Atelier indépendant — Brumath",
     "title": "Detailing, rétrofit CarPlay et vente de véhicules.",
@@ -197,6 +165,15 @@
         "value": "4,9"
       }
     ]
+  },
+  "lastJob": {
+    "enabled": true,
+    "eyebrow": "Dernier passage atelier",
+    "title": "Correction 2 passes + céramique 9H",
+    "vehicle": "",
+    "badge": "Livrée en 48 h",
+    "photos": [],
+    "coverIndex": 0
   },
   "workshop": {
     "title": "L’atelier",
@@ -1104,6 +1081,35 @@
         "Correction 1 passe + scellant SiO2 (juillet 2026)",
         "Habitacle repris en injection-extraction",
         "Rétrofit CarPlay sans fil posé sur MIB2"
+      ],
+      "equipment": [
+        "regulateur",
+        "angles-morts",
+        "franchissement",
+        "camera-recul",
+        "radars-avant",
+        "radars-arriere",
+        "clim-multizone",
+        "sieges-chauffants",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "hayon-electrique",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "bluetooth",
+        "combine-numerique",
+        "feux-led",
+        "jantes-alu",
+        "barres-de-toit",
+        "sellerie-cuir",
+        "volant-cuir",
+        "volant-multifonction",
+        "vitres-electriques",
+        "retroviseurs-rabattables"
+      ],
+      "equipmentExtra": [
+        "Pack S line extérieur"
       ]
     },
     {
@@ -1140,6 +1146,35 @@
         "Correction 2 passes + céramique 3 ans",
         "Rénovation des optiques",
         "Traitement hydrophobe pare-brise"
+      ],
+      "equipment": [
+        "acc",
+        "camera-recul",
+        "radars-avant",
+        "radars-arriere",
+        "angles-morts",
+        "clim-multizone",
+        "sieges-chauffants",
+        "sieges-electriques",
+        "hayon-electrique",
+        "acces-mains-libres",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "bluetooth",
+        "affichage-tete-haute",
+        "combine-numerique",
+        "feux-led",
+        "jantes-alu",
+        "toit-ouvrant",
+        "sellerie-cuir",
+        "sieges-sport",
+        "volant-cuir",
+        "volant-multifonction",
+        "eclairage-ambiance",
+        "banquette-rabattable"
       ]
     },
     {
@@ -1176,6 +1211,36 @@
         "Correction 1 passe",
         "Teintage 4 vitres latérales",
         "Nettoyage moteur"
+      ],
+      "equipment": [
+        "regulateur",
+        "limiteur",
+        "camera-recul",
+        "radars-avant",
+        "radars-arriere",
+        "franchissement",
+        "clim-multizone",
+        "sieges-chauffants",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "android-auto",
+        "bluetooth",
+        "combine-numerique",
+        "feux-led",
+        "jantes-alu",
+        "vitres-surteintees",
+        "sieges-sport",
+        "volant-cuir",
+        "volant-multifonction",
+        "palettes",
+        "vitres-electriques",
+        "eclairage-ambiance"
+      ],
+      "equipmentExtra": [
+        "Sièges baquets tissu écossais GTD"
       ]
     },
     {
@@ -1212,6 +1277,50 @@
         "Rénovation intégrale + céramique",
         "Rétrofit Android Auto PCM 4.1",
         "Céramique jantes"
+      ],
+      "equipment": [
+        "acc",
+        "angles-morts",
+        "franchissement",
+        "anticollision",
+        "camera-360",
+        "radars-avant",
+        "radars-arriere",
+        "clim-multizone",
+        "sieges-chauffants",
+        "sieges-ventiles",
+        "sieges-electriques",
+        "sieges-memoire",
+        "volant-chauffant",
+        "hayon-electrique",
+        "acces-mains-libres",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "suspension-pilotee",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "bluetooth",
+        "audio-premium",
+        "combine-numerique",
+        "toit-panoramique",
+        "feux-led",
+        "feux-matriciels",
+        "jantes-alu",
+        "echappement-sport",
+        "peinture-metallisee",
+        "sellerie-cuir",
+        "sieges-sport",
+        "volant-cuir",
+        "volant-multifonction",
+        "palettes",
+        "eclairage-ambiance",
+        "seuils-eclaires"
+      ],
+      "equipmentExtra": [
+        "Pack Sport Chrono",
+        "Jantes 20 pouces RS Spyder",
+        "Système audio BOSE Surround"
       ]
     },
     {
@@ -1248,6 +1357,38 @@
         "Correction 1 passe",
         "Rénovation optiques",
         "Traitement pare-brise"
+      ],
+      "equipment": [
+        "acc",
+        "angles-morts",
+        "anticollision",
+        "camera-recul",
+        "radars-avant",
+        "radars-arriere",
+        "clim-multizone",
+        "sieges-chauffants",
+        "sieges-electriques",
+        "acces-mains-libres",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "retroviseur-electrochrome",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "android-auto",
+        "bluetooth",
+        "induction",
+        "combine-numerique",
+        "feux-led",
+        "jantes-alu",
+        "peinture-metallisee",
+        "sellerie-cuir",
+        "volant-cuir",
+        "volant-multifonction",
+        "eclairage-ambiance"
+      ],
+      "equipmentExtra": [
+        "Pack AMG Line"
       ]
     },
     {
@@ -1283,6 +1424,31 @@
       "workshopWork": [
         "Remise en état intérieur",
         "Correction 1 passe"
+      ],
+      "equipment": [
+        "regulateur",
+        "limiteur",
+        "camera-recul",
+        "radars-arriere",
+        "clim-auto",
+        "sieges-chauffants",
+        "acces-mains-libres",
+        "essuie-glaces-auto",
+        "feux-auto",
+        "ecran-tactile",
+        "gps",
+        "carplay",
+        "android-auto",
+        "bluetooth",
+        "feux-led",
+        "jantes-alu",
+        "volant-cuir",
+        "volant-multifonction",
+        "vitres-electriques",
+        "banquette-rabattable"
+      ],
+      "equipmentExtra": [
+        "Câble de recharge Type 2 fourni"
       ]
     }
   ],

@@ -198,7 +198,7 @@ const seed = () => ({
  * elles ont leurs propres routes, et une sauvegarde de contenus ne doit jamais
  * pouvoir les écraser.
  */
-const CLES_CONTENU = [
+export const CLES_CONTENU = [
   'vehicles', 'packs', 'options', 'catalogue', 'hero', 'lastJob', 'workshop', 'beforeAfter',
   'gallery', 'galleryFilters', 'poles', 'navLinks', 'brand', 'company',
   'retrofitProcess', 'retrofitFacts', 'retrofitKeeps', 'testimonials',
