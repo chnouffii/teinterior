@@ -43,21 +43,38 @@ export function buildTestDriveRequest(vehicle) {
   };
 }
 
-/** Visuel de fiche : photo de couverture si renseignée, sinon illustration. */
+/**
+ * Visuel de fiche : photo de couverture si renseignée, sinon illustration.
+ *
+ * La photo est montrée entière plutôt que recadrée — une voiture dont on a
+ * coupé l'avant ou le toit ne donne pas envie de cliquer. Le cadre garde un
+ * rapport fixe pour que la grille reste régulière, et ce qui reste autour est
+ * comblé par la photo elle-même, agrandie et floutée.
+ */
 export function VehicleCover({ vehicle, className = '' }) {
   const cover = vehicle.photos?.[vehicle.coverIndex] ?? vehicle.photos?.[0];
 
   if (cover) {
     return (
-      <img
-        src={cover}
-        alt={`${vehicle.brand} ${vehicle.model} — ${vehicle.trim}, à vendre à Brumath`}
-        width="1600"
-        height="1200"
-        loading="lazy"
-        decoding="async"
-        className={`object-cover ${className}`}
-      />
+      <span className={`relative block overflow-hidden bg-ink-950 ${className}`}>
+        <img
+          src={cover}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-2xl"
+        />
+        <img
+          src={cover}
+          alt={`${vehicle.brand} ${vehicle.model} — ${vehicle.trim}, à vendre à Brumath`}
+          width="1600"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+          className="relative h-full w-full object-contain"
+        />
+      </span>
     );
   }
 

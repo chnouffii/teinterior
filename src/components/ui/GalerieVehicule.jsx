@@ -81,21 +81,40 @@ export default function GalerieVehicule({ vehicle, className = '', dimmed = fals
             focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {ordonnees.map((photo, index) => (
-            <img
+            <div
               key={photo}
-              src={photo}
-              alt={index === 0 ? legende : `${legende} — photo ${index + 1}`}
-              width="1600"
-              height="1000"
-              // La première photo est le plus grand élément visible de la page :
-              // la charger sans attendre évite de retarder l'affichage.
-              loading={index === 0 ? 'eager' : 'lazy'}
-              fetchPriority={index === 0 ? 'high' : 'auto'}
-              decoding="async"
-              className={`w-full shrink-0 snap-center object-cover ${className} ${
+              className={`relative w-full shrink-0 snap-center overflow-hidden bg-ink-950 ${className} ${
                 dimmed ? 'opacity-50 grayscale' : ''
               }`}
-            />
+            >
+              {/*
+                La photo entière, jamais recadrée — c'est le sujet.
+                Le cadre garde un rapport fixe pour que la page ne saute pas
+                d'une photo à l'autre, et ce qui reste autour est comblé par la
+                photo elle-même, agrandie et floutée. Des bandes noires y
+                passeraient pour un défaut d'affichage.
+              */}
+              <img
+                src={photo}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-2xl"
+              />
+              <img
+                src={photo}
+                alt={index === 0 ? legende : `${legende} — photo ${index + 1}`}
+                width="1600"
+                height="1000"
+                // La première photo est le plus grand élément visible de la
+                // page : la charger sans attendre évite de retarder l'affichage.
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                decoding="async"
+                className="relative h-full w-full object-contain"
+              />
+            </div>
           ))}
         </div>
 
@@ -155,7 +174,9 @@ export default function GalerieVehicule({ vehicle, className = '', dimmed = fals
                   height="76"
                   loading="lazy"
                   decoding="async"
-                  className="h-[4.75rem] w-28 object-cover"
+                  // Entières elles aussi : une vignette recadrée ne montre pas
+                  // ce qu'on s'apprête à ouvrir.
+                  className="h-[4.75rem] w-28 bg-ink-950 object-contain"
                 />
               </button>
             </li>

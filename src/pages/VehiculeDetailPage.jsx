@@ -248,7 +248,7 @@ export default function VehiculeDetailPage() {
                   to={`${ROUTES.vehicules}/${item.id}`}
                   className="group flex items-center gap-3 rounded-lg border border-white/10 bg-ink-900 p-3 transition-colors hover:border-white/20"
                 >
-                  <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded-lg object-cover" />
+                  <VehicleCover vehicle={item} className="h-14 w-20 shrink-0 rounded-lg" />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-medium text-fg transition-colors group-hover:text-accent">
                       {item.brand} {item.model}
