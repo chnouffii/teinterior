@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Search, X } from 'lucide-react';
-import { Field, Select, TextArea, TextInput } from './Field';
+import { Loader2, Search, Sparkles, X } from 'lucide-react';
+import { AdminButton, Field, Select, TextArea, TextInput } from './Field';
+import { api } from '../../lib/api.js';
+import { formaterPlaque } from '../../lib/format.js';
 import PhotoUploader from './PhotoUploader';
-import { FUELS, GEARBOXES, VEHICLE_STATUS } from '../../data/vehicles.js';
+import { FUELS, GEARBOXES, VEHICLE_STATUS, boiteLisible } from '../../data/vehicles.js';
 import { EQUIPEMENTS, NOMBRE_EQUIPEMENTS, compterEquipements } from '../../data/equipements.js';
 import type { Vehicle } from '../../store/types';
 
@@ -14,7 +16,7 @@ export const EMPTY_VEHICLE: Vehicle = {
   trim: '',
   year: new Date().getFullYear(),
   km: 0,
-  gearbox: 'BVM',
+  gearbox: 'Manuelle',
   fuel: 'Essence',
   power: 0,
   price: 0,
@@ -31,7 +33,155 @@ export const EMPTY_VEHICLE: Vehicle = {
   workshopWork: [],
   equipment: [],
   equipmentExtra: [],
+  plate: '',
+  vin: '',
 };
+
+/** Les champs que la recherche par plaque peut remplir, dans l'ordre d'affichage. */
+const CHAMPS_SIV: { cle: keyof Vehicle; label: string }[] = [
+  { cle: 'brand', label: 'Marque' },
+  { cle: 'model', label: 'Modèle' },
+  { cle: 'trim', label: 'Finition' },
+  { cle: 'year', label: 'Année' },
+  { cle: 'fuel', label: 'Carburant' },
+  { cle: 'gearbox', label: 'Boîte' },
+  { cle: 'power', label: 'Puissance' },
+  { cle: 'color', label: 'Teinte' },
+  { cle: 'vin', label: 'N° de série' },
+];
+
+/**
+ * Pré-remplissage de la fiche à partir de la plaque.
+ *
+ * Ne remplace que les champs restés vides : une fiche déjà renseignée à la main
+ * ne doit pas être écrasée par une donnée administrative parfois approximative
+ * — la « finition » du certificat d'immatriculation, notamment, ne correspond
+ * pas toujours au nom commercial.
+ */
+function RecherchePlaque({
+  draft,
+  onChange,
+}: {
+  draft: Vehicle;
+  onChange: (patch: Partial<Vehicle>) => void;
+}) {
+  const [enCours, setEnCours] = useState(false);
+  const [erreur, setErreur] = useState<string | null>(null);
+  const [remplis, setRemplis] = useState<string[]>([]);
+  const [ignores, setIgnores] = useState<string[]>([]);
+
+  /**
+   * Un champ est à remplir s'il est vide, ou s'il porte encore la valeur du
+   * formulaire vierge.
+   *
+   * Sans cette seconde condition, l'année et la boîte n'étaient jamais
+   * renseignées : le formulaire les initialise à l'année courante et à
+   * « Manuelle », que le premier test considérait comme une saisie.
+   */
+  const aRemplir = (cle: keyof Vehicle) => {
+    const v = draft[cle];
+    if (v === undefined || v === null || v === '' || v === 0) return true;
+    const defaut = EMPTY_VEHICLE[cle];
+    return defaut !== undefined && defaut !== '' && String(v) === String(defaut);
+  };
+
+  async function chercher() {
+    setErreur(null);
+    setRemplis([]);
+    setIgnores([]);
+    setEnCours(true);
+    try {
+      const { champs } = (await api.chercherPlaque(draft.plate ?? '')) as {
+        champs: Record<string, unknown>;
+      };
+      const patch: Record<string, unknown> = {};
+      const ajoutes: string[] = [];
+      const conserves: string[] = [];
+
+      for (const { cle, label } of CHAMPS_SIV) {
+        if (champs[cle] === undefined) continue;
+        if (aRemplir(cle)) {
+          patch[cle] = champs[cle];
+          ajoutes.push(label);
+        } else if (String(draft[cle]) !== String(champs[cle])) {
+          conserves.push(`${label} : « ${champs[cle]} » proposé`);
+        }
+      }
+
+      if (Object.keys(patch).length > 0) onChange(patch as Partial<Vehicle>);
+      setRemplis(ajoutes);
+      setIgnores(conserves);
+      if (ajoutes.length === 0 && conserves.length === 0) {
+        setErreur('Rien de nouveau : la fiche est déjà renseignée.');
+      }
+    } catch (e) {
+      setErreur((e as Error).message || 'La recherche a échoué.');
+    } finally {
+      setEnCours(false);
+    }
+  }
+
+  return (
+    <div className="mt-3 space-y-3">
+      <div className="flex flex-wrap items-end gap-3">
+        <Field
+          label="Plaque d’immatriculation"
+          hint="Interne — jamais affichée sur le site public"
+          className="min-w-[13rem] flex-1"
+        >
+          <TextInput
+            value={draft.plate ?? ''}
+            placeholder="AB-123-CD"
+            onChange={(event) => onChange({ plate: formaterPlaque(event.target.value) })}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                if (!enCours && (draft.plate ?? '').length >= 9) chercher();
+              }
+            }}
+          />
+        </Field>
+        <AdminButton
+          variant="ghost"
+          onClick={chercher}
+          disabled={enCours || (draft.plate ?? '').length < 9}
+          className="mb-[2px]"
+        >
+          {enCours ? (
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+          ) : (
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+          )}
+          {enCours ? 'Recherche…' : 'Remplir depuis la plaque'}
+        </AdminButton>
+      </div>
+
+      {erreur ? <p className="text-xs text-signal-warn">{erreur}</p> : null}
+
+      {remplis.length > 0 ? (
+        <p className="text-xs text-signal-ok">
+          Renseigné automatiquement : {remplis.join(', ')}.
+        </p>
+      ) : null}
+
+      {ignores.length > 0 ? (
+        <div className="rounded-lg border border-white/10 bg-ink-850 p-3">
+          <p className="text-[11px] text-faint">
+            Champs déjà remplis, laissés tels quels — à recopier vous-même si la valeur officielle
+            vous convient mieux :
+          </p>
+          <ul className="mt-1.5 space-y-0.5">
+            {ignores.map((ligne) => (
+              <li key={ligne} className="text-xs text-muted">
+                {ligne}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 /** Sans accent ni casse : « Régulateur » se trouve en tapant « regulateur ». */
 const sansAccent = (valeur: string) =>
@@ -200,6 +350,11 @@ export function VehicleForm({
   return (
     <div className="space-y-7">
       <section>
+        <h3 className="label-xs">Recherche par plaque</h3>
+        <RecherchePlaque draft={draft} onChange={onChange} />
+      </section>
+
+      <section>
         <h3 className="label-xs">Identification</h3>
         <div className="mt-3 grid gap-4 sm:grid-cols-3">
           <Field label="Référence interne">
@@ -259,7 +414,7 @@ export function VehicleForm({
           </Field>
           <Field label="Boîte">
             <Select
-              value={draft.gearbox}
+              value={boiteLisible(draft.gearbox)}
               onChange={(event) => onChange({ gearbox: event.target.value as Vehicle['gearbox'] })}
             >
               {GEARBOXES.map((box: string) => (

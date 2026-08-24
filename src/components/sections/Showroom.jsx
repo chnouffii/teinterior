@@ -6,7 +6,7 @@ import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
 import CarVisual from '../ui/CarVisual.jsx';
 import { ROUTES } from '../../data/site.js';
-import { VEHICLE_STATUS } from '../../data/vehicles.js';
+import { VEHICLE_STATUS, boiteLisible } from '../../data/vehicles.js';
 import { useSiteStore } from '../../store/siteStore';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
@@ -114,7 +114,7 @@ function VehicleCard({ vehicle, index, onTestDrive }) {
           {[
             { label: 'Année', value: vehicle.year },
             { label: 'Km', value: `${Math.round(vehicle.km / 1000)}k` },
-            { label: 'Boîte', value: vehicle.gearbox },
+            { label: 'Boîte', value: boiteLisible(vehicle.gearbox) },
             { label: 'Ch', value: vehicle.power },
           ].map((cell) => (
             <div key={cell.label} className="bg-ink-900 px-1 py-2">

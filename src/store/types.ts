@@ -1,5 +1,10 @@
 export type VehicleStatus = 'disponible' | 'reserve' | 'vendu';
-export type Gearbox = 'BVM' | 'BVA';
+/**
+ * Libellé de boîte de vitesses. Volontairement libre plutôt qu'une union
+ * fermée : les fiches déjà enregistrées portent l'ancien vocabulaire
+ * (« BVM », « BVA »), traduit à l'affichage par `boiteLisible`.
+ */
+export type Gearbox = string;
 
 export interface Vehicle {
   id: string;
@@ -40,6 +45,13 @@ export interface Vehicle {
   equipment?: string[];
   /** Équipements propres à ce véhicule, saisis librement. */
   equipmentExtra?: string[];
+  /**
+   * Plaque du véhicule — interne, jamais affichée publiquement.
+   * Sert au pré-remplissage de la fiche et au recoupement à l'atelier.
+   */
+  plate?: string;
+  /** Numéro de série, relevé lors de la recherche par plaque. Interne. */
+  vin?: string;
 }
 
 export interface PackStep {

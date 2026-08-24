@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { ContentStore } from './store.js';
 import { MediaStore, TAILLE_MAX } from './media.js';
+import { chercherParPlaque, sivConfigure } from './siv.js';
 import { creerJeton, jetonValide, verifierMotDePasse, LimiteurConnexion } from './auth.js';
 
 const ici = path.dirname(fileURLToPath(import.meta.url));
@@ -475,6 +476,25 @@ const serveur = http.createServer(async (requete, reponse) => {
       const { leads: _demandes, clients: _clients, ...contenus } = corps;
       const suivant = await store.modifier((donnees) => ({ ...donnees, ...contenus }));
       return json(reponse, 200, suivant);
+    }
+
+    // Recherche par plaque. Derrière authentification : chaque appel est
+    // facturé à l'atelier, la route ne doit pas être ouverte au public.
+    const plaqueCiblee = chemin.match(/^\/api\/immatriculation\/([^/]+)$/);
+    if (plaqueCiblee && methode === 'GET') {
+      if (!sivConfigure()) {
+        return json(reponse, 501, {
+          error:
+            'Recherche par plaque non configurée. Renseignez TEINTERIOR_SIV_URL et ' +
+            'TEINTERIOR_SIV_TOKEN dans /etc/teinterior.env.',
+        });
+      }
+      try {
+        const resultat = await chercherParPlaque(decodeURIComponent(plaqueCiblee[1]));
+        return json(reponse, 200, resultat);
+      } catch (erreur) {
+        return json(reponse, erreur.statut ?? 502, { error: erreur.message });
+      }
     }
 
     if (chemin === '/api/media' && methode === 'POST') {

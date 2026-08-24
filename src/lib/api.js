@@ -44,6 +44,15 @@ export const api = {
   /** Contenus publics du site. */
   lireContenus: () => appeler('/content'),
 
+  /**
+   * Caractéristiques d'un véhicule d'après sa plaque.
+   *
+   * L'appel passe par notre serveur, jamais directement par le prestataire :
+   * la clé d'API resterait sinon lisible dans le JavaScript du site, et le
+   * quota facturé à l'atelier serait consommé par n'importe qui.
+   */
+  chercherPlaque: (plaque) => appeler(`/immatriculation/${encodeURIComponent(plaque)}`),
+
   /** Enregistre une partie des contenus (fusion côté serveur). */
   enregistrerContenus: (partiel) =>
     appeler('/content', { method: 'PUT', body: JSON.stringify(partiel) }),

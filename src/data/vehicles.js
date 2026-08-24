@@ -8,7 +8,19 @@ export const VEHICLE_STATUS = {
   vendu: { id: 'vendu', label: 'Vendu', tone: 'neutral' },
 };
 
-export const GEARBOXES = ['BVM', 'BVA'];
+export const GEARBOXES = ['Manuelle', 'Automatique'];
+
+/**
+ * Ancien vocabulaire, encore présent dans les fiches déjà enregistrées.
+ *
+ * Les annonces stockent le libellé lui-même, pas un code : renommer les valeurs
+ * sans traduire les anciennes aurait affiché « BVA » sur le site et laissé le
+ * menu du panel vide sur toutes les fiches existantes.
+ */
+const ANCIENNES_BOITES = { BVM: 'Manuelle', BVA: 'Automatique' };
+
+/** Le libellé de boîte à afficher, ancien vocabulaire compris. */
+export const boiteLisible = (valeur) => ANCIENNES_BOITES[valeur] ?? valeur ?? '';
 export const FUELS = ['Essence', 'Diesel', 'Hybride', 'Électrique', 'GPL'];
 
 export const VEHICLES = [
@@ -20,7 +32,7 @@ export const VEHICLES = [
     trim: '2.0 TDI 190 S line quattro',
     year: 2019,
     km: 78400,
-    gearbox: 'BVA',
+    gearbox: 'Automatique',
     fuel: 'Diesel',
     power: 190,
     price: 24900,
@@ -83,7 +95,7 @@ export const VEHICLES = [
     trim: '320d xDrive M Sport',
     year: 2020,
     km: 62150,
-    gearbox: 'BVA',
+    gearbox: 'Automatique',
     fuel: 'Diesel',
     power: 190,
     price: 29500,
@@ -146,7 +158,7 @@ export const VEHICLES = [
     trim: 'GTD 184 5 portes',
     year: 2017,
     km: 104300,
-    gearbox: 'BVM',
+    gearbox: 'Manuelle',
     fuel: 'Diesel',
     power: 184,
     price: 17450,
@@ -206,7 +218,7 @@ export const VEHICLES = [
     trim: 'S 3.0 V6 354 PDK',
     year: 2018,
     km: 88900,
-    gearbox: 'BVA',
+    gearbox: 'Automatique',
     fuel: 'Essence',
     power: 354,
     price: 48900,
@@ -284,7 +296,7 @@ export const VEHICLES = [
     trim: '220 d AMG Line 9G-Tronic',
     year: 2019,
     km: 71200,
-    gearbox: 'BVA',
+    gearbox: 'Automatique',
     fuel: 'Diesel',
     power: 194,
     price: 26800,
@@ -345,7 +357,7 @@ export const VEHICLES = [
     trim: 'R135 Intens — batterie en pleine propriété',
     year: 2021,
     km: 34600,
-    gearbox: 'BVA',
+    gearbox: 'Automatique',
     fuel: 'Électrique',
     power: 135,
     price: 14900,

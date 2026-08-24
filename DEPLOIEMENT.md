@@ -429,6 +429,44 @@ curl -s localhost:8787/api/content | head # l'API répond-elle ?
 Si le panel affiche « Serveur injoignable », le service est arrêté ou le bloc
 `location /api/` manque dans la config nginx.
 
+## Recherche par plaque (facultatif)
+
+Le formulaire véhicule peut pré-remplir marque, modèle, année, énergie, boîte,
+puissance et teinte à partir d'une plaque d'immatriculation.
+
+**Cela demande un abonnement.** Les données du SIV ne sont pas publiques :
+l'accès direct passe par une habilitation ANTS réservée aux professionnels
+agréés, avec plusieurs semaines à plusieurs mois d'instruction. En pratique on
+passe par un revendeur d'API, à partir d'environ 9 € par mois. Sans clé
+configurée, le bouton explique simplement que le service n'est pas branché et
+la fiche se remplit à la main comme avant.
+
+Une fois la clé obtenue, ajoutez dans `/etc/teinterior.env` :
+
+```bash
+TEINTERIOR_SIV_URL=https://exemple-fournisseur.fr/api/v1/fr?plaque={plaque}&token={token}
+TEINTERIOR_SIV_TOKEN=votre_cle
+```
+
+`{plaque}` et `{token}` sont remplacés à l'appel. La clé est aussi envoyée en
+en-tête `Authorization: Bearer`, ce qui couvre les fournisseurs qui l'attendent
+là plutôt que dans l'URL.
+
+```bash
+sudo systemctl restart teinterior-api
+```
+
+La clé reste sur le serveur : l'appel part de l'API, jamais du navigateur.
+Dans le JavaScript du site elle serait lisible par n'importe quel visiteur, et
+votre quota consommé par des tiers. La route exige d'être connecté au panel.
+
+Pour vérifier, connectez-vous au panel et essayez une plaque que vous
+connaissez. Les noms de champ varient d'un fournisseur à l'autre : le serveur
+en accepte plusieurs par donnée, mais si un champ ne remonte pas, complétez
+`normaliserReponse` dans `server/siv.js` avec le nom employé par le vôtre.
+
+---
+
 ## 6. Vérifier après déploiement
 
 ```bash

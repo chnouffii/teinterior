@@ -3,13 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import Button from '../components/ui/Button.jsx';
 import Reveal from '../components/ui/Reveal.jsx';
 import CtaBand from '../components/sections/CtaBand.jsx';
+import GalerieVehicule from '../components/ui/GalerieVehicule.jsx';
 import {
   STATUS_TONES,
   VehicleCover,
   buildTestDriveRequest,
   formatPrice,
 } from '../components/sections/Showroom.jsx';
-import { VEHICLE_STATUS } from '../data/vehicles.js';
+import { VEHICLE_STATUS, boiteLisible } from '../data/vehicles.js';
 import { ROUTES, primaryPhone } from '../data/site.js';
 import { equipementsDe } from '../data/equipements.js';
 import { useSiteStore } from '../store/siteStore';
@@ -49,7 +50,7 @@ export default function VehiculeDetailPage() {
   const specs = [
     { label: 'Année', value: vehicle.year },
     { label: 'Kilométrage', value: `${vehicle.km.toLocaleString('fr-FR')} km` },
-    { label: 'Boîte', value: vehicle.gearbox },
+    { label: 'Boîte', value: boiteLisible(vehicle.gearbox) },
     { label: 'Énergie', value: vehicle.fuel },
     { label: 'Puissance', value: `${vehicle.power} ch` },
     { label: 'Teinte', value: vehicle.color },
@@ -84,23 +85,24 @@ export default function VehiculeDetailPage() {
       <section className="py-10">
         <div className="container-x grid gap-8 lg:grid-cols-12">
           <Reveal className="lg:col-span-7">
-            <figure className="overflow-hidden rounded-lg border border-white/10 bg-ink-900">
-              <div className="relative">
-                <VehicleCover
+            <figure>
+              <div className="relative overflow-hidden rounded-lg border border-white/10 bg-ink-900">
+                <GalerieVehicule
                   vehicle={vehicle}
-                  className={`aspect-[16/10] w-full ${isSold ? 'opacity-50 grayscale' : ''}`}
+                  className="aspect-[16/10]"
+                  dimmed={isSold}
                 />
                 <span
-                  className={`absolute left-4 top-4 rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
+                  className={`pointer-events-none absolute left-4 top-4 rounded-lg border px-2 py-0.5 text-[11px] font-semibold ${
                     STATUS_TONES[status.tone]
                   }`}
                 >
                   {status.label}
                 </span>
               </div>
-              <figcaption className="num border-t border-white/10 px-4 py-2.5 text-[11px] text-faint">
+              <figcaption className="num mt-2 text-[11px] text-faint">
                 {vehicle.photos.length > 0
-                  ? `${vehicle.photos.length} photo(s) — ${vehicle.ref}`
+                  ? `${vehicle.photos.length} photo${vehicle.photos.length > 1 ? 's' : ''} — ${vehicle.ref}`
                   : `Illustration de repli — ${vehicle.ref}`}
               </figcaption>
             </figure>
