@@ -6,7 +6,7 @@
   "description": "Site vitrine et conversion Teintérior - esthétique automobile, rétrofit multimédia et courtage de véhicules.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node build/generer-pages.mjs",
+    "build": "npm run generer:contenus && vite build && node build/generer-pages.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "generer:contenus": "node scripts/generer-contenus-par-defaut.mjs",

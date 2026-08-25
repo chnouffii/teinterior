@@ -5,10 +5,12 @@ import Reveal from '../ui/Reveal.jsx';
 import DernierChantier from './DernierChantier.jsx';
 import { ROUTES } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
+import useSection from '../../hooks/useSection.js';
 
 export default function Hero() {
   const hero = useSiteStore((state) => state.hero);
   const lastJob = useSiteStore((state) => state.lastJob);
+  const chiffres = useSection('chiffresAccueil');
   const packs = useSiteStore((state) => state.packs);
   // `Math.min()` sans argument vaut Infinity : sans ce garde, supprimer la
   // dernière prestation depuis le panel afficherait « à partir de Infinity € ».
@@ -80,6 +82,7 @@ export default function Hero() {
         ) : null}
       </div>
 
+      {chiffres ? (
       <div className="container-x relative mt-16 lg:mt-20">
         <Reveal className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
           {hero.facts.map((fact) => (
@@ -89,8 +92,8 @@ export default function Hero() {
             </div>
           ))}
         </Reveal>
-
       </div>
+      ) : null}
     </section>
   );
 }

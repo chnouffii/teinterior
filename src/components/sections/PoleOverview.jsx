@@ -4,11 +4,19 @@ import SectionHeading from '../ui/SectionHeading.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import Icon from '../ui/Icon.jsx';
 import { useSiteStore } from '../../store/siteStore';
+import useSection from '../../hooks/useSection.js';
 
 
 /** Les trois métiers de l'atelier, chacun renvoyant vers sa page dédiée. */
 export default function PoleOverview() {
+  const affiche = useSection('metiers');
   const poles = useSiteStore((state) => state.poles);
+
+  // Le garde vient après tous les hooks : React exige qu'ils soient appelés
+  // dans le même ordre à chaque rendu, un retour anticipé au milieu en saute
+  // une partie et fait planter le composant.
+  if (!affiche) return null;
+
   return (
     <section id="poles" className="scroll-mt-24 py-12 lg:py-14">
       <div className="container-x">

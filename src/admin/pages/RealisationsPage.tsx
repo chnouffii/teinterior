@@ -1,5 +1,6 @@
 import { Field, TextInput } from '../components/Field';
 import { Bloc, ListeEditable } from '../components/Editors';
+import BasculeSection from '../components/BasculeSection';
 import { useSiteStore } from '../../store/siteStore';
 
 const CARROSSERIES = 'berline, break, suv, citadine, coupe';
@@ -99,6 +100,7 @@ export default function RealisationsAdminPage() {
 
       <Bloc
         titre="Avis clients"
+        actions={<BasculeSection id="avis" nom="Avis clients" />}
         aide="Affichés sur la page d’accueil (les trois premiers) et en entier sur la page Réalisations."
       >
         <ListeEditable

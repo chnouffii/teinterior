@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Plus, Search, Trash2, UserPlus } from 'lucide-react';
+import { BellOff, CalendarClock, Check, Plus, Search, Trash2, UserPlus } from 'lucide-react';
 import { AdminButton, Field, TextInput } from '../components/Field';
 import Modal from '../components/Modal';
 import StatusPill from '../components/StatusPill';
@@ -27,6 +27,7 @@ export default function ClientsPage() {
   const leads = useSiteStore((state) => state.leads);
   const creerClient = useSiteStore((state) => state.creerClient);
   const supprimerClient = useSiteStore((state) => state.supprimerClient);
+  const modifierClient = useSiteStore((state) => state.modifierClient);
   const { query } = useAdminUi();
 
   const [filtre, setFiltre] = useState<'tous' | ClientStatus>('tous');
@@ -68,7 +69,39 @@ export default function ClientsPage() {
   }, [clients, filtre, affaire, recherche]);
 
   const aujourdhui = new Date().toISOString().slice(0, 10);
-  const relancesDues = clients.filter((c) => c.nextAction && c.nextAction.date <= aujourdhui);
+
+  /**
+   * Rappel mis en veille pour la journée.
+   *
+   * Gardé dans le navigateur et non sur le serveur : c'est un confort
+   * d'affichage propre à la personne devant l'écran, pas une donnée de
+   * l'atelier. On enregistre le jour du masquage plutôt qu'un simple drapeau,
+   * pour que le rappel revienne de lui-même le lendemain.
+   */
+  const [masqueLe, setMasqueLe] = useState(() => {
+    try {
+      return localStorage.getItem('teinterior:relances-masquees') ?? '';
+    } catch {
+      // Navigation privée ou stockage refusé : le rappel reste affiché.
+      return '';
+    }
+  });
+
+  const setRelancesMasquees = (actif: boolean) => {
+    const valeur = actif ? aujourdhui : '';
+    setMasqueLe(valeur);
+    try {
+      if (valeur) localStorage.setItem('teinterior:relances-masquees', valeur);
+      else localStorage.removeItem('teinterior:relances-masquees');
+    } catch {
+      /* sans stockage, le masquage ne dure que le temps de la visite */
+    }
+  };
+
+  const relancesDues =
+    masqueLe === aujourdhui
+      ? []
+      : clients.filter((c) => c.nextAction && c.nextAction.date <= aujourdhui);
 
   const compte = (statut: 'tous' | ClientStatus) =>
     statut === 'tous' ? clients.length : clients.filter((c) => c.status === statut).length;
@@ -108,14 +141,23 @@ export default function ClientsPage() {
         </AdminButton>
       </div>
 
+      {/*
+        Chaque relance se traite depuis le bandeau : la retirer ou la repousser
+        demandait jusqu'ici d'ouvrir la fiche, de trouver le bloc « Relance à
+        venir » et de revenir. Une alerte qu'on ne peut pas éteindre là où on la
+        lit finit par être ignorée.
+      */}
       {relancesDues.length > 0 ? (
         <section className="rounded-lg border border-accent/30 bg-accent/5 p-4">
           <h2 className="text-sm font-semibold text-accent">
             {relancesDues.length} relance{relancesDues.length > 1 ? 's' : ''} à faire
           </h2>
-          <ul className="mt-2 space-y-1.5">
+          <ul className="mt-3 divide-y divide-accent/10">
             {relancesDues.map((c) => (
-              <li key={c.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+              <li
+                key={c.id}
+                className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2 text-sm first:pt-0 last:pb-0"
+              >
                 <button
                   type="button"
                   onClick={() => setOuvert(c.id)}
@@ -123,13 +165,58 @@ export default function ClientsPage() {
                 >
                   {c.name}
                 </button>
-                <span className="text-muted">{c.nextAction?.label || 'Relance'}</span>
+                <span className="min-w-0 flex-1 text-muted">{c.nextAction?.label || 'Relance'}</span>
                 <span className="num text-xs text-faint">
                   prévue le {dateCourte(c.nextAction!.date)}
+                </span>
+
+                <span className="flex shrink-0 items-center gap-1">
+                  <button
+                    type="button"
+                    title="Relance faite — retirer de la liste"
+                    onClick={async () => {
+                      await modifierClient(c.id, { nextAction: null });
+                      toast(`Relance de ${c.name} marquée comme faite.`);
+                    }}
+                    className="flex h-8 items-center gap-1.5 rounded-md border border-white/10 px-2.5 text-xs text-muted transition-colors hover:border-signal-ok/40 hover:text-signal-ok"
+                  >
+                    <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                    Fait
+                  </button>
+                  <button
+                    type="button"
+                    title="Repousser d’une semaine"
+                    onClick={async () => {
+                      const dans7 = new Date(`${c.nextAction!.date}T12:00:00`);
+                      // À partir d'aujourd'hui si la date est déjà passée :
+                      // repousser une relance en retard d'une semaine depuis sa
+                      // date d'origine la laisserait souvent en retard.
+                      const base = dans7 < new Date() ? new Date() : dans7;
+                      base.setDate(base.getDate() + 7);
+                      const date = base.toISOString().slice(0, 10);
+                      await modifierClient(c.id, {
+                        nextAction: { date, label: c.nextAction!.label },
+                      });
+                      toast(`Relance de ${c.name} repoussée au ${dateCourte(date)}.`);
+                    }}
+                    className="flex h-8 items-center gap-1.5 rounded-md border border-white/10 px-2.5 text-xs text-muted transition-colors hover:border-white/25 hover:text-fg"
+                  >
+                    <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
+                    +7 j
+                  </button>
                 </span>
               </li>
             ))}
           </ul>
+
+          <button
+            type="button"
+            onClick={() => setRelancesMasquees(true)}
+            className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-faint transition-colors hover:text-muted"
+          >
+            <BellOff className="h-3.5 w-3.5" aria-hidden="true" />
+            Masquer ce rappel jusqu’à demain
+          </button>
         </section>
       ) : null}
 

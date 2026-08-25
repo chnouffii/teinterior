@@ -4,6 +4,7 @@ import Button from '../ui/Button.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import { ROUTES, primaryPhone } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
+import useSection from '../../hooks/useSection.js';
 
 /** Bande de conversion placée en fin de page. */
 export default function CtaBand({
@@ -13,6 +14,9 @@ export default function CtaBand({
   primaryTo = ROUTES.contact,
 }) {
   const contact = useSiteStore((state) => state.contact);
+  const affiche = useSection('bandeauDevis');
+
+  if (!affiche) return null;
 
   return (
     <section className="border-t border-white/5 py-14">

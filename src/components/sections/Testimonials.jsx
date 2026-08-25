@@ -4,11 +4,17 @@ import Reveal from '../ui/Reveal.jsx';
 import StarRating from '../ui/StarRating.jsx';
 import { ROUTES } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
+import useSection from '../../hooks/useSection.js';
 
 export default function Testimonials({ limit = null, showAllLink = false }) {
+  const affiche = useSection('avis');
   const testimonials = useSiteStore((state) => state.testimonials);
   const summary = useSiteStore((state) => state.reviewSummary);
   const items = limit ? testimonials.slice(0, limit) : testimonials;
+
+  // Masqués depuis le panel : le bloc disparaît de l'accueil, des réalisations
+  // et des pages locales d'un seul geste, note moyenne comprise.
+  if (!affiche) return null;
 
   return (
     <section className="border-t border-white/5 py-12 lg:py-14">

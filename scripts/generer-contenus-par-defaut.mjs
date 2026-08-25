@@ -18,6 +18,7 @@ const content = await import(path.join(racine, 'src/data/content.js'));
 const services = await import(path.join(racine, 'src/data/services.js'));
 const retrofit = await import(path.join(racine, 'src/data/retrofit.js'));
 const vehicles = await import(path.join(racine, 'src/data/vehicles.js'));
+const sections = await import(path.join(racine, 'src/data/sections.js'));
 const leads = await import(path.join(racine, 'src/data/leads.js'));
 
 const contenus = {
@@ -29,6 +30,7 @@ const contenus = {
 
   hero: content.HERO,
   lastJob: content.LAST_JOB,
+  sections: sections.SECTIONS_PAR_DEFAUT,
   workshop: content.WORKSHOP,
   beforeAfter: content.BEFORE_AFTER,
   pipeline: content.SOURCING_PIPELINE,

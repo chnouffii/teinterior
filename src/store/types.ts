@@ -149,6 +149,12 @@ export interface LastJob {
   coverIndex: number;
 }
 
+/**
+ * Visibilité des sections du site, par identifiant.
+ * Voir `data/sections.js`. Absent vaut visible.
+ */
+export type Sections = Record<string, boolean>;
+
 export interface WorkshopContent {
   title: string;
   intro: string;
@@ -294,7 +300,12 @@ export interface Client {
   /** Identifiants des demandes entrantes rattachées à cette fiche. */
   leadIds: string[];
   /** Prochaine relance à ne pas oublier. */
-  nextAction?: { date: string; label: string };
+  /**
+   * Prochaine relance. `null` l'annule explicitement — `undefined` serait
+   * retiré par `JSON.stringify` et le serveur, qui ne modifie que les clés
+   * reçues, laisserait la relance en place.
+   */
+  nextAction?: { date: string; label: string } | null;
 }
 
 export type LeadType = 'estimation' | 'devis';

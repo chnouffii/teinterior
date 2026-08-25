@@ -4,6 +4,7 @@ import Modal from '../components/Modal';
 import StatusPill from '../components/StatusPill';
 import { AdminButton, Field, Select, TextArea, TextInput } from '../components/Field';
 import { toast } from '../components/toast';
+import BasculeSection from '../components/BasculeSection';
 import { useSiteStore } from '../../store/siteStore';
 import { FITMENT } from '../../data/retrofit.js';
 import type {
@@ -159,6 +160,8 @@ export default function ServicesPage() {
       <section>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-sm font-semibold text-fg">Options à la carte</h2>
+          <div className="flex flex-wrap items-center gap-2">
+          <BasculeSection id="optionsCarte" nom="Options à la carte" />
           <AdminButton
             variant="ghost"
             onClick={() => {
@@ -169,6 +172,7 @@ export default function ServicesPage() {
             <Plus className="h-4 w-4" aria-hidden="true" />
             Ajouter une option
           </AdminButton>
+          </div>
         </div>
         <div className="mt-4 overflow-x-auto rounded-lg border border-white/10">
           <table className="w-full min-w-[640px] border-collapse text-sm">

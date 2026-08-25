@@ -6,6 +6,7 @@ import Button from '../ui/Button.jsx';
 import BeforeAfterSlider from '../ui/BeforeAfterSlider.jsx';
 import { useSiteStore } from '../../store/siteStore';
 import { useQuote } from '../../context/QuoteContext.jsx';
+import useSection from '../../hooks/useSection.js';
 
 /** Carte de formule : le détail du devis reste lisible, sans mise en tableau. */
 function PackCard({ pack, onSelect, index }) {
@@ -92,6 +93,8 @@ export default function Detailing({ hideHeading = false }) {
   const packs = useSiteStore((state) => state.packs);
   const options = useSiteStore((state) => state.options);
   const beforeAfter = useSiteStore((state) => state.beforeAfter);
+  const afficheOptions = useSection('optionsCarte');
+  const afficheAvantApres = useSection('avantApres');
   const { requestQuote } = useQuote();
   const [activeCase, setActiveCase] = useState(beforeAfter[0]?.id);
 
@@ -133,6 +136,7 @@ export default function Detailing({ hideHeading = false }) {
           ))}
         </div>
 
+        {afficheOptions ? (
         <Reveal className="mt-8 rounded-lg border border-white/10 bg-ink-850/50 p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h3 className="flex items-center gap-2 text-lg font-bold">
@@ -162,8 +166,9 @@ export default function Detailing({ hideHeading = false }) {
             ))}
           </ul>
         </Reveal>
+        ) : null}
 
-        {current ? (
+        {current && afficheAvantApres ? (
           <div className="mt-20 grid items-center gap-10 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
               <span className="chip">Module interactif</span>

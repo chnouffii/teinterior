@@ -137,7 +137,7 @@ export default function ClientDetail({ client, onClose }: { client: Client; onCl
             {client.nextAction ? (
               <button
                 type="button"
-                onClick={() => enregistrer({ nextAction: undefined })}
+                onClick={() => enregistrer({ nextAction: null })}
                 className="text-[11px] text-faint transition-colors hover:text-signal-danger"
               >
                 Retirer
@@ -153,7 +153,7 @@ export default function ClientDetail({ client, onClose }: { client: Client; onCl
                   enregistrer({
                     nextAction: e.target.value
                       ? { date: e.target.value, label: client.nextAction?.label ?? '' }
-                      : undefined,
+                      : null,
                   })
                 }
               />

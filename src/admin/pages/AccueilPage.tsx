@@ -1,5 +1,6 @@
 import { Bascule, Field, TextArea, TextInput } from '../components/Field';
 import PhotoUploader from '../components/PhotoUploader';
+import BasculeSection from '../components/BasculeSection';
 import { Bloc, ChiffresCles, ListeDeTextes, ListeEditable } from '../components/Editors';
 import { useSiteStore } from '../../store/siteStore';
 
@@ -126,6 +127,7 @@ export default function AccueilPage() {
       <Bloc
         titre="Chiffres de la page d’accueil"
         aide="La bande de quatre chiffres sous l’accroche. Annoncez des valeurs que vous pouvez justifier."
+        actions={<BasculeSection id="chiffresAccueil" nom="Chiffres de l’accueil" />}
       >
         <ChiffresCles
           items={hero.facts}
@@ -136,6 +138,7 @@ export default function AccueilPage() {
       <Bloc
         titre="Les trois métiers"
         aide="Chaque carte renvoie vers sa page dédiée. L’ordre ici est celui de la page d’accueil."
+        actions={<BasculeSection id="metiers" nom="Les trois métiers" />}
       >
         <ListeEditable
           items={poles as unknown as Record<string, unknown>[]}
@@ -193,6 +196,33 @@ export default function AccueilPage() {
           ))}
         </div>
       </Bloc>
+      <Bloc
+        titre="Autres sections"
+        aide="Deux blocs sans écran d’édition dédié : leur contenu est fixe, seul leur affichage se règle ici."
+      >
+        <ul className="divide-y divide-white/5">
+          <li className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-fg">Véhicules sur l’accueil</p>
+              <p className="mt-0.5 text-xs text-faint">
+                L’aperçu de trois véhicules. La page « Véhicules à vendre » reste accessible par le
+                menu quoi qu’il arrive.
+              </p>
+            </div>
+            <BasculeSection id="showroomAccueil" nom="Véhicules sur l’accueil" />
+          </li>
+          <li className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-fg">Bandeau « Demander un devis »</p>
+              <p className="mt-0.5 text-xs text-faint">
+                L’encart d’appel à l’action, en bas de presque toutes les pages.
+              </p>
+            </div>
+            <BasculeSection id="bandeauDevis" nom="Bandeau de devis" />
+          </li>
+        </ul>
+      </Bloc>
+
     </div>
   );
 }

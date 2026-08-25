@@ -4,8 +4,13 @@ import Showroom from '../components/sections/Showroom.jsx';
 import Testimonials from '../components/sections/Testimonials.jsx';
 import CtaBand from '../components/sections/CtaBand.jsx';
 import usePageMeta from '../hooks/usePageMeta.js';
+import useSection from '../hooks/useSection.js';
 
 export default function HomePage() {
+  // Le garde est ici et non dans le composant : le même Showroom sert la page
+  // « Véhicules à vendre », qui doit rester en place quoi qu'il arrive.
+  const apercuVehicules = useSection('showroomAccueil');
+
   usePageMeta({
     title: 'Teintérior — Detailing, CarPlay et vente auto à Brumath',
     description:
@@ -16,7 +21,7 @@ export default function HomePage() {
     <>
       <Hero />
       <PoleOverview />
-      <Showroom hideHeading={false} limit={3} showFilters={false} />
+      {apercuVehicules ? <Showroom hideHeading={false} limit={3} showFilters={false} /> : null}
       <Testimonials limit={3} showAllLink />
       <CtaBand />
     </>

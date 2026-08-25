@@ -1,5 +1,6 @@
 import { Field, TextArea, TextInput } from '../components/Field';
 import { Bloc, ChiffresCles } from '../components/Editors';
+import BasculeSection from '../components/BasculeSection';
 import { useSiteStore } from '../../store/siteStore';
 
 /**
@@ -15,11 +16,14 @@ export default function AvantApresAdminPage() {
 
   return (
     <div className="space-y-5">
-      <header>
-        <h1 className="text-lg font-semibold text-fg">Comparateur avant / après</h1>
-        <p className="mt-1 text-xs text-faint">
-          Les cas présentés sur la page Prestations, avec leur banc de comparaison.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold text-fg">Comparateur avant / après</h1>
+          <p className="mt-1 text-xs text-faint">
+            Les cas présentés sur la page Prestations, avec leur banc de comparaison.
+          </p>
+        </div>
+        <BasculeSection id="avantApres" nom="Comparateur avant / après" />
       </header>
 
       {beforeAfter.map((cas) => (

@@ -20,6 +20,7 @@ import {
   TESTIMONIALS,
   WORKSHOP,
 } from '../data/content.js';
+import { SECTIONS_PAR_DEFAUT } from '../data/sections.js';
 import { LEADS } from '../data/leads.js';
 import { BRAND, COMPANY, CONTACT, NAV_LINKS, POLES } from '../data/site.js';
 import type {
@@ -29,6 +30,7 @@ import type {
   ContactInfo,
   HeroContent,
   LastJob,
+  Sections,
   Lead,
   LeadStatus,
   RetrofitBrand,
@@ -49,6 +51,7 @@ interface SiteState {
   catalogue: RetrofitBrand[];
   hero: HeroContent;
   lastJob: LastJob;
+  sections: Sections;
   workshop: WorkshopContent;
   beforeAfter: BeforeAfterCase[];
   gallery: typeof GALLERY_ITEMS;
@@ -172,6 +175,7 @@ const seed = () => ({
   catalogue: RETROFIT_CATALOGUE as RetrofitBrand[],
   hero: HERO as HeroContent,
   lastJob: LAST_JOB as LastJob,
+  sections: { ...SECTIONS_PAR_DEFAUT } as Sections,
   workshop: WORKSHOP as WorkshopContent,
   beforeAfter: BEFORE_AFTER as BeforeAfterCase[],
   gallery: GALLERY_ITEMS,
@@ -199,7 +203,7 @@ const seed = () => ({
  * pouvoir les écraser.
  */
 export const CLES_CONTENU = [
-  'vehicles', 'packs', 'options', 'catalogue', 'hero', 'lastJob', 'workshop', 'beforeAfter',
+  'vehicles', 'packs', 'options', 'catalogue', 'hero', 'lastJob', 'sections', 'workshop', 'beforeAfter',
   'gallery', 'galleryFilters', 'poles', 'navLinks', 'brand', 'company',
   'retrofitProcess', 'retrofitFacts', 'retrofitKeeps', 'testimonials',
   'reviewSummary', 'pipeline', 'sourcingFacts', 'contact',

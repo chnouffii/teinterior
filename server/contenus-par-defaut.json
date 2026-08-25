@@ -175,6 +175,15 @@
     "photos": [],
     "coverIndex": 0
   },
+  "sections": {
+    "avis": true,
+    "metiers": true,
+    "chiffresAccueil": true,
+    "showroomAccueil": true,
+    "avantApres": true,
+    "optionsCarte": true,
+    "bandeauDevis": true
+  },
   "workshop": {
     "title": "L’atelier",
     "intro": "Un local de 180 m² à Brumath, chauffé et éclairé en 5 000 K pour travailler la peinture sans mauvaise surprise à la sortie.",
