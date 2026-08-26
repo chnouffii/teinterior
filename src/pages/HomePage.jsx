@@ -14,7 +14,7 @@ export default function HomePage() {
   usePageMeta({
     title: 'Teintérior — Detailing, CarPlay et vente auto à Brumath',
     description:
-      'Atelier automobile à Brumath, près de Strasbourg : detailing, céramique, teintage, rétrofit CarPlay sur écran d’origine et dépôt-vente. Devis sous 24 h.',
+      'Atelier automobile à Brumath, près de Strasbourg : lavage et detailing complet, cuir, plastiques, odeurs, rétrofit CarPlay et dépôt-vente. Devis sous 24 h.',
   });
 
   return (

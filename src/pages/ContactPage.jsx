@@ -6,7 +6,7 @@ export default function ContactPage() {
   usePageMeta({
     title: 'Devis & contact — Atelier Teintérior Brumath',
     description:
-      'Demandez un devis gratuit : detailing, céramique, teintage, rétrofit CarPlay ou dépôt-vente. Coordonnées de l’atelier, horaires et plan d’accès.',
+      'Demandez un devis gratuit : lavage complet, remise en état de l’habitacle, rétrofit CarPlay ou dépôt-vente. Coordonnées, horaires et plan d’accès.',
   });
 
   return (

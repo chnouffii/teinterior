@@ -160,7 +160,7 @@ export default function ClientDetail({ client, onClose }: { client: Client; onCl
             </Field>
             <Field label="À faire">
               <TextInput
-                placeholder="Rappeler pour le devis céramique"
+                placeholder="Rappeler pour le devis détailing"
                 defaultValue={client.nextAction?.label ?? ''}
                 onBlur={(e) =>
                   client.nextAction?.date &&
@@ -384,7 +384,7 @@ function ListeInterventions({
           className="min-w-[200px] flex-1"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          placeholder="Correction 2 passes + céramique"
+          placeholder="Détailing complet + traitement cuir"
           onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), ajouter())}
         />
         <TextInput

@@ -5,9 +5,9 @@ import usePageMeta from '../hooks/usePageMeta.js';
 
 export default function PrestationsPage() {
   usePageMeta({
-    title: 'Detailing, céramique et teintage — Tarifs | Teintérior',
+    title: 'Lavage, detailing et remise en état — Tarifs | Teintérior',
     description:
-      'Formules de detailing intérieur et extérieur, correction de peinture, protection céramique 9H et teintage 3M. Tarifs indicatifs et comparatif avant / après.',
+      'Lavage complet, nettoyage intérieur approfondi et détailing complet : cuir, plastiques et odeurs. Tarifs dès 49 € et comparatif avant / après.',
   });
 
   return (

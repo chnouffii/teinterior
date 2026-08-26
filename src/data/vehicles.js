@@ -53,7 +53,7 @@ export const VEHICLES = [
     history:
       'Véhicule de cadre commercial, entretien exclusivement en réseau Audi. Aucun sinistre déclaré, rapport Histovec disponible.',
     workshopWork: [
-      'Correction 1 passe + scellant SiO2 (juillet 2026)',
+      'Détailing complet à la livraison (juillet 2026)',
       'Habitacle repris en injection-extraction',
       'Rétrofit CarPlay sans fil posé sur MIB2',
     ],
@@ -109,14 +109,14 @@ export const VEHICLES = [
     location: 'Brumath (67)',
     listedAt: '2026-08-02',
     highlights: [
-      'Céramique CQuartz posée en mars 2026, garantie transférée',
+      'Habitacle repris et cuir nourri en mars 2026',
       'Sellerie cuir Vernasca reprise et nourrie',
       'Révision et filtres faits à 60 000 km',
     ],
     history:
       'Première main, véhicule de société suivi en concession. Quatre pneus Continental à 5 mm.',
     workshopWork: [
-      'Correction 2 passes + céramique 3 ans',
+      'Habitacle repris et cuir nourri',
       'Rénovation des optiques',
       'Traitement hydrophobe pare-brise',
     ],
@@ -239,7 +239,7 @@ export const VEHICLES = [
     history:
       'Véhicule suivi chez Porsche Strasbourg jusqu’à 80 000 km, puis chez un spécialiste indépendant. Disques et plaquettes avant neufs.',
     workshopWork: [
-      'Rénovation intégrale + céramique',
+      'Détailing complet avant mise en vente',
       'Rétrofit Android Auto PCM 4.1',
       'Céramique jantes',
     ],

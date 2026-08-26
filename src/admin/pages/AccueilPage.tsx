@@ -88,7 +88,7 @@ export default function AccueilPage() {
             <Field label="Prestation réalisée">
               <TextInput
                 value={lastJob.title}
-                placeholder="Correction 2 passes + céramique 9H"
+                placeholder="Détailing complet + traitement cuir"
                 onChange={(e) => patchSection('lastJob', { title: e.target.value })}
               />
             </Field>

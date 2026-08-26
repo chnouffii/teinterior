@@ -65,7 +65,7 @@ export default function RealisationsAdminPage() {
           champs={[
             { cle: 'title', label: 'Titre', largeur: 7 },
             { cle: 'category', label: 'Catégorie', largeur: 5, aide: 'identifiant d’un filtre' },
-            { cle: 'meta', label: 'Détails', aide: 'ex. 14 h atelier · céramique 5 ans' },
+            { cle: 'meta', label: 'Détails', aide: 'ex. 4 h atelier · cuir nourri' },
             { cle: 'scene', label: 'Scène', largeur: 6, aide: SCENES },
             { cle: 'body', label: 'Carrosserie', largeur: 6, aide: CARROSSERIES },
           ]}

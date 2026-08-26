@@ -57,8 +57,8 @@ const construireSections = (BRAND, COMPANY, CONTACT) => [
         subtitle: 'Prestations esthétiques',
         lines: [
           'Les durées annoncées sont indicatives et dépendent de l’état réel du véhicule.',
-          'Les protections céramique sont garanties 3 ans sous réserve du respect du protocole d’entretien remis au client.',
-          'Le teintage est réalisé conformément à la réglementation en vigueur : les vitres avant conservent au minimum 70 % de transmission lumineuse.',
+          'Les prestations d’esthétique portent sur l’état constaté du véhicule : les défauts irréversibles — brûlures, déchirures, décolorations — sont signalés avant intervention et ne peuvent être garantis.',
+          'Le traitement anti-odeurs à l’ozone impose une aération complète du véhicule avant restitution ; l’habitacle n’est accessible qu’à l’issue de ce délai.',
         ],
       },
       {

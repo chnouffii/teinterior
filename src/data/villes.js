@@ -18,16 +18,16 @@ export const VILLES = [
     // Description de référencement, distincte de l'accroche : Google tronque
     // au-delà d'environ 160 caractères, et l'accroche en fait le double.
     meta:
-      'Atelier de detailing et rétrofit CarPlay à 20 minutes de Strasbourg par l’A4. Correction de peinture, céramique, dépôt-vente. Devis sous 24 h.',
+      'Atelier de detailing et rétrofit CarPlay à 20 minutes de Strasbourg par l’A4. Lavage complet, habitacle, cuir, dépôt-vente. Devis sous 24 h.',
     accroche:
       'Notre atelier est à Brumath, vingt minutes du centre de Strasbourg par l’A4. La plupart de nos clients strasbourgeois déposent leur voiture le matin et la récupèrent en fin de journée.',
     contexte:
-      'Le stationnement de rue en centre-ville marque les carrosseries : rayures de portières, jantes frottées contre les bordures, traces de vernis sur les pare-chocs. Ce sont les trois quarts des corrections que nous faisons pour des véhicules strasbourgeois.',
+      'Rouler en ville, c’est enchaîner les trajets courts : la poussière de freins s’incruste sur les jantes, le stationnement en épi ramène de la boue dans les seuils, et l’habitacle ne sèche jamais complètement entre deux averses. Les trois quarts des voitures strasbourgeoises qui passent chez nous arrivent avec ce profil.',
     arguments: [
       {
-        titre: 'Correction de peinture après stationnement urbain',
+        titre: 'Lavage soigné, jantes et bas de caisse',
         detail:
-          'Micro-rayures et traces de frottement reprises à la polisseuse, épaisseur de vernis mesurée avant chaque passe.',
+          'Deux seaux et gant microfibre, poussière de freins décrochée, passages de roues repris. Aucun rouleau, aucune brosse tournante.',
       },
       {
         titre: 'Rétrofit CarPlay sur les véhicules de fonction',
@@ -50,16 +50,16 @@ export const VILLES = [
     axe: 'par la D1063',
     titre: 'Detailing et rétrofit CarPlay à Haguenau',
     meta:
-      'Atelier de detailing et rétrofit CarPlay à 15 minutes de Haguenau par la D1063. Céramique, habitacle, recherche de véhicule. Devis sous 24 h.',
+      'Atelier de detailing et rétrofit CarPlay à 15 minutes de Haguenau par la D1063. Habitacle, cuir, plastiques, recherche de véhicule. Devis sous 24 h.',
     accroche:
       'Quinze minutes séparent Haguenau de notre atelier de Brumath par la D1063. C’est le trajet le plus court de tout le nord du Bas-Rhin pour une prestation de ce niveau.',
     contexte:
-      'Les véhicules qui nous arrivent de Haguenau et de sa périphérie roulent beaucoup, souvent sur route et autoroute : impacts de gravillons sur les faces avant, vernis terni par les kilomètres, habitacles marqués par les trajets quotidiens.',
+      'Les voitures qui nous arrivent du nord du Bas-Rhin avalent les kilomètres : navettes domicile-travail, repas pris au volant, enfants à l’arrière matin et soir. Moquettes tassées, assises lustrées par le frottement, odeurs installées dans la ventilation.',
     arguments: [
       {
         titre: 'Remise en état après forts kilométrages',
         detail:
-          'Décontamination complète, correction du vernis et protection céramique, pour des voitures qui prennent l’autoroute tous les jours.',
+          'Moquettes et assises passées à l’injection-extraction, sellerie cuir nourrie au pH 5,5, odeurs traitées à l’ozone jusque dans le circuit d’aération.',
       },
       {
         titre: 'Habitacle repris en profondeur',

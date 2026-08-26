@@ -126,8 +126,8 @@ export default function Detailing({ hideHeading = false }) {
         ) : (
           <SectionHeading
             eyebrow="Pôle esthétique auto"
-            title="Detailing, correction de peinture,"
-            highlight="céramique & teintage"
+            title="Lavage, detailing"
+            highlight="et remise en état"
             // Le nombre suit les prestations réellement publiées : le texte
             // annonçait « Trois formules » même après en avoir ajouté une.
             description={`${nombreFormules}, détaillées opération par opération comme sur le devis que vous recevrez : produits utilisés, temps passé, résultat attendu.`}

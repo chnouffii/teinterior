@@ -4,7 +4,7 @@ export const HERO = {
   kicker: 'Atelier indépendant — Brumath',
   title: 'Detailing, rétrofit CarPlay et vente de véhicules.',
   subtitle:
-    'Un véhicule à la fois dans l’atelier. Vernis mesuré avant chaque passe de polish, faisceaux jamais coupés sur les intégrations multimédia, et des devis détaillés ligne par ligne.',
+    'Un véhicule à la fois dans l’atelier. Habitacle repris en profondeur, faisceaux jamais coupés sur les intégrations multimédia, et des devis détaillés ligne par ligne.',
   primaryCta: 'Voir les prestations',
   secondaryCta: 'Faire estimer ma voiture',
   facts: [
@@ -26,7 +26,7 @@ export const HERO = {
 export const LAST_JOB = {
   enabled: true,
   eyebrow: 'Dernier passage atelier',
-  title: 'Correction 2 passes + céramique 9H',
+  title: 'Détailing complet + traitement cuir',
   vehicle: '',
   badge: 'Livrée en 48 h',
   photos: [],
@@ -36,19 +36,19 @@ export const LAST_JOB = {
 export const WORKSHOP = {
   title: 'L’atelier',
   intro:
-    'Un local de 180 m² à Brumath, chauffé et éclairé en 5 000 K pour travailler la peinture sans mauvaise surprise à la sortie.',
+    'Un local de 180 m² à Brumath, chauffé et éclairé en 5 000 K pour ne rien laisser passer sur un habitacle.',
   points: [
     {
-      label: 'Cabine de polissage',
+      label: 'Poste de travail',
       detail: 'Éclairage Scangrip multi-température, sol résiné, aspiration à la source.',
     },
     {
       label: 'Outillage',
-      detail: 'Rupes LHR 15 Mark III et Mille, Kärcher Puzzi 10/1, jauge à vernis, générateur d’ozone.',
+      detail: 'Kärcher Puzzi 10/1, nettoyeur vapeur 165 °C, générateur d’ozone, soufflette et air pulsé.',
     },
     {
       label: 'Consommables',
-      detail: 'Koch-Chemie, Menzerna, CarPro, Colourlock, films 3M et Solar Gard.',
+      detail: 'Koch-Chemie, Colourlock, dressings mats et microfibres renouvelées à chaque véhicule.',
     },
     {
       label: 'Suivi',
@@ -58,36 +58,6 @@ export const WORKSHOP = {
 };
 
 export const BEFORE_AFTER = [
-  {
-    id: 'lustrage',
-    label: 'Correction peinture',
-    vehicle: 'Audi A5 Sportback — noir mythos',
-    scene: 'polish',
-    beforeCaption: 'Avant — micro-rayures de lavage',
-    afterCaption: 'Après — 2 passes',
-    summary:
-      'Peinture marquée par cinq ans de lavage automatique. Deux passes Menzerna 300 puis 3800, épaisseur de vernis relevée à 118 µm avant travail.',
-    specs: [
-      { label: 'Défauts corrigés', value: '92 %' },
-      { label: 'Temps atelier', value: '11 h' },
-      { label: 'Vernis retiré', value: '4 µm' },
-    ],
-  },
-  {
-    id: 'teintage',
-    label: 'Teintage vitres',
-    vehicle: 'BMW Série 3 G20 — film 3M 20 %',
-    scene: 'tint',
-    beforeCaption: 'Avant — vitrage d’origine',
-    afterCaption: 'Après — film 3M 20 %',
-    summary:
-      'Pose à chaud sans découpe sur véhicule, quatre vitres latérales. Vitres avant laissées d’origine pour rester conforme au contrôle technique.',
-    specs: [
-      { label: 'UV bloqués', value: '99 %' },
-      { label: 'Chaleur rejetée', value: '58 %' },
-      { label: 'Pose', value: '3 h' },
-    ],
-  },
   {
     id: 'interieur',
     label: 'Habitacle',
@@ -101,6 +71,36 @@ export const BEFORE_AFTER = [
       { label: 'Taches traitées', value: '100 %' },
       { label: 'Séchage', value: '4 h' },
       { label: 'Passages', value: '3' },
+    ],
+  },
+  {
+    id: 'cuir',
+    label: 'Sellerie cuir',
+    vehicle: 'BMW Série 3 G20 — cuir Dakota noir',
+    scene: 'interior',
+    beforeCaption: 'Avant — cuir encrassé et mat',
+    afterCaption: 'Après — nettoyé et nourri',
+    summary:
+      'Nettoyage au pH 5,5 sur l’ensemble des assises et des contreportes, puis lait nourrissant mat. Aucun effet brillant : le cuir retrouve son toucher d’origine, pas un vernis.',
+    specs: [
+      { label: 'Assises traitées', value: '5' },
+      { label: 'Temps atelier', value: '1 h 15' },
+      { label: 'Finition', value: 'Mate' },
+    ],
+  },
+  {
+    id: 'odeurs',
+    label: 'Odeurs',
+    vehicle: 'Renault Scénic — transport d’animaux',
+    scene: 'interior',
+    beforeCaption: 'Avant — odeur tenace',
+    afterCaption: 'Après — cycle ozone',
+    summary:
+      'Textiles extraits puis cycle d’ozone de 60 minutes, circuit de ventilation compris, suivi d’une aération complète. L’ozone détruit la molécule odorante au lieu de la masquer.',
+    specs: [
+      { label: 'Cycle ozone', value: '60 min' },
+      { label: 'Débit', value: '10 g/h' },
+      { label: 'Aération', value: '45 min' },
     ],
   },
 ];
@@ -153,9 +153,9 @@ export const GALLERY_ITEMS = [
   {
     id: 'r1',
     category: 'detailing',
-    title: 'Audi RS4 — correction 3 passes',
-    meta: '14 h atelier · Menzerna 300/3800 · céramique 5 ans',
-    scene: 'polish',
+    title: 'Audi RS4 — détailing complet',
+    meta: '4 h atelier · habitacle repris · cuir nourri',
+    scene: 'interior',
     palette: ['#2E1C22', '#6B3541'],
     body: 'berline',
   },
@@ -179,9 +179,9 @@ export const GALLERY_ITEMS = [
   {
     id: 'r4',
     category: 'detailing',
-    title: 'Golf VIII — teintage 3M 20 %',
-    meta: '3 h · 4 vitres latérales · garantie à vie du film',
-    scene: 'tint',
+    title: 'Golf VIII — plastiques rénovés',
+    meta: '1 h · plastiques extérieurs ternis · dressing mat',
+    scene: 'interior',
     palette: ['#1A2226', '#33484F'],
     body: 'citadine',
   },
@@ -213,9 +213,9 @@ export const GALLERY_ITEMS = [
   {
     id: 'r8',
     category: 'detailing',
-    title: 'Tesla Model 3 — céramique 9H',
-    meta: '2 jours · vernis mou, passe unique douce · garantie 3 ans',
-    scene: 'polish',
+    title: 'Tesla Model 3 — lavage complet',
+    meta: '1 h 30 · deux seaux · séchage sans contact',
+    scene: 'sale',
     palette: ['#2A2E32', '#5C646C'],
     body: 'berline',
   },
@@ -241,10 +241,10 @@ export const TESTIMONIALS = [
     id: 't1',
     name: 'Julien M.',
     city: 'Vendenheim',
-    service: 'Rénovation intégrale',
+    service: 'Détailing complet',
     rating: 5,
     date: 'Juin 2026',
-    text: "Ils ont mesuré le vernis devant moi avant de sortir la polisseuse, et refusé une passe supplémentaire sur le capot parce que l'épaisseur était limite. C'est la première fois qu'un pro me dit non pour de bonnes raisons.",
+    text: "Ils m'ont montré ce qui partirait et ce qui ne partirait pas avant de commencer, tache par tache. C'est la première fois qu'un pro m'annonce une limite au lieu de me promettre du neuf.",
   },
   {
     id: 't2',
@@ -277,10 +277,10 @@ export const TESTIMONIALS = [
     id: 't5',
     name: 'Karim B.',
     city: 'Bischwiller',
-    service: 'Teintage',
+    service: 'Traitement anti-odeurs',
     rating: 5,
     date: 'Février 2026',
-    text: "Pose nette, aucune bulle sur les bords. Ils ont refusé de teinter les vitres avant en m'expliquant la règle des 70 % de transmission. Sérieux.",
+    text: "Odeur de tabac dans une voiture achetée d'occasion. Cycle d'ozone et habitacle repris : plus rien au bout de six mois, et ils m'avaient prévenu que la ventilation devait y passer aussi.",
   },
   {
     id: 't6',

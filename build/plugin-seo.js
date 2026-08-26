@@ -68,8 +68,8 @@ function donneesStructurees() {
     '@id': `${SITE_URL}/#atelier`,
     name: BRAND.name,
     description:
-      'Atelier automobile à Brumath : detailing et céramique, rétrofit CarPlay et Android Auto ' +
-      'sur écran d’origine, dépôt-vente et recherche de véhicule.',
+      'Atelier automobile à Brumath : lavage et detailing complet, remise en état de l’habitacle, ' +
+      'rétrofit CarPlay et Android Auto sur écran d’origine, dépôt-vente et recherche de véhicule.',
     url: SITE_URL,
     image: `${SITE_URL}/og.jpg`,
     logo: `${SITE_URL}/logo.png`,
@@ -99,7 +99,7 @@ function donneesStructurees() {
     openingHoursSpecification: horaires,
     sameAs: CONTACT.socials.map((r) => r.url),
     makesOffer: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Detailing et céramique automobile' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Lavage et detailing automobile' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Rétrofit CarPlay et Android Auto' } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dépôt-vente et recherche de véhicule' } },
     ],
