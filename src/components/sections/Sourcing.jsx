@@ -5,6 +5,7 @@ import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
 import { FUELS, GEARBOXES } from '../../data/vehicles.js';
 import { useSiteStore } from '../../store/siteStore';
+import { colonnesSm } from '../../lib/grille.js';
 import { primaryPhone } from '../../data/site.js';
 import { sendLead } from '../../lib/sendLead.js';
 import { chiffresSeuls, formaterMontant, formaterTelephone } from '../../lib/format.js';
@@ -442,24 +443,6 @@ function EstimationForm() {
   );
 }
 
-/**
- * Nombre de colonnes de la grille de chiffres, selon ce qu'elle contient.
- *
- * Le fond clair du conteneur sert de filet entre les cases : une colonne vide
- * n'est donc pas neutre, elle laisse un aplat gris à la place d'un chiffre. La
- * liste étant renseignée depuis le panel, le compte doit suivre. Les classes
- * sont écrites en toutes lettres — Tailwind ne voit pas les noms construits à
- * l'exécution et ne générerait rien.
- */
-const COLONNES = {
-  1: 'sm:grid-cols-1',
-  2: 'sm:grid-cols-2',
-  3: 'sm:grid-cols-3',
-  4: 'sm:grid-cols-4',
-};
-
-const colonnes = (nombre) => COLONNES[nombre] ?? 'sm:grid-cols-3';
-
 export default function Sourcing({ hideHeading = false }) {
   const pipeline = useSiteStore((state) => state.pipeline);
   const facts = useSiteStore((state) => state.sourcingFacts);
@@ -507,7 +490,7 @@ export default function Sourcing({ hideHeading = false }) {
             {facts.length > 0 ? (
               <Reveal
                 delay={60}
-                className={`mt-5 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 ${colonnes(facts.length)}`}
+                className={`mt-5 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 ${colonnesSm(facts.length)}`}
               >
                 {facts.map((fact, index) => (
                   <div key={index} className="bg-ink-900 px-4 py-4">

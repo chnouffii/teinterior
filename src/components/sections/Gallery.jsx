@@ -67,10 +67,22 @@ export default function Gallery({ hideHeading = false, limit = null }) {
   const connu = filter === TOUS || galleryFilters.some((f) => f.id === filter);
   const actif = connu ? filter : TOUS;
 
-  const filtered = actif === TOUS ? items : items.filter((item) => item.category === actif);
+  /*
+    Un chantier sans titre ni photo n'a rien à montrer : il s'affichait comme
+    une illustration générique surmontée d'un cadre vide, ce qui ressemble à un
+    défaut du site plutôt qu'à une fiche en cours de rédaction. Le bouton
+    « Ajouter une réalisation » crée précisément une entrée de ce genre — elle
+    reste donc invisible au public tant qu'elle n'a pas au moins l'un des deux.
+  */
+  const publiables = items.filter(
+    (item) => item.title?.trim() || (item.photos?.length ?? 0) > 0
+  );
+
+  const filtered =
+    actif === TOUS ? publiables : publiables.filter((item) => item.category === actif);
   const rows = limit ? filtered.slice(0, limit) : filtered;
 
-  const chantier = ouvert ? items.find((item) => item.id === ouvert) : null;
+  const chantier = ouvert ? publiables.find((item) => item.id === ouvert) : null;
 
   return (
     <section className={`pb-12 lg:pb-14 ${hideHeading ? 'pt-8' : 'pt-12 lg:pt-14'}`}>
@@ -93,7 +105,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
           {/* Une rangée de filtres au-dessus d'une grille vide donne l'impression
               que la page a échoué à charger. Tant qu'aucun chantier n'est
               publié, on ne montre rien à filtrer. */}
-          <Reveal delay={60} className={`flex flex-wrap gap-2 ${items.length === 0 ? 'hidden' : ''}`}>
+          <Reveal delay={60} className={`flex flex-wrap gap-2 ${publiables.length === 0 ? 'hidden' : ''}`}>
             {galleryFilters.map((item) => (
               <button
                 key={item.id}
@@ -114,7 +126,7 @@ export default function Gallery({ hideHeading = false, limit = null }) {
 
         {rows.length === 0 ? (
           <p className="mt-8 rounded-lg border border-dashed border-white/10 px-5 py-8 text-center text-sm text-faint">
-            {items.length === 0
+            {publiables.length === 0
               ? 'Les premiers chantiers photographiés seront publiés ici prochainement.'
               : 'Aucun chantier dans cette catégorie pour l’instant.'}
           </p>

@@ -80,7 +80,6 @@ export const RETROFIT_FACTS = [
   { label: 'Immobilisation moyenne', value: '2 h 30' },
   { label: 'Garantie pièces et pose', value: '2 ans' },
   { label: 'Retour à l’état d’origine', value: '30 min' },
-  { label: 'Installations réalisées', value: '380' },
 ];
 
 export const RETROFIT_KEEPS = [

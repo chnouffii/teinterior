@@ -128,6 +128,5 @@ export const SERVICE_OPTIONS = [
   { id: 'ozone', label: 'Désinfection ozone', detail: 'Générateur 10 g/h, 60 min de cycle + ventilation — odeurs de tabac, d’animaux ou d’humidité', price: '39 €', duration: '1 h 30' },
   { id: 'plastiques', label: 'Rénovation des plastiques extérieurs', detail: 'Plastiques ternis ou blanchis repris, dressing mat longue tenue sans surbrillance', price: '49 €', duration: '1 h' },
   { id: 'cuir', label: 'Traitement cuir approfondi', detail: 'Nettoyage pH 5,5 Colourlock, nourrissage et protection mate des assises et contreportes', price: '59 €', duration: '1 h 15' },
-  { id: 'optiques', label: 'Rénovation d’optiques', detail: 'Ponçage progressif puis finition, sur optiques jaunies ou piquées', price: '79 € la paire', duration: '1 h 30' },
   { id: 'moteur', label: 'Nettoyage compartiment moteur', detail: 'Protection des connectiques, dégraissage et dressing plastiques', price: '69 €', duration: '1 h' },
 ];

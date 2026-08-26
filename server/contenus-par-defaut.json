@@ -549,13 +549,6 @@
       "duration": "1 h 15"
     },
     {
-      "id": "optiques",
-      "label": "Rénovation d’optiques",
-      "detail": "Ponçage progressif puis finition, sur optiques jaunies ou piquées",
-      "price": "79 € la paire",
-      "duration": "1 h 30"
-    },
-    {
       "id": "moteur",
       "label": "Nettoyage compartiment moteur",
       "detail": "Protection des connectiques, dégraissage et dressing plastiques",
@@ -613,10 +606,6 @@
     {
       "label": "Retour à l’état d’origine",
       "value": "30 min"
-    },
-    {
-      "label": "Installations réalisées",
-      "value": "380"
     }
   ],
   "retrofitKeeps": [

@@ -5,6 +5,7 @@ import Reveal from '../ui/Reveal.jsx';
 import Button from '../ui/Button.jsx';
 import { FITMENT } from '../../data/retrofit.js';
 import { useSiteStore } from '../../store/siteStore';
+import { colonnesLg } from '../../lib/grille.js';
 import { useQuote } from '../../context/QuoteContext.jsx';
 
 const FITMENT_TONES = {
@@ -230,9 +231,23 @@ export default function Retrofit({ hideHeading = false }) {
           />
         )}
 
-        <Reveal className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
-          {retrofitFacts.map((fact) => (
-            <div key={fact.label} className="bg-ink-950/90 px-6 py-6 text-center">
+        <Reveal
+          className={`mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 ${colonnesLg(retrofitFacts.length)}`}
+        >
+          {retrofitFacts.map((fact, index) => (
+            <div
+              key={fact.label}
+              /*
+                Deux colonnes sur mobile : en nombre impair, le dernier chiffre
+                laisserait une case vide à côté de lui — un aplat gris, le fond
+                du conteneur servant de filet. Il prend donc toute la largeur.
+              */
+              className={`bg-ink-950/90 px-6 py-6 text-center ${
+                retrofitFacts.length % 2 === 1 && index === retrofitFacts.length - 1
+                  ? 'col-span-2 lg:col-span-1'
+                  : ''
+              }`}
+            >
               <p className="num font-display text-2xl font-bold text-fg">{fact.value}</p>
               <p className="mt-2 text-[11px] leading-snug text-faint">{fact.label}</p>
             </div>
