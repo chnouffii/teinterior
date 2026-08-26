@@ -28,6 +28,8 @@ import type {
   ClientNote,
   BeforeAfterCase,
   ContactInfo,
+  GalleryFilter,
+  Realisation,
   HeroContent,
   LastJob,
   Sections,
@@ -54,8 +56,8 @@ interface SiteState {
   sections: Sections;
   workshop: WorkshopContent;
   beforeAfter: BeforeAfterCase[];
-  gallery: typeof GALLERY_ITEMS;
-  galleryFilters: typeof GALLERY_FILTERS;
+  gallery: Realisation[];
+  galleryFilters: GalleryFilter[];
   poles: typeof POLES;
   navLinks: typeof NAV_LINKS;
   brand: typeof BRAND;
@@ -178,8 +180,8 @@ const seed = () => ({
   sections: { ...SECTIONS_PAR_DEFAUT } as Sections,
   workshop: WORKSHOP as WorkshopContent,
   beforeAfter: BEFORE_AFTER as BeforeAfterCase[],
-  gallery: GALLERY_ITEMS,
-  galleryFilters: GALLERY_FILTERS,
+  gallery: GALLERY_ITEMS as Realisation[],
+  galleryFilters: GALLERY_FILTERS as GalleryFilter[],
   poles: POLES,
   navLinks: NAV_LINKS,
   brand: BRAND,

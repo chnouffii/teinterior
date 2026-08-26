@@ -231,7 +231,7 @@ export default function PhotoUploader({
           </ul>
           <p className="mt-2 text-[11px] text-faint">
             {photos.length} photo{photos.length > 1 ? 's' : ''} · la couverture est celle affichée
-            dans le showroom.
+            en vignette sur le site.
           </p>
         </>
       ) : (

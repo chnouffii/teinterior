@@ -54,6 +54,42 @@ export interface Vehicle {
   vin?: string;
 }
 
+/** Silhouette de l'illustration vectorielle de repli. */
+export type Carrosserie = 'berline' | 'break' | 'suv' | 'citadine' | 'coupe';
+
+/** Scène de l'illustration vectorielle de repli. */
+export type Scene = 'polish' | 'tint' | 'interior' | 'screen' | 'sale';
+
+/**
+ * Un chantier montré sur la page Réalisations.
+ *
+ * Les photos priment : `scene`, `palette` et `body` ne servent qu'à la
+ * vignette de repli, tant qu'aucune photo n'a été déposée. Une réalisation
+ * décrite mais pas encore photographiée reste donc présentable.
+ *
+ * `category` est libre — c'est l'identifiant d'un filtre de la galerie, que
+ * l'atelier renomme et complète à sa guise.
+ */
+export interface Realisation {
+  id: string;
+  category: string;
+  title: string;
+  meta: string;
+  /** Texte long facultatif, affiché dans la visionneuse. */
+  detail?: string;
+  photos: string[];
+  coverIndex: number;
+  scene: Scene;
+  palette: string[];
+  body?: Carrosserie;
+}
+
+/** Bouton de filtre au-dessus de la galerie. */
+export interface GalleryFilter {
+  id: string;
+  label: string;
+}
+
 export interface PackStep {
   label: string;
   detail: string;
