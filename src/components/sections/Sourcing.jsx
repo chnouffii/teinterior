@@ -442,6 +442,24 @@ function EstimationForm() {
   );
 }
 
+/**
+ * Nombre de colonnes de la grille de chiffres, selon ce qu'elle contient.
+ *
+ * Le fond clair du conteneur sert de filet entre les cases : une colonne vide
+ * n'est donc pas neutre, elle laisse un aplat gris à la place d'un chiffre. La
+ * liste étant renseignée depuis le panel, le compte doit suivre. Les classes
+ * sont écrites en toutes lettres — Tailwind ne voit pas les noms construits à
+ * l'exécution et ne générerait rien.
+ */
+const COLONNES = {
+  1: 'sm:grid-cols-1',
+  2: 'sm:grid-cols-2',
+  3: 'sm:grid-cols-3',
+  4: 'sm:grid-cols-4',
+};
+
+const colonnes = (nombre) => COLONNES[nombre] ?? 'sm:grid-cols-3';
+
 export default function Sourcing({ hideHeading = false }) {
   const pipeline = useSiteStore((state) => state.pipeline);
   const facts = useSiteStore((state) => state.sourcingFacts);
@@ -486,14 +504,19 @@ export default function Sourcing({ hideHeading = false }) {
               </ol>
             </Reveal>
 
-            <Reveal delay={60} className="mt-5 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 sm:grid-cols-3">
-              {facts.map((fact) => (
-                <div key={fact.value} className="bg-ink-900 px-4 py-4">
-                  <p className="num text-lg font-semibold text-fg">{fact.value}</p>
-                  <p className="mt-1 text-[11px] leading-snug text-faint">{fact.label}</p>
-                </div>
-              ))}
-            </Reveal>
+            {facts.length > 0 ? (
+              <Reveal
+                delay={60}
+                className={`mt-5 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 ${colonnes(facts.length)}`}
+              >
+                {facts.map((fact, index) => (
+                  <div key={index} className="bg-ink-900 px-4 py-4">
+                    <p className="num text-lg font-semibold text-fg">{fact.value}</p>
+                    <p className="mt-1 text-[11px] leading-snug text-faint">{fact.label}</p>
+                  </div>
+                ))}
+              </Reveal>
+            ) : null}
 
             <Reveal delay={90} className="mt-5 rounded-lg border border-white/10 bg-ink-900 p-5">
               <h3 className="text-sm font-semibold text-fg">Vous cherchez plutôt un véhicule ?</h3>

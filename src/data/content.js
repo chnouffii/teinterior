@@ -139,7 +139,6 @@ export const SOURCING_PIPELINE = [
 export const SOURCING_FACTS = [
   { value: '+12 %', label: 'de prix de vente moyen constaté après préparation' },
   { value: '23 j', label: 'de délai moyen de vente sur les 12 derniers mois' },
-  { value: '4,9 %', label: 'de commission unique — rien à payer si le véhicule ne part pas' },
 ];
 
 export const GALLERY_FILTERS = [
