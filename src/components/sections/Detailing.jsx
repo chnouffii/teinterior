@@ -7,15 +7,19 @@ import BeforeAfterSlider from '../ui/BeforeAfterSlider.jsx';
 import { useSiteStore } from '../../store/siteStore';
 import { useQuote } from '../../context/QuoteContext.jsx';
 import useSection from '../../hooks/useSection.js';
+import useReflet from '../../hooks/useReflet.js';
 
 /** Carte de formule : le détail du devis reste lisible, sans mise en tableau. */
 function PackCard({ pack, onSelect, index }) {
   const popular = Boolean(pack.featured);
+  const suivreReflet = useReflet();
 
   return (
     <Reveal
+      variante="carte"
+      onMouseMove={suivreReflet}
       delay={index * 90}
-      className={`group relative flex h-full flex-col rounded-lg border p-7 shadow-card
+      className={`reflet group relative flex h-full flex-col rounded-lg border p-7 shadow-card
         transition-colors duration-150 hover:border-accent/50
         ${popular ? 'border-accent/50 bg-ink-850/80' : 'border-white/10 bg-ink-850'}`}
     >

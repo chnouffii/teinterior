@@ -28,7 +28,7 @@ export default function PageHeader({ eyebrow, title, highlight, description, met
         </Reveal>
 
         <div className="mt-5 grid gap-x-12 gap-y-5 lg:grid-cols-12 lg:items-end">
-          <Reveal className="lg:col-span-7">
+          <Reveal variante="titre" className="lg:col-span-7">
             <h1 className="text-3xl font-extrabold leading-[1.06] sm:text-4xl lg:text-[2.75rem]">
               {title}
               {highlight ? <span className="block text-muted">{highlight}</span> : null}

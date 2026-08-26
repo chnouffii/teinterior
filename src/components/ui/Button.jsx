@@ -26,6 +26,7 @@ export default function Button({
       className={`group inline-flex cursor-pointer items-center justify-center gap-2 rounded
         font-semibold tracking-tight transition-colors duration-150
         disabled:cursor-not-allowed disabled:opacity-40
+        ${variant === 'primary' ? 'balayage' : ''}
         ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...rest}
     >

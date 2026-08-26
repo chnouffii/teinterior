@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../ui/Button.jsx';
 import Reveal from '../ui/Reveal.jsx';
 import DernierChantier from './DernierChantier.jsx';
+import Chiffre from '../ui/Chiffre.jsx';
 import { ROUTES } from '../../data/site.js';
 import { useSiteStore } from '../../store/siteStore';
 import useSection from '../../hooks/useSection.js';
@@ -28,7 +29,7 @@ export default function Hero() {
             </span>
           </Reveal>
 
-          <Reveal delay={80}>
+          <Reveal delay={80} variante="titre">
             <h1 className="mt-6 text-4xl font-extrabold leading-[1.05] sm:text-5xl lg:text-[3.25rem]">
               {hero.title}
             </h1>
@@ -75,7 +76,7 @@ export default function Hero() {
             dignes d'être montrés, mieux vaut ne rien afficher. */}
         {lastJob?.enabled ? (
           <div className="lg:col-span-6">
-            <Reveal delay={200} className="relative">
+            <Reveal delay={200} variante="image" className="relative">
               <DernierChantier chantier={lastJob} />
             </Reveal>
           </div>
@@ -84,10 +85,12 @@ export default function Hero() {
 
       {chiffres ? (
       <div className="container-x relative mt-16 lg:mt-20">
-        <Reveal className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
+        <Reveal variante="carte" className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 lg:grid-cols-4">
           {hero.facts.map((fact) => (
             <div key={fact.label} className="bg-ink-950/90 px-6 py-7 text-center">
-              <p className="num font-display text-2xl font-bold text-fg sm:text-3xl">{fact.value}</p>
+              <p className="num font-display text-2xl font-bold text-fg sm:text-3xl">
+                <Chiffre valeur={fact.value} />
+              </p>
               <p className="mt-2 text-xs leading-snug text-faint">{fact.label}</p>
             </div>
           ))}

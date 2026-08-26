@@ -1,10 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Enveloppe un bloc et déclenche son apparition (fondu + translation)
- * lorsqu'il entre dans le viewport.
+ * Enveloppe un bloc et déclenche son apparition à l'entrée dans le viewport.
+ *
+ * `variante` choisit la manière d'apparaître selon la nature du contenu —
+ * « titre », « carte », « image », « trait » — plutôt que d'appliquer le même
+ * fondu à tout. Voir les classes correspondantes dans `index.css`.
  */
-export default function Reveal({ children, as: Tag = 'div', delay = 0, className = '', ...rest }) {
+export default function Reveal({
+  children,
+  as: Tag = 'div',
+  delay = 0,
+  variante = null,
+  className = '',
+  ...rest
+}) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -37,7 +47,9 @@ export default function Reveal({ children, as: Tag = 'div', delay = 0, className
     <Tag
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`reveal ${visible ? 'is-visible' : ''} ${className}`}
+      className={`reveal ${variante ? `reveal-${variante}` : ''} ${
+        visible ? 'is-visible' : ''
+      } ${className}`}
       {...rest}
     >
       {children}

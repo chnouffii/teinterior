@@ -5,9 +5,11 @@ import App from './App.jsx';
 // Google : la feuille de style tierce bloquait le premier rendu (168 ms mesurés
 // quand elle échoue vite, 12,5 s quand elle traîne), et son chargement direct
 // transmettait l'adresse IP de chaque visiteur à Google.
-import '@fontsource/sora/latin-600.css';
-import '@fontsource/sora/latin-700.css';
-import '@fontsource/sora/latin-800.css';
+// Archivo variable, axes de graisse et de chasse. Un seul fichier remplace les
+// trois graisses fixes de Sora, et l'axe de chasse donne aux titres une allure
+// de signalétique d'atelier — un caractère que la géométrie neutre de Sora,
+// qu'on retrouve sur un site sur deux, ne donnait pas.
+import '@fontsource-variable/archivo/wdth.css';
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';

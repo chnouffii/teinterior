@@ -36,7 +36,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
-        display: ['Sora', 'Segoe UI', 'system-ui', 'sans-serif'],
+        display: ['Archivo Variable', 'Archivo', 'Segoe UI', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         glow: '0 0 40px -12px rgba(217, 164, 65, 0.55)',

@@ -49,7 +49,8 @@ function PublicLayout({ children }) {
         Aller au contenu principal
       </a>
       <Header />
-      <main id="contenu" className="pb-20 sm:pb-0">
+      {/* `grain` pose un bruit fixe sur toute la page : voir index.css. */}
+      <main id="contenu" className="grain pb-20 sm:pb-0">
         {children}
       </main>
       <Footer />

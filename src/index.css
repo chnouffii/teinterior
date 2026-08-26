@@ -16,20 +16,29 @@
     @apply bg-ink-950 font-sans text-muted antialiased;
   }
 
+  /*
+    Titres en Archivo élargi.
+    L'axe de chasse est le cœur de l'identité typographique : à 118 % les
+    capitales prennent une allure de signalétique d'atelier. L'interlettrage
+    resserré compense l'élargissement, sinon les titres se délitent.
+  */
   h1,
   h2,
   h3,
   h4 {
     @apply font-display text-fg;
     text-wrap: balance;
+    font-variation-settings: 'wdth' 112;
   }
 
   h1 {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
+    font-variation-settings: 'wdth' 118;
   }
 
   h2 {
-    letter-spacing: -0.022em;
+    letter-spacing: -0.028em;
+    font-variation-settings: 'wdth' 115;
   }
 
   p {
@@ -75,6 +84,44 @@
 }
 
 @layer components {
+  /*
+    Grain de pellicule sur toute la page.
+
+    Un aplat sombre parfaitement lisse est ce qui trahit le plus un gabarit :
+    aucune surface réelle n'est propre à ce point. Le bruit est produit une
+    seule fois par un filtre SVG en URL de données — pas d'image à télécharger,
+    pas de requête, et il ne coûte rien au défilement puisqu'il est fixe.
+  */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /*
+    Graduation de pied à coulisse — la signature du site.
+
+    Le métier consiste à mesurer avant d'agir : épaisseur de vernis, temps
+    d'immobilisation, kilométrage. La règle graduée reprend ce geste, et
+    remplace le filet uniforme qui séparait les sections jusqu'ici.
+  */
+  .graduation {
+    height: 12px;
+    width: 9rem;
+    /*
+      Graduations régulières : un trait long tous les quatre petits, comme sur
+      une règle. Dessiné en SVG plutôt qu'avec des dégradés empilés — ceux-ci
+      donnaient un semis irrégulier, l'arrondi des positions au pixel ne tombant
+      pas juste.
+    */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='12'%3E%3Cg fill='none' stroke-width='1'%3E%3Cpath d='M0.5 0v12' stroke='%23D9A441'/%3E%3Cpath d='M10.5 5v7M20.5 5v7M30.5 5v7' stroke='rgba(255,255,255,0.22)'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+  }
+
   .container-x {
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
   }
@@ -128,6 +175,66 @@
     @apply min-h-[44px] min-w-[44px];
   }
 
+  /*
+    Reflet spéculaire au survol.
+
+    Le métier consiste à maîtriser un reflet sur une carrosserie : une lueur
+    qui suit le curseur vaut mieux qu'une ombre portée générique. La position
+    vient de deux variables posées par le composant ; sans JavaScript, la carte
+    reste simplement mate.
+  */
+  .reflet {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .reflet::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+    background: radial-gradient(
+      22rem circle at var(--reflet-x, 50%) var(--reflet-y, 0%),
+      rgb(217 164 65 / 0.10),
+      transparent 62%
+    );
+  }
+
+  .reflet:hover::before,
+  .reflet:focus-within::before {
+    opacity: 1;
+  }
+
+  /*
+    Balayage laiton sur les boutons pleins : la lumière passe une fois sur la
+    surface, comme sur une aile qu'on éclaire.
+  */
+  .balayage {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .balayage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-120%);
+    background: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgb(255 255 255 / 0.28) 50%,
+      transparent 80%
+    );
+  }
+
+  .balayage:hover::after {
+    transform: translateX(120%);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   .link-quiet {
     @apply text-muted underline-offset-4 transition-colors hover:text-accent-soft hover:underline;
   }
@@ -150,11 +257,69 @@
     transform: none;
   }
 
+  /*
+    Quatre entrées en scène, selon la nature de ce qui apparaît.
+
+    Un seul fondu appliqué à tout revient à n'avoir aucune intention : un tarif
+    ne devrait pas arriver comme une photographie. Chaque variante a sa durée et
+    sa courbe ; les plus lourdes visuellement entrent le plus lentement.
+  */
   .js .reveal {
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     will-change: opacity, transform;
+  }
+
+  /*
+    Titres : dévoilés par le bas, comme une plaque qu'on découvre.
+
+    Un masque et non un `clip-path` : un élément entièrement découpé n'est plus
+    considéré comme visible par l'observateur d'intersection, qui ne se
+    déclenche donc jamais — le titre resterait invisible pour toujours. Un
+    masque n'affecte que la peinture, et l'observateur le voit.
+  */
+  .js .reveal-titre {
+    opacity: 1;
+    transform: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 0%, transparent 0%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 0%, transparent 0%);
+    transition: -webkit-mask-image 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+      mask-image 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .js .reveal-titre.is-visible {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 100%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 100%, transparent 100%);
+  }
+
+  /* Cartes : montée courte et ferme, sans rebond. */
+  .js .reveal-carte {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.5s ease-out, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Images : légère avancée, comme une mise au point qui se fait. */
+  .js .reveal-image {
+    opacity: 0;
+    transform: scale(1.035);
+    transition: opacity 0.7s ease-out, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Filets et graduations : tracés de gauche à droite, au masque également. */
+  .js .reveal-trait {
+    opacity: 1;
+    transform: none;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 0%, transparent 0%);
+    mask-image: linear-gradient(to right, #000 0%, #000 0%, transparent 0%);
+    transition: -webkit-mask-image 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      mask-image 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .js .reveal-trait.is-visible {
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 100%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 100%, transparent 100%);
   }
 
   .js .reveal.is-visible {
@@ -177,10 +342,21 @@
     scroll-behavior: auto;
   }
 
+  .balayage::after,
+  .reflet::before {
+    display: none;
+  }
+
   .js .reveal,
+  .js .reveal-titre,
+  .js .reveal-carte,
+  .js .reveal-image,
+  .js .reveal-trait,
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
+    -webkit-mask-image: none;
+    mask-image: none;
     transition: none;
   }
 
