@@ -90,7 +90,10 @@ export default function Gallery({ hideHeading = false, limit = null }) {
             />
           )}
 
-          <Reveal delay={60} className="flex flex-wrap gap-2">
+          {/* Une rangée de filtres au-dessus d'une grille vide donne l'impression
+              que la page a échoué à charger. Tant qu'aucun chantier n'est
+              publié, on ne montre rien à filtrer. */}
+          <Reveal delay={60} className={`flex flex-wrap gap-2 ${items.length === 0 ? 'hidden' : ''}`}>
             {galleryFilters.map((item) => (
               <button
                 key={item.id}
@@ -111,7 +114,9 @@ export default function Gallery({ hideHeading = false, limit = null }) {
 
         {rows.length === 0 ? (
           <p className="mt-8 rounded-lg border border-dashed border-white/10 px-5 py-8 text-center text-sm text-faint">
-            Aucun chantier dans cette catégorie pour l’instant.
+            {items.length === 0
+              ? 'Les premiers chantiers photographiés seront publiés ici prochainement.'
+              : 'Aucun chantier dans cette catégorie pour l’instant.'}
           </p>
         ) : (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

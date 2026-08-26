@@ -161,133 +161,17 @@ export const GALLERY_FILTERS = [
 /**
  * Les chantiers montrés sur la page Réalisations.
  *
- * `photos` est vide au départ : la vignette retombe alors sur l'illustration
- * vectorielle décrite par `scene`, `palette` et `body`. Dès qu'une photo est
- * déposée depuis le panel, c'est elle qui s'affiche, et le clic ouvre la
- * série complète.
+ * Volontairement vide : la liste de démonstration qui s'y trouvait décrivait
+ * des véhicules qui ne sont jamais passés à l'atelier. Un exemple inventé sur
+ * une page « Réalisations » n'est pas un gabarit à remplir, c'est une fausse
+ * référence en ligne — mieux vaut une galerie vide le temps de photographier
+ * les premiers vrais chantiers.
+ *
+ * Chaque entrée ajoutée depuis le panel porte ses photos ; `scene`, `palette`
+ * et `body` ne servent qu'à l'illustration de repli, tant qu'aucune photo
+ * n'est déposée.
  */
-export const GALLERY_ITEMS = [
-  {
-    id: 'r1',
-    category: 'detailing',
-    title: 'Audi RS4 — détailing complet',
-    meta: '4 h atelier · habitacle repris · cuir nourri',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'interior',
-    palette: ['#2E1C22', '#6B3541'],
-    body: 'berline',
-  },
-  {
-    id: 'r2',
-    category: 'carplay',
-    title: 'BMW Série 3 F30 — interface NBT',
-    meta: '2 h de pose · molette iDrive conservée · caméra ajoutée',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'screen',
-    palette: ['#182029', '#2F4A5E'],
-    body: 'berline',
-  },
-  {
-    id: 'r3',
-    category: 'vente',
-    title: 'Porsche Macan S — dépôt-vente',
-    meta: 'Vendue en 11 jours au prix demandé · 6 plateformes',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'sale',
-    palette: ['#1B2333', '#38496B'],
-    body: 'suv',
-  },
-  {
-    id: 'r4',
-    category: 'detailing',
-    title: 'Golf VIII — plastiques rénovés',
-    meta: '1 h · plastiques extérieurs ternis · dressing mat',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'interior',
-    palette: ['#1A2226', '#33484F'],
-    body: 'citadine',
-  },
-  {
-    id: 'r5',
-    category: 'interieur',
-    title: 'Volvo XC60 — habitacle repris',
-    meta: '6 h · cuir Colourlock · ozone 60 min',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'interior',
-    palette: ['#26211B', '#4E4335'],
-    body: 'suv',
-  },
-  {
-    id: 'r6',
-    category: 'carplay',
-    title: 'Porsche Cayenne — PCM 4.1',
-    meta: '2 h 30 · Android Auto ajouté · Burmester conservé',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'screen',
-    palette: ['#1A1F2B', '#333C57'],
-    body: 'suv',
-  },
-  {
-    id: 'r7',
-    category: 'vente',
-    title: 'Mercedes Classe C break — sourcing',
-    meta: 'Trouvée en Allemagne · expertise sur place · import géré',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'sale',
-    palette: ['#24282E', '#474F59'],
-    body: 'break',
-  },
-  {
-    id: 'r8',
-    category: 'detailing',
-    title: 'Tesla Model 3 — lavage complet',
-    meta: '1 h 30 · deux seaux · séchage sans contact',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'sale',
-    palette: ['#2A2E32', '#5C646C'],
-    body: 'berline',
-  },
-  {
-    id: 'r9',
-    category: 'carplay',
-    title: 'Audi A5 B8 — MMI 3G',
-    meta: '2 h 30 · micro externe · commandes au volant actives',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'screen',
-    palette: ['#1D2622', '#33514A'],
-    body: 'coupe',
-  },
-  {
-    id: 'r10',
-    category: 'odeurs',
-    title: 'Renault Scénic — traitement ozone',
-    meta: '60 min de cycle · ventilation comprise · textiles extraits',
-    detail: '',
-    photos: [],
-    coverIndex: 0,
-    scene: 'interior',
-    palette: ['#26211B', '#4E4335'],
-    body: 'break',
-  },
-];
+export const GALLERY_ITEMS = [];
 
 /** Synthèse affichée au-dessus des avis. Modifiable depuis Admin → Contenu. */
 export const REVIEW_SUMMARY = {
