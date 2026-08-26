@@ -70,7 +70,6 @@ export const POLES = [
     lead: 'Dépôt-vente préparé et photographié, ou recherche du véhicule que vous cherchez.',
     points: [
       '23 jours de délai moyen de vente',
-      'Commission unique de 4,9 %, rien si pas de vente',
       'Fonds vérifiés avant remise des clés',
     ],
     to: ROUTES.vendre,
