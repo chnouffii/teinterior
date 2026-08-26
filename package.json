@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "generer:contenus": "node scripts/generer-contenus-par-defaut.mjs",
+    "realigner:contenus": "node scripts/realigner-contenus.mjs",
     "server": "node server/index.js"
   },
   "dependencies": {

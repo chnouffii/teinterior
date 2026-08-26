@@ -467,6 +467,41 @@ en accepte plusieurs par donnée, mais si un champ ne remonte pas, complétez
 
 ---
 
+## Réaligner les contenus après une mise à jour du code
+
+Le site affiche **les contenus du serveur**, pas ceux du dépôt. Quand une mise
+à jour apporte de nouveaux contenus par défaut — un catalogue de prestations
+réécrit, par exemple — déployer ne suffit pas : la page s'affiche d'abord avec
+les nouveaux, puis bascule sur les anciens dès que le JavaScript a interrogé
+l'API.
+
+Deux façons de s'en sortir : recréer les contenus depuis le panel, ou les
+réaligner d'un coup.
+
+```bash
+cd /opt/teinterior
+
+# 1. Aperçu — n'écrit rien, montre ce qui serait remplacé
+npm run realigner:contenus -- --cles=packs,options
+
+# 2. Écriture, une fois l'aperçu vérifié
+npm run realigner:contenus -- --cles=packs,options --appliquer
+```
+
+Le mot de passe est demandé à la saisie, sans écho. **Ne le passez pas sur la
+ligne de commande** : il resterait dans l'historique du shell, lisible par
+quiconque accède au compte.
+
+Sections courantes : `packs`, `options`, `poles`, `hero`, `workshop`,
+`beforeAfter`, `gallery`, `testimonials`, `contact`, `catalogue`, `sections`.
+Celles qui ne sont pas listées ne sont pas touchées.
+
+`vehicles`, `leads` et `clients` sont refusés : ils contiennent vos annonces et
+vos fiches, pas du contenu éditorial. Les réaligner les remplacerait par les
+données de démonstration du dépôt.
+
+---
+
 ## 6. Vérifier après déploiement
 
 ```bash
